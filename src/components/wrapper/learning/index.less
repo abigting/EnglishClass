@@ -1,0 +1,202 @@
+.learn-bg{
+    background-image: url(https://bhbl.dayuan1997.com/img/bg2.7b45f30b.png);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: cover;
+    background-color: #0482de;
+    position: relative;
+    bottom: 0;
+}
+.learn-container{
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    overflow: hidden;
+    background-color: rgba(0,0,0,.5);
+    background-image: url(https://bhbl.dayuan1997.com/img/l-bg-left.a5531bbb.png),url(https://bhbl.dayuan1997.com/img/l-bg-right.ce124e27.png);
+    background-repeat: no-repeat;
+    background-size: 1rem 100%;
+    background-position: 0,100%;
+}
+
+.learn-left{
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.learn-title{
+    flex: 0 0 0.8rem;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+    background: url(https://bhbl.dayuan1997.com/img/learn-title-bg.bd620d45.png) no-repeat;
+    height: 1.67rem!important;
+    background-size: 100% 100%;
+    z-index: 11;
+}
+
+.learn-title-header{
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAB1AgMAAADyyGPNAAAADFBMVEXs8PnhfjD0xUymUh+HXMJIAAAAFklEQVQI12NwwAEPYMCBBg54YANhCAA5MRZBgT4zFAAAAABJRU5ErkJggg==) repeat-x;
+    background-size: 100% 100%;
+    height: 1.17rem;
+    line-height: 1rem;
+    display: inline-block;
+    color: #3963c9;
+    font-weight: 700;
+    font-size: .3rem;
+    padding: 0 0.2rem;
+    position: relative;
+}
+
+.learn-title-header:after,.learn-title-header:before {
+    content: "";
+    position: absolute;
+    top: -0.44rem;
+    height: 1.61rem;
+    width: 2.1rem;
+    background-size: 100% 100%;
+}
+
+.learn-title-header:before{
+    background: url(https://bhbl.dayuan1997.com/img/learn-title-left.87eea15d.png) no-repeat;
+    background-size: contain;
+    left: -1.84rem;
+}
+
+.learn-title-header:after{
+    background: url(https://bhbl.dayuan1997.com/img/learn-title-right.3eb80d5b.png) no-repeat;
+    background-size: contain;
+    right: -1.89rem;
+}
+
+.left-post-board{
+    position: absolute;
+    width: 0.7rem;
+    top: 0.3rem;
+    width: 0.9rem;
+    height: 1.1rem;
+    left: 0.25rem;
+    background: url(https://bhbl.dayuan1997.com/img/left-post-board.2d1236b0.png) no-repeat;
+    background-size: 100%;
+}
+
+.back{
+    position: fixed;
+    left: 0.7rem;
+    top: 1rem;
+    display: inline-block;
+    width: 0.8rem;
+    height: 1rem;
+    text-align: center;
+    cursor: pointer;
+    background-size: 100% 100%;
+    box-sizing: border-box;
+    z-index: 11;
+}
+
+.learn-area{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    height: calc(100% - 0.8rem);
+    width: 100%;
+    padding: 0 0.6rem;
+    box-sizing: border-box;
+}
+
+
+.learn-img-info{
+    position: absolute;
+    top: 50%;
+    width: 0.7rem;
+    transform: translateY(-50%);
+}
+
+.learn-left-hand{
+    // top: 0.3rem;
+    // width: 0.9rem;
+    // height: 1.1rem;
+}
+
+.learn-right-hand{
+    right: -0.03rem;
+    top: 50%;
+    width: 0.7rem;
+    transform: translateY(-50%);
+}
+
+.learn-area-left-post, .learn-area-right-post {
+    position: absolute;
+    width: 1.55rem;
+    height: 100%;
+    top: -46px;
+}
+
+.learn-area-left-post{
+    left: 0.46rem;
+    background: url(https://bhbl.dayuan1997.com/img/learn-left-post.d3b23ca4.png) no-repeat;
+    background-size: 100% 100%;
+    z-index: 10;
+}
+.learn-area-right-post{
+    right: 0.46rem;
+    background: url(https://bhbl.dayuan1997.com/img/learn-right-post.82a736bd.png) no-repeat;
+    background-size: 100% 100%;
+    z-index: 10;
+}
+
+.learn-bottom-light{
+    position: absolute;
+    background: url(https://bhbl.dayuan1997.com/img/learn-bottom-light.139ff94e.png) no-repeat;
+    background-size: 100%;
+    width: 100%;
+    height: 1.58rem;
+    bottom: 0;
+    z-index: 1;
+    left: 0;
+}
+
+.refresh-container{
+    position: absolute;
+    top: 53%;
+    right: 0.4rem;
+    transform: translateY(-53%) rotate(-90deg);
+    z-index: 89;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.learn-area-bottom{
+    bottom: 0;
+    height: 1.55rem;
+    text-align: center;
+    background: url(https://bhbl.dayuan1997.com/img/learn-bottom-plateform.e4e1438d.png) no-repeat 50%;
+    width: 12.55rem;
+    background-size: 100%;
+    z-index: 2;
+    transform: translateX(-6.3rem);
+    left: 50%;
+    position: absolute;
+}
+
+.learn-content-container{
+    position: relative;
+    top: -40px;
+    padding: 0;
+}
+

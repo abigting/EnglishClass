@@ -1,0 +1,168 @@
+// new
+.learn-audio .learn-audio-record {
+    height: 40%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: .6rem;
+    margin: auto;
+    transform-origin: center center;
+    z-index: 11
+}
+
+.learn-audio {
+    text-align: center;
+    box-sizing: border-box;
+    background: linear-gradient(0deg,#3d7bff,#87a1ff);
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.learn-audio .learn-audio-handle {
+    height: 14%;
+    position: absolute;
+    top: 18%;
+    transform-origin: right bottom;
+    z-index: 11
+}
+
+.learn-audio .learn-audio-play {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%);
+    width: 9rem;
+    height: 3.4rem;
+    background: url(https://bhbl.dayuan1997.com/img/l-sound-bg.82d41a1d.png) no-repeat;
+    background-size: 100% !important;
+    z-index: 11
+}
+
+.learn-audio .learn-audio-bottom {
+    width: 100%;
+    height: 100%;
+    position: relative
+}
+
+.learn-audio .learn-audio-bottom .audio-title {
+    height: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: .24rem;
+    font-weight: 400;
+    font-stretch: normal;
+    letter-spacing: 0;
+    color: #e39d26;
+    margin: 0
+}
+
+.learn-audio .learn-audio-bottom .progress {
+    position: absolute;
+    bottom: .15rem;
+    width: 46%;
+    height: 20%;
+    left: 55%;
+    transform: translate(-50%)
+}
+
+.learn-audio .learn-audio-bottom .progress .progress-section {
+    width: 80%;
+    margin: auto;
+    height: .1rem;
+    position: relative
+}
+
+.learn-audio .learn-audio-bottom .progress .progress-section .progress-box {
+    width: 100%;
+    position: relative;
+    top: 0;
+    right: 0;
+    height: .1rem;
+    background: #1c1b4b;
+    border-radius: .1rem;
+    cursor: pointer
+}
+
+.learn-audio .learn-audio-bottom .progress .progress-section .progress-box .progress-small {
+    position: absolute;
+    left: 0;
+    width: 30%;
+    height: .1rem;
+    top: 0;
+    background-image: linear-gradient(90deg, #9588f8, #9588f8);
+    border-radius: .1rem
+}
+
+.learn-audio .learn-audio-bottom .progress .progress-section .progress-box .progress-small .circle {
+    background-image: linear-gradient(90deg, #9588f8, #9588f8);
+    width: .16rem;
+    height: .16rem;
+    display: inline-block;
+    position: absolute;
+    right: -.085rem;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 .04rem #9d90fd
+}
+
+.learn-audio .learn-audio-bottom .progress .time {
+    width: 80%;
+    box-sizing: border-box;
+    padding: .1rem 0 .24rem 0;
+    margin: 0 auto;
+    color: #fff;
+    font-size: .2rem;
+    text-align: right;
+    display: flex;
+    flex-direction: row
+}
+
+.learn-audio .learn-audio-bottom .progress .time .time-show {
+    flex: 1;
+    color: #fff
+}
+
+.learn-audio .learn-audio-bottom .progress .time .time-show .current-time {
+    text-align: left
+}
+
+.learn-audio .learn-audio-bottom .audio-contrl {
+    width: .8rem;
+    height: .8rem;
+    position: absolute;
+    bottom: .15rem;
+    left: 23%;
+    display: flex;
+    justify-content: center
+}
+
+.learn-audio .learn-audio-bottom .audio-contrl .play {
+    display: inline-block;
+    width: .6rem;
+    height: .6rem;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 50%;
+    text-align: center;
+    color: #333;
+    background: url(https://bhbl.dayuan1997.com/img/play1.03bc51a9.png) no-repeat;
+    background-size: 100% 100%
+}
+
+.learn-audio .learn-audio-bottom .audio-contrl .play.pause {
+    background: url(https://bhbl.dayuan1997.com/img/pause1.57089135.png) no-repeat;
+    background-size: 100% 100%
+}
+
+.learn-audio .learn-audio-bottom .pause-number {
+    position: absolute;
+    right: 25%;
+    bottom: .85rem;
+    font-size: .12rem;
+    color: #fff
+}

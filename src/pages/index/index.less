@@ -1,0 +1,98 @@
+.login-wrapper {
+    background-image: url("https://auth.dayuan1997.com/img/l-login-back.5b22fda6.png");
+    background-size: 100% 100%;
+    width: 100vw;
+    height: 100vh;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-form {
+    text-align: center;
+    width: 300px;
+
+    :global(.ant-form-item .ant-form-item-label >label::after) {
+        content: "";
+    }
+}
+
+.login-logo {
+    width: 320px;
+
+    >img {
+        width: 100%;
+    }
+}
+
+.login-inner {
+    position: relative;
+    width: 780px;
+    height: 380px;
+    background: url(https://auth.dayuan1997.com/img/l-login-back-2.e2253a2d.png) no-repeat 50%/100% 100%;
+}
+
+.login-main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.tab-box {
+    position: absolute;
+    top: -46px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    cursor: pointer;
+
+    .tab {
+        width: 184px;
+        height: 56px;
+        line-height: 56px;
+        font-size: 24px;
+        text-align: center;
+        background-repeat: no-repeat;
+        background-position: 50%;
+        background-size: auto 100%;
+        color: #fff;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQIAAABQCAMAAADFoIsqAAABnlBMVEX75cIAAAD75sH//33//m/7577+/l7857r/2HX/5XX75sH85cD/6W7757j/7HH86bT85sH758L75sT/3n3/6nL/5nX/6HH757P/6nH86Kv96LH56XD857P//6L85qj76Lv/73P855/96KX56W766HH56m//63D856375cL855366W7/53P95nL856X857D75rv76Jr86az857766W/86aL86KL463H/63H75sP658P76bj/2rL96KD86LX856f76L375sP66nL76Jb855r96Lj/7Xb75cD/7qP/7sb76Zf96bz/8qj/8Lb96bf96qf96rr96bn96ar86LP/7sT66Gz/66r56nL966j/7bf97Kv+67v96Z/+67396qz96rv857b/7sD97Kr96qv76pb96a7752r86bD86bP/7cP/7sH/7Lr/7bL+7K/+66n96br86Jn96cP/7bX/67z+6rr86aj+6Kb+7bX76Zj86Jb76Wn/7sX/7sL/7cD+7bb+7Ln86Kz/7an+6ar/7br/7Lz86aD/7b/76qP/7Ln76oH76YHU41qgAAAAinRSTlM7ADwCBD4DQAYJPjkLQg1EOj9BCBETFUYXTUkoRwZRQw9cVC0gIxlLMl8qHh1SSDJhTEgwWFYmG0IrRAZZQk9FRCJfXEscNRL8Y1MWCFefaltPLuw1DCWWzIR9eG5nZU/Zj3JnX0A9N+fhvbqqe2FZTrR3cykcn21VO/fzzsaJSCQgrZSExW2mR0AZMa2uAAAKOUlEQVR42u3b+UMSQRQH8DUQF4K2pDQBxRSwVDQtj0jMAzMpgqQk7yPzvjUtz+zuv+69mWGGS7eLyqXvD921zofve4tgUt7Zje57kqeaM0OgyxQDif7kGAxqEOoEarDZz+lHlmW5VIZYrVYjixljhFjp7+n1p3/U0o/C/0GM9Ac85eylePT4qS/EU44hPwIJdOB1yHSRUwjElUWyCKF+/qTT0weeHx7PfRlzJSHwU5QABrlUD8mMcCJBhgtzhywyqD/+/PDs9Hh4dvYiyNXEwM/BAf4IdOEUBOk0gPTtwqKmkK3+pz/4/PRwZI+npaWnlqenxeO5yhTMMBBsHPIwKgRp58/MkB0EnRqAEcPLT8+Pp4fD10BcLlcnDfyopqa2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);
+    }
+}
+
+.login-btn {
+    width: 200px;
+    height: 50px;
+    // line-height: 64px;
+    margin: 0 auto;
+    background-color: #6072ea;
+    border-color: #6072ea;
+    font-size: 16px;
+    letter-spacing: .01rem;
+    color: #fff;
+    text-shadow: rgb(62 86 141 / 92%) 0.02rem 0 0, rgb(62 86 141 / 92%) 0 0.02rem 0, rgb(62 86 141 / 92%) -0.02rem 0 0, rgb(62 86 141 / 92%) 0 -0.02rem 0;
+}
+
+.login-form-icon {
+    color: #fff;
+}
+
+.login-form-input {
+    font-size: .2rem;
+    color: #357fd6;
+    box-sizing: border-box;
+    background-color: #afd0f7;
+}
+
+.register{
+    cursor: pointer;
+    text-align: right;
+    margin: 0 0 12px 0;
+    color: #fff;
+    font-size: 16px;
+}
