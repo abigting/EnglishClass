@@ -7,7 +7,7 @@ export default defineConfig({
     { path: "/practise", component: "practise" },
     { path: "/lessonManagement", component: "lesson-management" },
     { path: "/classDetail", component: "class-detail" },
-    { path: "/learning", component: "learning" },
+    { path: "/learning/:type", component: "learning" },
   ],
   npmClient: 'yarn',
 });

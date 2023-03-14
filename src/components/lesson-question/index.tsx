@@ -20,21 +20,26 @@ export default function Add() {
 
     return (
         <div>
-            <LearningWrapper title="video" className={styles['learn-video']}>
-                <ReactPlayer
-                    width='100%'
-                    height='100%'
-                    playing={true}
-                    src={require("./../../assets/2023_02_26 20_56_17.mp4")} />
-            </LearningWrapper >
-            <div className={styles['lSoundRecording-btn']}><div className={styles['l-recorder-container']}>
-                <div className={`${styles['btn-recorder']} ${styles['default']}`}>
-                    <span className={styles['text']}>
-                        点击按钮回答问题
-                    </span>
+            <LearningWrapper title="question" className={styles['learn-vidreact-playereo']}>
+                <div className={styles['video-wrapper']}>
+                    <ReactPlayer
+                        url={require("./../../assets/2023_02_26 20_56_17.mp4")}
+                        className='react-player'
+                        // playing
+                        controls
+                        width='100%'
+                        height='100%'
+                    />
                 </div>
-            </div>
-            </div>
+                <div className={styles['lSoundRecording-btn']}><div className={styles['l-recorder-container']}>
+                    <div className={`${styles['btn-recorder']} ${styles['default']}`}>
+                        <span className={styles['text']}>
+                            点击按钮回答问题
+                        </span>
+                    </div>
+                </div>
+                </div>
+            </LearningWrapper >
         </div>
     );
 }

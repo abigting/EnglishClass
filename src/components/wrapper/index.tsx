@@ -19,7 +19,7 @@ export default function Home(props: TProps) {
             props.menus &&
             <div className={styles['home-menu']}>
             {
-                 props.menus.map((s: any)=> <span className={styles['home-menu-tab']}>{s.title}</span>)
+                 props.menus.map((s: any)=> <span key={s.key} className={styles['home-menu-tab']}>{s.title}</span>)
             }
         </div>
         }

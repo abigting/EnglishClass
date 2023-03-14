@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Modal, Radio, Form, Input, Upload } from 'antd';
+// import React, { useState } from 'react';
+import { Button, Modal, Radio, Form, Input, Upload, InputNumber } from 'antd';
 import styles from './index.less';
 
 type onCancel = (a: number, b: number) => number
@@ -61,6 +61,13 @@ export default function Add(props: IProps) {
                     rules={[{ required: true, message: '请输入题目名称!' }]}
                 >
                     <Input />
+                </Form.Item>
+                <Form.Item
+                    label="播放顺序"
+                    name="sort"
+                    rules={[{ required: true, message: '请输入播放顺序!' }]}
+                >
+                    <InputNumber min={1} precision={0} />
                 </Form.Item>
                 <Form.Item
                     label="题目答案"

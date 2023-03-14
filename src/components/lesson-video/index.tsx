@@ -1,7 +1,7 @@
 import { Link, Outlet } from 'umi';
 import React, { useState } from 'react';
 import { Button, Modal, Radio, Form, Input, InputNumber, Upload, Table } from 'antd';
-import { Player } from 'video-react';
+import ReactPlayer from 'react-player';
 import LearningWrapper from '@/components/wrapper/learning';
 // import { PlusOutlined } from '@ant-design/icons';
 import 'video-react/dist/video-react.css';
@@ -20,11 +20,17 @@ export default function Add() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <LearningWrapper title="video" className={styles['learn-video']}>
-            <Player>
-                <source src={require("D:\\download\\browser\\2023_03_12 19_43_21.mp4")} />
-                {/* <source src={require("D:/download/browser/2023_03_12 19_43_21.mp4")} /> */}
-            </Player>
-        </LearningWrapper >
+        <LearningWrapper title="question" className={styles['learn-vidreact-playereo']}>
+        <div className={styles['video-wrapper']}>
+            <ReactPlayer
+                url={require("./../../assets/2023_02_26 20_56_17.mp4")}
+                className='react-player'
+                // playing
+                controls
+                width='100%'
+                height='100%'
+            />
+        </div>
+    </LearningWrapper >
     );
 }

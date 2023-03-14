@@ -8,19 +8,20 @@ interface TProps {
 
 const blocks = [
     {
-        id: 1,
-        img: 'https://bhbl.dayuan1997.com/img/801.8c70aba7.png',
-        text: '心法'
+        img: 'https://bhbl.dayuan1997.com/img/800.d1ecb553.png',
+        text: '秘籍',
+        type:1,
     },
     {
-        id: 2,
-        img: 'https://bhbl.dayuan1997.com/img/815.47abf77e.png',
-        text: '大侠表达'
+        img: 'https://bhbl.dayuan1997.com/img/801.8c70aba7.png',
+        text: '心法',
+        type:2,
     },
     {
         id: 3,
-        img: 'https://bhbl.dayuan1997.com/img/815.47abf77e.png',
-        text: '答题'
+        img: 'https://bhbl.dayuan1997.com/img/803.09130ece.png',
+        text: '大侠表达',
+        type:3,
     }
 ]
 
@@ -55,7 +56,7 @@ export default function Lesson(props: TProps) {
                         <div className={styles['lesson-info-content']}>
                             {
                                 blocks.map(s =>
-                                    <div key={s.id} className={styles['lesson-info-content-block']}  onClick={() => history.push('/learning')}>
+                                    <div key={s.type} className={styles['lesson-info-content-block']}  onClick={() => history.push(`/learning/${s.type}`)}>
                                         <div className={styles['element-img']}>
                                             <div className={styles['element-sign']}>0/1</div>
                                             <img src={s.img} alt="" />

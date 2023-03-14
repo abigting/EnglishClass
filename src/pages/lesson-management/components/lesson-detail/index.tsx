@@ -57,7 +57,8 @@ export default function Add(props: IProps) {
 
     return (
         <Modal title="新增课程" width={500} open={props.visible} onOk={handleOk} onCancel={() => handleCancel()} footer={null}>
-            <Form
+           <div     className={styles['form-wrapper']}>
+           <Form
                 className={styles['form-content']}
                 name="basic"
                 labelCol={{ span: 4 }}
@@ -86,6 +87,14 @@ export default function Add(props: IProps) {
                         <Radio value="b">选择题(音频)</Radio>
                         <Radio value="c">语音回答</Radio>
                     </Radio.Group>
+                </Form.Item>
+
+                <Form.Item
+                    label="播放顺序"
+                    name="sort"
+                    rules={[{ required: true, message: '请输入播放顺序!' }]}
+                >
+                    <InputNumber min={1} precision={0} />
                 </Form.Item>
 
                 <Form.Item
@@ -144,6 +153,7 @@ export default function Add(props: IProps) {
                     </Button>
                 </Form.Item>
             </Form>
+           </div>
         </Modal>
     );
 }
