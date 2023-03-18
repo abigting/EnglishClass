@@ -10,4 +10,16 @@ export default defineConfig({
     { path: "/learning/:type", component: "learning" },
   ],
   npmClient: 'yarn',
+  // base:'./',
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
+  history:{
+    type:"hash"
+  },
+  proxy: {
+    '/course/': {
+              target: '/lccweb.natapp1.cc',
+              changeOrigin: true,
+              // pathRewrite: {'^/api': ''},
+    },
+}
 });

@@ -11,6 +11,7 @@ request.interceptors.request.use((url, options) => {
       ...rest,
       headers: {
         // token: getCookie('token'),
+        userUUId: '123',
         ...headers,
       },
     },
@@ -20,12 +21,12 @@ request.interceptors.request.use((url, options) => {
 request.interceptors.response.use(async (response) => {
   try {
     const data = await response.clone().json();
-    if (data.code !== '0') {
+    if (data.code !== 0) {
       // 防止连续弹出多个message
       message.destroy();
-      message.warning(data.errorMsg);
-      if (data.code === '401') {
-        window.location.href = '/login';
+      message.warning(data.message);
+      if (data.code === -10000) {
+        window.location.href = '/';
       }
     } else {
     }

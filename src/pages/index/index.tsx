@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { history } from 'umi';
 import { Button, Modal, Radio, Form, Input, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { UserServices} from '@/services';
 import Register from './register';
 
 import styles from './index.less';
@@ -22,14 +23,17 @@ export default function Index() {
 
   function login(){
     form.validateFields()
-    .then((values) => {
-      console.log(values, 'values')
-      if(!values.username){
+    .then(async (values) => {
+      if(!values.userName){
         message.error('请输入用户名!')
       }else if(!values.password){
         message.error('请输入密码!')
       }else{
         history.push('/home')
+        // const res =await UserServices.login(values);
+        // if (res.code === 0){
+        //   history.push('/home')
+        // }
       }
     })
     .catch((errorInfo) => {
@@ -57,11 +61,11 @@ export default function Index() {
             wrapperCol={{ span: 20 }}
             style={{ maxWidth: 600 }}
             autoComplete="off"
-            initialValues={{ 'type': 'a', username:'test', password: '123456' }}
+            initialValues={{userName:'test', password: '123456' }}
           >
             <Form.Item
               label={<UserOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
-              name="username"
+              name="userName"
             // rules={[{ required: true, message: '请输入用户名!' }]}
             >
               <Input className={styles['login-form-input']} size="large" />
@@ -74,7 +78,7 @@ export default function Index() {
               <Input className={styles['login-form-input']} type="password" size="large" />
             </Form.Item>
 
-            <div className={styles['register']} onClick={() => setVisible(true)}><a>注册</a></div>
+            {/* <div className={styles['register']} onClick={() => setVisible(true)}><a>注册</a></div> */}
             <Button className={styles['login-btn']} onClick={() => login()}>立即登录</Button>
           </Form>
           <Register visible={visible} closeModal={()=> setVisible(false) }/>

@@ -1,5 +1,6 @@
 import Wrapper from '@/components/wrapper';
 import { history } from 'umi';
+import { Rate} from 'antd';
 import styles from './index.less';
 
 export default function Home() {
@@ -15,13 +16,13 @@ export default function Home() {
             id: 2,
             title: '第41关卡 - 大侠7段',
             img: 'https://bhbl-prod.oss-accelerate.aliyuncs.com/%E8%AF%AD%E8%AF%BE/07GZG07/GZG07041%23%E6%96%B0%E8%AF%BE/GZG07041.jpg?Expires=3089631899&OSSAccessKeyId=LTAI4GGtSGUKaH8yBZViDdp3&RI8Z5kima26Ihg0y1JBfUQ2OYpc%3D',
-            rate: 4
+            rate: 3
         },
         {
             id: 3,
             title: '第41关卡 - 大侠7段',
             img: 'https://bhbl-prod.oss-accelerate.aliyuncs.com/%E8%AF%AD%E8%AF%BE/07GZG07/GZG07041%23%E6%96%B0%E8%AF%BE/GZG07041.jpg?Expires=3089631899&OSSAccessKeyId=LTAI4GGtSGUKaH8yBZViDdp3&RI8Z5kima26Ihg0y1JBfUQ2OYpc%3D',
-            rate: 4
+            rate: 5
         },
         {
             id: 4,
@@ -33,7 +34,7 @@ export default function Home() {
             id: 5,
             title: '第41关卡 - 大侠7段',
             img: 'https://bhbl-prod.oss-accelerate.aliyuncs.com/%E8%AF%AD%E8%AF%BE/07GZG07/GZG07041%23%E6%96%B0%E8%AF%BE/GZG07041.jpg?Expires=3089631899&OSSAccessKeyId=LTAI4GGtSGUKaH8yBZViDdp3&RI8Z5kima26Ihg0y1JBfUQ2OYpc%3D',
-            rate: 4
+            rate: 1
         }
     ]
 
@@ -62,6 +63,9 @@ export default function Home() {
                             </div>
                             <div className={styles['class-content']}>
                                 <img className={styles['class-content-cover']} src={item.img} alt="" />
+                                <div className={styles['class-content-rate']} >
+                                <Rate value={item.rate}/>
+                                </div>
                             </div>
                     </div>)
             }

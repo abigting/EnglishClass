@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Wrapper from '@/components/wrapper';
 import { history } from 'umi';
 import { Table, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { LearningServices } from '@/services';
 import QuestionDetail from './components/question-detail';
 import LessonDetail from './components/lesson-detail';
 import styles from './index.less';
@@ -16,44 +17,13 @@ interface DataType {
 }
 
 export default function LessonManagement() {
-
+  const [data, setData] = useState([])
   const [lVisible, setlVisible] = useState(false)
   const [qVisible, setqVisible] = useState(false)
 
-  const data: DataType[] = [
-    {
-      key: 1,
-      name: 'John Brown sr.',
-      age: 60,
-      address: 'New York No. 1 Lake Park',
-      children: [
-        {
-          key: 11,
-          name: 'John Brown',
-          age: 42,
-          address: 'New York No. 2 Lake Park',
-        },
-        {
-          key: 12,
-          name: 'John Brown jr.',
-          age: 30,
-          address: 'New York No. 3 Lake Park',
-        },
-        {
-          key: 13,
-          name: 'Jim Green sr.',
-          age: 72,
-          address: 'London No. 1 Lake Park',
-        },
-      ],
-    },
-    {
-      key: 2,
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-    },
-  ];
+  useEffect(()=>{
+      getList();
+  }, [])
 
   const columns: ColumnsType<DataType> = [
     {
@@ -70,7 +40,13 @@ export default function LessonManagement() {
     {
       title: '答案',
       dataIndex: 'address',
-      width: '30%',
+      // width: '30%',
+      key: 'address',
+    },
+    {
+      title: '播放次数',
+      dataIndex: 'playTimes',
+      // width: '30%',
       key: 'address',
     },
     {
@@ -87,6 +63,13 @@ export default function LessonManagement() {
       </div>,
     },
   ];
+
+  async function getList(){
+    const res = await LearningServices.fetchCourselist();
+    if(res.code === 0){
+      setData(res.data)
+    }
+  }
 
   function addLesson() {
     setlVisible(true)
@@ -109,6 +92,6 @@ export default function LessonManagement() {
     <QuestionDetail visible={qVisible} closeModal={()=>closeQuestionDetailModal()}/>
     <LessonDetail visible={lVisible} closeModal={()=>closeLessonDetailModal()} />
     <div><Button size='middle' type="primary" onClick={() => addLesson()}>新增课程</Button></div>
-    <Table dataSource={data} columns={columns} />
+    <Table rowKey="id" childrenColumnName="list" dataSource={data} columns={columns}  />
   </Wrapper>
 }

@@ -4,7 +4,6 @@ import { Button, Modal, Radio, Form, Input, InputNumber, Upload, Table } from 'a
 import ReactPlayer from 'react-player';
 import LearningWrapper from '@/components/wrapper/learning';
 // import { PlusOutlined } from '@ant-design/icons';
-import 'video-react/dist/video-react.css';
 import styles from './index.less';
 
 
@@ -20,7 +19,7 @@ export default function Add() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <LearningWrapper title="question" className={styles['learn-vidreact-playereo']}>
+        <LearningWrapper title="video" className={styles['learn-vidreact-playereo']}>
         <div className={styles['video-wrapper']}>
             <ReactPlayer
                 url={require("./../../assets/2023_02_26 20_56_17.mp4")}
