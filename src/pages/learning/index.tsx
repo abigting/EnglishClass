@@ -9,7 +9,6 @@ import styles from './index.less';
     const type = 1;
 
     const { match } = props;
-    console.log(match?.params?.type, 'match?.params?.type')
     return <div>
         {
             match?.params?.type === '1' ? <LessonAudio /> :  match?.params?.type === '2' ? <LessonVideo /> : <LessonQuestion />

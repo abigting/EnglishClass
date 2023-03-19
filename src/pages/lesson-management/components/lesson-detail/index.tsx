@@ -32,29 +32,29 @@ export default function Add(props: IProps) {
     };
 
     const onFinish = async (values: any) => {
-        const {coverPath, videoPath, audioPath, ...rest } = values;
-        let req ={...rest}
-        if(values.coverPath){
-            req={
-                ...req, 
+        const { coverPath, videoPath, audioPath, ...rest } = values;
+        let req = { ...rest }
+        if (values.coverPath) {
+            req = {
+                ...req,
                 coverPath: values?.coverPath?.originFileObj
             }
         }
-        if(values.videoPath){
-            req={
-                ...req, 
+        if (values.videoPath) {
+            req = {
+                ...req,
                 videoPath: values?.videoPath?.originFileObj
             }
         }
-        if(values.audioPath){
-            req={
-                ...req, 
+        if (values.audioPath) {
+            req = {
+                ...req,
                 audioPath: values?.audioPath?.originFileObj
             }
         }
         const formData = getFormData(req)
         const res = await LearningServices.courseCreate(formData);
-        if(res.code === 0){
+        if (res.code === 0) {
             message.success('保存成功');
             props.closeModal();
         }
@@ -89,9 +89,16 @@ export default function Add(props: IProps) {
     };
 
     return (
-        <Modal title="新增课程" width={500} open={props.visible} onOk={handleOk} onCancel={() => handleCancel()} footer={null}>
+        <Modal title="新增课程"
+            width={500}
+            open={props.visible}
+            onOk={handleOk}
+            onCancel={() => handleCancel()}
+            afterClose={() => form.resetFields()}
+            footer={null}>
             <div className={styles['form-wrapper']}>
                 <Form
+                  form={form}
                     className={styles['form-content']}
                     name="basic"
                     labelCol={{ span: 4 }}
@@ -153,7 +160,7 @@ export default function Add(props: IProps) {
                         getValueFromEvent={coverFile}
                     // rules={[{ required: true, message: '请上传封面资料!' }]}
                     >
-                        <Upload listType="picture-card" maxCount={1}>
+                        <Upload accept="image/*" listType="picture-card" maxCount={1}>
                             <div>
                                 <div style={{ marginTop: 8 }}>+ 上传</div>
                             </div>
@@ -167,10 +174,8 @@ export default function Add(props: IProps) {
                         getValueFromEvent={videoFile}
                     // rules={[{ required: true, message: '请上传视频资料!' }]}
                     >
-                        <Upload listType="picture-card">
-                            <div>
-                                <div style={{ marginTop: 8 }}>+ 上传</div>
-                            </div>
+                        <Upload accept="video/*" maxCount={1}>
+                            <Button>+ 上传</Button>
                         </Upload>
                     </Form.Item>
 
@@ -181,10 +186,8 @@ export default function Add(props: IProps) {
                         getValueFromEvent={audioFile}
                     // rules={[{ required: true, message: '请上传音频资料!' }]}
                     >
-                        <Upload listType="picture-card">
-                            <div>
-                                <div style={{ marginTop: 8 }}>+ 上传</div>
-                            </div>
+                        <Upload accept="image/*" maxCount={1}>
+                            <Button>+ 上传</Button>
                         </Upload>
                     </Form.Item>
 

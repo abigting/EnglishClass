@@ -1,7 +1,6 @@
-import { Link, Outlet } from 'umi';
 import React, { useState } from 'react';
-import { Button, Modal, Radio, Form, Input, InputNumber, Upload, Table } from 'antd';
 import ReactPlayer from 'react-player';
+import { message } from 'antd';
 import LearningWrapper from '@/components/wrapper/learning';
 // import { PlusOutlined } from '@ant-design/icons';
 import styles from './index.less';
@@ -16,7 +15,20 @@ interface DataType {
 }
 
 export default function Add() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [playTimes, setPlayTimes] = useState(3);
+
+    function videoPlay(){
+        if(playTimes>0){
+            setPlayTimes(playTimes-1)
+        }
+    }
+
+    function videoPause(){
+       if(playTimes <=0){
+        message.info("你已经无可暂停次数~")
+        return false;
+       }
+    }
 
     return (
         <LearningWrapper title="video" className={styles['learn-vidreact-playereo']}>
@@ -25,10 +37,14 @@ export default function Add() {
                 url={require("./../../assets/2023_02_26 20_56_17.mp4")}
                 className='react-player'
                 // playing
-                controls
+                onPlay={()=>videoPlay()}
+                onPause={()=>videoPause()}
+                controls = {true}
                 width='100%'
                 height='100%'
+                
             />
+            <span className={styles['left-times']}>剩余暂停次数：{playTimes}</span>
         </div>
     </LearningWrapper >
     );

@@ -11,7 +11,7 @@ request.interceptors.request.use((url, options) => {
       ...rest,
       headers: {
         // token: getCookie('token'),
-        userUUId: '123',
+        userUUId: 'test123',
         ...headers,
       },
     },
@@ -26,7 +26,7 @@ request.interceptors.response.use(async (response) => {
       message.destroy();
       message.warning(data.message);
       if (data.code === -10000) {
-        window.location.href = '/';
+        // window.location.href = '/';
       }
     } else {
     }

@@ -1,72 +1,57 @@
+import React, { useState, useEffect } from 'react';
 import Wrapper from '@/components/wrapper';
 import { history } from 'umi';
-import { Rate} from 'antd';
+import { Rate } from 'antd';
+import { LearningServices } from '@/services';
 import styles from './index.less';
 
+const menusDefault = [
+    {
+        key: '1',
+        title: '视频',
+        active: true
+    },
+    {
+        key: '2',
+        title: '音频'
+    },
+    {
+        key: '3',
+        title: '选择题'
+    }
+]
+
 export default function Home() {
+    const [data, setData] = useState([]);
+    const [menus, setMenus] = useState(menusDefault);
+    useEffect(() => {
+        getList('1');
+    }, [])
 
-    const classs = [
-        {
-            id: 1,
-            title: '第41关卡 - 大侠7段',
-            img: 'https://bhbl-prod.oss-accelerate.aliyuncs.com/%E8%AF%AD%E8%AF%BE/07GZG07/GZG07041%23%E6%96%B0%E8%AF%BE/GZG07041.jpg?Expires=3089631899&OSSAccessKeyId=LTAI4GGtSGUKaH8yBZViDdp3&RI8Z5kima26Ihg0y1JBfUQ2OYpc%3D',
-            rate: 4
-        },
-        {
-            id: 2,
-            title: '第41关卡 - 大侠7段',
-            img: 'https://bhbl-prod.oss-accelerate.aliyuncs.com/%E8%AF%AD%E8%AF%BE/07GZG07/GZG07041%23%E6%96%B0%E8%AF%BE/GZG07041.jpg?Expires=3089631899&OSSAccessKeyId=LTAI4GGtSGUKaH8yBZViDdp3&RI8Z5kima26Ihg0y1JBfUQ2OYpc%3D',
-            rate: 3
-        },
-        {
-            id: 3,
-            title: '第41关卡 - 大侠7段',
-            img: 'https://bhbl-prod.oss-accelerate.aliyuncs.com/%E8%AF%AD%E8%AF%BE/07GZG07/GZG07041%23%E6%96%B0%E8%AF%BE/GZG07041.jpg?Expires=3089631899&OSSAccessKeyId=LTAI4GGtSGUKaH8yBZViDdp3&RI8Z5kima26Ihg0y1JBfUQ2OYpc%3D',
-            rate: 5
-        },
-        {
-            id: 4,
-            title: '第41关卡 - 大侠7段',
-            img: 'https://bhbl-prod.oss-accelerate.aliyuncs.com/%E8%AF%AD%E8%AF%BE/07GZG07/GZG07041%23%E6%96%B0%E8%AF%BE/GZG07041.jpg?Expires=3089631899&OSSAccessKeyId=LTAI4GGtSGUKaH8yBZViDdp3&RI8Z5kima26Ihg0y1JBfUQ2OYpc%3D',
-            rate: 4
-        },
-        {
-            id: 5,
-            title: '第41关卡 - 大侠7段',
-            img: 'https://bhbl-prod.oss-accelerate.aliyuncs.com/%E8%AF%AD%E8%AF%BE/07GZG07/GZG07041%23%E6%96%B0%E8%AF%BE/GZG07041.jpg?Expires=3089631899&OSSAccessKeyId=LTAI4GGtSGUKaH8yBZViDdp3&RI8Z5kima26Ihg0y1JBfUQ2OYpc%3D',
-            rate: 1
-        }
-    ]
 
-    const menus=[
-        {
-            key:'1',
-            title:'Audio'
-        },
-        {
-            key:'2',
-            title:'Video'
-        },
-        {
-            key:'3',
-            title:'Selection'
+    async function getList(type: string | undefined) {
+        setMenus(menus.map(s=>s.key===type?{...s, active: true}:{...s,active: false}))
+        const res = await LearningServices.courseList({ type});
+        if (res.code === 0) {
+            setData(res.data)
         }
-    ]
-    return <Wrapper menus={menus}>
+    }
+
+    return <Wrapper menus={menus} toggleMenu={(type: string)=> getList(type)}>
         <div className={styles['class-wrapper']}>
             {
-                classs.map(item =>
-                    <div key={item.id} className={styles['class-module']} onClick={() => history.push('/classDetail')}>
+                data.map(item =>
+                    <div key={item.id} className={styles['class-module']} onClick={() => history.push(`/classDetail?uuid=${item.uuid}`)}>
                         <img className={styles['class-module-bg']} src={'https://bhbl.dayuan1997.com/img/list-bg.5a909275.png'} alt="" />
                         <div className={styles['class-title']}>
-                                {item.title}
+                            {item.name}
+                        </div>
+                        <div className={styles['class-content']}>
+                            <img className={styles['class-content-cover']} src={`http://lccweb.natapp1.cc${item.coverPath}`} alt="" />
+                            <div className={styles['class-content-rate']} >
+                                <Rate value={item.rate} />
                             </div>
-                            <div className={styles['class-content']}>
-                                <img className={styles['class-content-cover']} src={item.img} alt="" />
-                                <div className={styles['class-content-rate']} >
-                                <Rate value={item.rate}/>
-                                </div>
-                            </div>
+                        </div>
                     </div>)
             }
         </div>

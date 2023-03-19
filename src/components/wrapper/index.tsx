@@ -2,9 +2,10 @@ import { ReactElement, ReactFragment } from 'react';
 import { history } from 'umi';
 import styles from './index.less';
 
-interface TProps{
+interface TProps {
     children: ReactElement | ReactFragment;
-    menus: any
+    menus: any;
+    toggleMenu: any;
 }
 
 export default function Home(props: TProps) {
@@ -18,13 +19,21 @@ export default function Home(props: TProps) {
         {
             props.menus &&
             <div className={styles['home-menu']}>
-            {
-                 props.menus.map((s: any)=> <span key={s.key} className={styles['home-menu-tab']}>{s.title}</span>)
-            }
-        </div>
+                {
+                    props.menus.map((s: any, i: number) =>
+                        <span key={s.key}
+                            className={`${styles['home-menu-tab']} 
+                            ${i === 0 ? styles['first'] :i === 1 ? styles['middle']: styles['last']}
+                            ${i === 0 && s.active ? styles['first-active'] :i === 1 && s.active ? styles['middle-active']: s.active?styles['last-active']:{}}
+                            `}
+                            onClick={() => props.toggleMenu(s.key)}>
+                            {s.title}
+                        </span>)
+                }
+            </div>
         }
         <div className={styles['home-container']}>
-            <div className={styles['home-left-pillar']}/>
+            <div className={styles['home-left-pillar']} />
             <div className={styles['home-center']}>
                 {props.children}
             </div>

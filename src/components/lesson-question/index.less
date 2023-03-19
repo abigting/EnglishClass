@@ -41,7 +41,7 @@
 }
 
 .l-recorder-container .btn-recorder.default {
-    background-image: url(https://bhbl.dayuan1997.com/img/default.1df9dcc3.png);
+    // background-image: url(https://bhbl.dayuan1997.com/img/default.1df9dcc3.png);
 }
 
 .l-recorder-container .btn-recorder {
@@ -56,7 +56,7 @@
     perspective: 1.5rem;
 }
 
-.l-recorder-container .btn-recorder .text {
+.l-recorder-container .btn-recorder .btn-text {
     position: absolute;
     text-align: center;
     top: 0;
@@ -66,4 +66,52 @@
     transform: rotateX(30deg);
     letter-spacing: .02rem;
     color: #db582e;
+}
+
+.l-recorder-container .btn-recorder .btn-text-active{
+    top: 8px
+}
+
+.l-button-container {
+    display: flex;
+    justify-content: space-around;
+    position: relative;
+    z-index: 12
+}
+
+
+.l-button-container .l-btn-default.l-btn-type-1 {
+    position: relative;
+    cursor: pointer;
+    width: 1.85rem;
+    height: 1.08rem;
+    background-image: url(https://bhbl.dayuan1997.com/img/type_1_default.285c3932.png);
+    background-size: 100% 100%;
+}
+
+.l-button-container .l-btn-default.l-btn-type-1.disabled{
+    color: #fff;
+    background-image: url(https://bhbl.dayuan1997.com/img/type_1_disabled.69b61b03.png)
+}
+
+.l-button-container .l-btn-default.l-btn-type-1.active {
+    color: #d35529;
+    background-image: url(https://bhbl.dayuan1997.com/img/type_1_active.7ce007f5.png)
+}
+
+.l-button-container .l-btn-default .btn-text {
+    position: absolute;
+    font-size: 22px;
+    text-align: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    transform: rotateX(30deg);
+    letter-spacing: .02rem;
+    color: #db582e;
+}
+
+.l-button-container .l-btn-default .btn-text-active{
+    top: 4px
 }
