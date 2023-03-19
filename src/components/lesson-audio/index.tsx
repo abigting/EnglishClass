@@ -2,15 +2,17 @@ import React, { useState, useRef, useEffect } from 'react';
 import LearningWrapper from '@/components/wrapper/learning';
 import styles from './index.less';
 
-interface DataType {
-    key: React.ReactNode;
-    name: string;
-    address: string;
-    answer: string;
-    children?: DataType[];
+interface IProps {
+    course: ICourse;
 }
 
-export default function Add() {
+interface ICourse {
+    playTimes: string;
+    name: string;
+    audioPath: string;
+}
+
+export default function Add(props:IProps) {
     const audioRef = useRef<HTMLAudioElement>(null)
     const [play, setPlay] = useState(false);
     const [playTimes, setPlayTimes] = useState(3);
@@ -72,7 +74,7 @@ export default function Add() {
     }
 
     return (
-        <LearningWrapper title="test" className={styles['learn-audio']}>
+        <LearningWrapper title={props?.course?.name} className={styles['learn-audio']}>
             <img src="https://bhbl.dayuan1997.com/img/record.e551874a.png" alt=""
                 className={`${styles['learn-audio-record']} ${play ? styles['rotate'] : {}}`} />
             <img src="https://bhbl.dayuan1997.com/img/handle.8d346771.png" alt=""
@@ -102,7 +104,8 @@ export default function Add() {
                     <span className={styles['pause-number']}>剩余暂停次数：{playTimes}次</span>
                 </div>
             </div>
-            <audio ref={audioRef} src="https://bhbl-prod.oss-accelerate.aliyuncs.com/undefined/2022/03/05/New%20Groove%2813%29.mp3?Expires=1679212180&OSSAccessKeyId=LTAI5tA6cc2K5H6xzdeuvpmt&Signature=aY7i9mswj7ah%2BCVESTZp5Zvv3Cc%3D"></audio>
+            <audio ref={audioRef} src={props?.course?.audioPath}></audio>
+            {/* <audio ref={audioRef} src="https://bhbl-prod.oss-accelerate.aliyuncs.com/undefined/2022/03/05/New%20Groove%2813%29.mp3?Expires=1679212180&OSSAccessKeyId=LTAI5tA6cc2K5H6xzdeuvpmt&Signature=aY7i9mswj7ah%2BCVESTZp5Zvv3Cc%3D"></audio> */}
         </LearningWrapper >
     );
 }

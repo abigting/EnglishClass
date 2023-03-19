@@ -6,15 +6,18 @@ import LearningWrapper from '@/components/wrapper/learning';
 import styles from './index.less';
 
 
-interface DataType {
-    key: React.ReactNode;
-    name: string;
-    address: string;
-    answer: string;
-    children?: DataType[];
+interface IProps {
+    course: ICourse;
 }
 
-export default function Add() {
+interface ICourse {
+    playTimes: string;
+    name: string;
+    audioPath: string;
+    videoPath: string;
+}
+
+export default function Add(props:IProps) {
     const [playTimes, setPlayTimes] = useState(3);
 
     function videoPlay(){
@@ -31,10 +34,11 @@ export default function Add() {
     }
 
     return (
-        <LearningWrapper title="video" className={styles['learn-vidreact-playereo']}>
+        <LearningWrapper title={props?.course?.name} className={styles['learn-vidreact-playereo']}>
         <div className={styles['video-wrapper']}>
             <ReactPlayer
                 url={require("./../../assets/2023_02_26 20_56_17.mp4")}
+                // url={props?.course?.videoPath}
                 className='react-player'
                 // playing
                 onPlay={()=>videoPlay()}

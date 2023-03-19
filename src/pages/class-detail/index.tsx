@@ -90,7 +90,7 @@ function ClassDetail(props: any) {
                         <div className={styles['lesson-info-content']}>
                             {
                                 blocks.map(s =>
-                                    <div key={s.type} className={styles['lesson-info-content-block']} onClick={() => history.push(`/learning/${s.type}`)}>
+                                    <div key={s.type} className={styles['lesson-info-content-block']} onClick={() => history.push(`/learning/${s.type}?uuid=${course.uuid}`)}>
                                         <div className={styles['element-img']}>
                                             {/* <div className={styles['element-sign']}>0/1</div> */}
                                             <img src={s.img} alt="" />

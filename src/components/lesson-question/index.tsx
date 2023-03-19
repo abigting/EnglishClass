@@ -10,26 +10,75 @@ import useLongPress from "./longPress";
 import styles from './index.less';
 
 
-interface DataType {
-    key: React.ReactNode;
-    name: string;
-    address: string;
-    answer: string;
-    children?: DataType[];
-}
+// interface DataType {
+//     key: React.ReactNode;
+//     name: string;
+//     address: string;
+//     answer: string;
+//     children?: DataType[];
+// }
 
 const optionsDefault = [{
-    key:'A',
+    key: 'A',
     active: false
-},{
-    key:'B',
+}, {
+    key: 'B',
     active: false
-},{
-    key:'C',
+}, {
+    key: 'C',
     active: false
 }];
 
-export default function Add() {
+interface IProps {
+    course: ICourse;
+}
+
+interface ICourse {
+    playTimes: string;
+    name: string;
+    audioPath: string;
+    type: number;
+}
+
+interface Question {
+    uuid: string;
+    name: string;
+    answer: string;
+    problemPath: string;
+    interpretationPath: string;
+    orderNum: number;
+    active?: boolean;
+}
+
+const listDefault = [
+    {
+        uuid: '1',
+        name: 'test',
+        answer: 'A',
+        problemPath: "/static/2023_02_26 20_56_17.ba7c481e.mp4",
+        interpretationPath: "/static/2023_02_26 20_56_17.ba7c481e.mp4",
+        orderNum: 2,
+        active: true
+    },
+    {
+        uuid: '1',
+        name: 'test',
+        answer: 'A',
+        problemPath: "/static/2023_02_26 20_56_17.ba7c481e.mp4",
+        interpretationPath: "/static/2023_02_26 20_56_17.ba7c481e.mp4",
+        orderNum: 2
+    },
+    {
+        uuid: '1',
+        name: 'test',
+        answer: 'A',
+        problemPath: "/static/2023_02_26 20_56_17.ba7c481e.mp4",
+        interpretationPath: "/static/2023_02_26 20_56_17.ba7c481e.mp4",
+        orderNum: 2
+    }
+]
+
+export default function Add(props: IProps) {
     const [recording, setRecording] = useState(false);
     const [options, setOptions] = useState(optionsDefault);
     const [recorder, setRecorder] = useState(new Recorder({
@@ -38,6 +87,8 @@ export default function Add() {
         numChannels: 1, // 声道，支持 1 或 2， 默认是1
         // compiling: false,(0.x版本中生效,1.x增加中)  // 是否边录边转换，默认是false
     }));
+
+    const [list, setList] = useState<Question[]>(listDefault);
 
     const longPressHandler = useLongPress(
         () => {
@@ -72,8 +123,8 @@ export default function Add() {
     }
 
     //选择题 选择答案
-    function selectOption(key: string){
-         setOptions(options.map(s=> s.key === key? {...s, active: true}:{...s, active: false}))
+    function selectOption(key: string) {
+        setOptions(options.map(s => s.key === key ? { ...s, active: true } : { ...s, active: false }))
     }
 
 
@@ -82,52 +133,10 @@ export default function Add() {
         active: 'https://bhbl.dayuan1997.com/img/active_light.a95ba7f5.png'
     }
 
-    const renderOperation =(type: string)=>{
-        switch (type){
-            case '1':
+    const renderOperation = (type: number) => {
+        switch (type) {
+            case 1:
                 return <div className={styles['lSoundRecording-btn']}>
-                <div className={styles['l-recorder-container']} >
-                    <div className={`${styles['btn-recorder']} ${styles['default']}`}
-                        style={{ backgroundImage: recording ? `url(${btnBg.active})` : `url(${btnBg.default})` }}
-                        {...longPressHandler}>
-                        <div className={`${styles['btn-text']} ${recording ? styles['btn-text-active'] : {}}`}>
-                            {
-                                recording ? "录音中..." : " 点击按钮回答问题"
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-            case '2':
-                return <div className={styles['l-button-container']}>
-                {
-                    options.map(s =>
-                        <div key={s.key}
-                            className={`${styles['l-btn-default']} ${styles['l-btn-type-1']} ${s.active ? styles['active'] : {}}`} onClick={()=>selectOption(s.key)}>
-                            <div className={`${styles['btn-text']} ${s.active ? styles['btn-text-active'] : {}}`}>
-                                {s.key}
-                            </div>
-                        </div>)
-                }
-            </div>
-        }
-    }
-
-
-    return (
-        <div>
-            <LearningWrapper title="question" className={styles['learn-vidreact-playereo']}>
-                <div className={styles['video-wrapper']}>
-                    <ReactPlayer
-                        url={require("./../../assets/2023_02_26 20_56_17.mp4")}
-                        className='react-player'
-                        // playing
-                        controls
-                        width='100%'
-                        height='100%'
-                    />
-                </div>
-                <div className={styles['lSoundRecording-btn']}>
                     <div className={styles['l-recorder-container']} >
                         <div className={`${styles['btn-recorder']} ${styles['default']}`}
                             style={{ backgroundImage: recording ? `url(${btnBg.active})` : `url(${btnBg.default})` }}
@@ -140,18 +149,74 @@ export default function Add() {
                         </div>
                     </div>
                 </div>
+            case 2:
+                return <div className={styles['l-button-container']}>
+                    {
+                        options.map(s =>
+                            <div key={s.key}
+                                className={`${styles['l-btn-default']} ${styles['l-btn-type-1']} ${s.active ? styles['active'] : {}}`} onClick={() => selectOption(s.key)}>
+                                <div className={`${styles['btn-text']} ${s.active ? styles['btn-text-active'] : {}}`}>
+                                    {s.key}
+                                </div>
+                            </div>)
+                    }
+                </div>
+        }
+    }
 
-                {/* {
-                    renderOperation('1')
-                } */}
+    function videoEnd() {
+        console.log('videoEnd')
+    }
+
+    function videoPause() {
+        console.log('videoPause')
+    }
+
+    function videoPlay() {
+        console.log('videoPlay')
+    }
+
+    function videoError() {
+        console.log('videoError')
+    }
+
+    const currentQuestion = list.find(s => s.active);
+    return (
+        <div>
+            <LearningWrapper title={props?.course?.name} className={styles['learn-vidreact-playereo']}>
+                <div className={styles['video-wrapper']}>
+                    {
+                        currentQuestion?.problemPath &&
+                        <ReactPlayer
+                            // url={require("./../../assets/2023_02_26 20_56_17.mp4")}
+                            url={currentQuestion?.problemPath}
+                            className='react-player'
+                            onPlay={() => videoPlay()}
+                            onPause={() => videoPause()}
+                            onEnded={() => videoEnd()}
+                            onError={() => videoError()}
+                            // playing
+                            controls
+                            width='100%'
+                            height='100%'
+                        />
+                    }
+
+                    <span className={styles["l-number"]}>3/13</span>
+
+                    <span className={styles["l-learn-replay"]}>
+                        <img className={styles["l-learn-replay-reload"]} src={require("../../assets/imgs/reload.png")} alt="" />
+                        <img className={styles["l-learn-replay-close"]} src={require("../../assets/imgs/close.png")} alt="" />
+                        <span className={styles["l-learn-replay-num"]} onClick={() => location.reload()}>{props?.course?.playTimes}</span>
+                        <img className={styles["l-learn-replay-lb"]} src={require("../../assets/imgs/lb.png")} alt="" />
+                        {/* <img className={styles["l-learn-replay-lbing"]} src={require("../../assets/imgs/lb.gif")} alt="" /> */}
+                    </span>
+                </div>
+
+                {
+                    renderOperation(props?.course?.type)
+                }
             </LearningWrapper >
         </div>
     );
 }
-
-
-{/* <img data-v-2dbf3b12="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAA6CAMAAADiHHsGAAAAkFBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+WABnwAAAAL3RSTlMA5rq3lpzjk6uwfm7x7cOOXxMOzFIF9umoool6czEbFwPa1c4rwLZlV0Y/VUpIJ7lpOiYAAAFtSURBVDjL7dXLcoIwGIbhD0XOFVQQQUS0nnv47v/uWgIMBkJZdOu7MYtnkjgZf/HcMkhWhrFKgiUGcmPWxZkSRBc+NY0UZEWp976w2Mnqii/2+uyQQ58cZLGjop1EHBVxJLJREfnCExWZSGT6Ii8CfFt+8QfxrROO5HaYZOQBHpkMk4T0oJH6MNFJY4SYLZmMk4uKTCUyU5FZS0zgqiLXmsSkDyxUZA/4ZFzuMlH/Yq3qYTTYFd+rNhGb2wgpLoOgKwKIq/ADhUcyB7CVxRZATtIrALeZfcG6BeugmZBuuTBI6uUi198q8KbngHggau0Q86vxHTq67oTV8PbbYSaOor2A1MKmOKYuFbu7UQsKV5yZoq75Nkb6WIrjHqnRn4dhfVHvOJ8fvfrSYefoWe+dF+h2MjWySTNPUBXdHWtNrjfOPcJwc3Jefv6PnMnzCFmJN1V3M2e/2eItypV+G/nfE1IWGRVlEtloiiyIfgBAubwSlVZ/mQAAAABJRU5ErkJggg==" alt="" class="wave-img"></img> */ }
-{/* <img src="data:image/gif;base64,R0lGODlhIQAYAJEAAAAAAP///////wAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQFFAACACwAAAAAIQAYAAACQJSPqcuNAZ1csIaJha3ZbdsxH4iNJimd6jWtZ+mOcLzNNNfeqKfjaR/JAW26DJAVSqiSIhmT8nk2atImsooVFAAAIfkEBRQAAgAsFwAGAAUACwAAAg1UhKFo25ecgvPFUxMrACH5BAUUAAIALBsABAAFAA8AAAIRjCUWmIf6HIzMtbjampBnUQAAOw==" class="l-image-voice"></img> */ }
-{/* <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAaCAYAAABctMd+AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyVpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDYuMC1jMDA2IDc5LjE2NDc1MywgMjAyMS8wMi8xNS0xMTo1MjoxMyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIyLjMgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NEU0MTdEQjBEMTkzMTFFQkE2OUZDOUU2NzdFOEFBQTUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NEU0MTdEQjFEMTkzMTFFQkE2OUZDOUU2NzdFOEFBQTUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo0RTQxN0RBRUQxOTMxMUVCQTY5RkM5RTY3N0U4QUFBNSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo0RTQxN0RBRkQxOTMxMUVCQTY5RkM5RTY3N0U4QUFBNSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PnKgyIwAAAHpSURBVHjapJXNK0RhFMbvfCnTCI0sFFImpSQLY1KaleIPkAxbURZYWJIUCwtKWbCzkGJjIxtmrGnKglIo8lGKaGJiMNdzpnPzzp37OffU797m3nOf98x5zzmvJMuyZAMfmAUX4BSMAbeev2RTfEUutH0QdCruAR+ytt2CiBPxctnYMmASuJRvvJK5NYAIaDLx84ElEAaDIKsXJa3eB47l4qyfdNwaEdSAQ7AN2qXirIMu6rQ0gjio5d8ZsAF2QRokLIrf5K5CKirApfDX4qBeeN9iMSVnIKCuljXBYRN4VftgRXyLg8wrxWbwzQ5JUKKxyXUGom8gplfnYud1GdR6QkP4SJW+AnEl19cmjRTklL2AOzBuNlv8IMvi6zZnjZpSHmZhpUOrgItL6EFyZhNgAaRAkJroR3jpdyiujIgS0iXxJ/DJD0MOxUNiBkj8F5zww24H0VcL4yKpiJPt8D0ARosUn+LJ+K/Hu0wVc88Vk+KmslMlnTzPya6U7hYdYkJj0EJtFoWj4Jm/o5Lu0TuJloUF6EibAWUGDbUoREw2J/rkjiTBPGAVjAjP0jyGz8Er90UriHLJ5bIL5sF03i7oRDUAHi2OWBoZvXZPf9rkYXAA3lWCtOl7YEhngmqmxcgqmS+rY+JPgAEAqtb2LwUVw3UAAAAASUVORK5CYII=" class="l-image-replay"></img> */ }
-
-// background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAB1AgMAAADyyGPNAAAADFBMVEXs8PnhfjD0xUymUh+HXMJIAAAAFklEQVQI12NwwAEPYMCBBg54YANhCAA5MRZBgT4zFAAAAABJRU5ErkJggg==) repeat-x;

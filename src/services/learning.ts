@@ -77,12 +77,12 @@ export function courseDetail(data: any) {
 }
 
 /**
-* @desc 新增题目
+* @desc 获取题目
 */
 export function titleDeatil(data: any) {
-    return request(`${url}/title/detailTitle`, {
-        method: 'post',
-        data
+    return request(`${url}/title/detail_title`, {
+        method: 'get',
+        params: data
         // ...option,
     });
 }
