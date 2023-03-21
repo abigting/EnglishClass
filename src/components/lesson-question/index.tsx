@@ -2,6 +2,7 @@ import { Link, Outlet } from 'umi';
 import React, { useEffect, useState } from 'react';
 import { message } from 'antd';
 import ReactPlayer from 'react-player';
+import Cookies from 'js-cookie';
 import LearningWrapper from '@/components/wrapper/learning';
 import Recorder from 'js-audio-recorder';
 import { LearningServices } from '@/services'
@@ -167,6 +168,7 @@ export default function Add(props: IProps) {
         const currentItem = list.find(s => s.active) || list[0];
         if(!currentItem) return
         let formData = new FormData();
+        formData.append("userUUId", Cookies.get("userUUId"));
         formData.append("courseUid", currentItem.courseUuid);
         formData.append("titleUuid", currentItem.uuid);
         formData.append("score", "1");

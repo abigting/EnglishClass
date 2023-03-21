@@ -23,10 +23,10 @@ export default function Add(props: IProps) {
     }, [props.visible]);
 
     function getInfo(){
-        LearningServices.reviewCourse(props.uuid).then(res=>{
+        LearningServices.courseDetail({uuid: props.uuid}).then(res=>{
             if(res.code === 0){
-                // const {name} = res.data;
-                // form.setFieldsValue({... res.data})
+                const { id, list, ...rest } = res.data;
+                form.setFieldsValue({ ...rest })
             }
         })
     }

@@ -1,4 +1,4 @@
-// import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { Button, Modal, Radio, Form, Input, Upload, InputNumber, message } from 'antd';
 import { LearningServices } from '@/services'
 import styles from './index.less';
@@ -13,6 +13,22 @@ interface IProps {
 
 export default function Add(props: IProps) {
     const [form] = Form.useForm();
+
+    useEffect(() => {
+        if (props.visible) {
+            getInfo()
+        }
+    }, [props.visible]);
+
+    function getInfo() {
+        LearningServices.titleDeatil({ uuid: props.uuid }).then(res => {
+            if (res.code === 0) {
+                const { id, courseUuid, ...rest } = res.data;
+                form.setFieldsValue({ ...rest })
+            }
+        })
+    }
+
     const handleOk = () => {
         props.closeModal();
     };
@@ -64,7 +80,7 @@ export default function Add(props: IProps) {
         return e?.file;
     };
 
-    
+
     const interpretationPath = (e: any) => {
         console.log('Upload event:', e);
         if (Array.isArray(e)) {

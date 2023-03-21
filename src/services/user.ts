@@ -22,3 +22,4 @@ export function courseCreate(data: any) {
         // ...option,
     });
 }
+
