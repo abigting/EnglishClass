@@ -1,5 +1,6 @@
 import { extend } from 'umi-request';
 import { message } from 'antd';
+import Cookies from 'js-cookie';
 // import { getCookie } from './common';
 
 const request = extend({});
@@ -10,8 +11,7 @@ request.interceptors.request.use((url, options) => {
     options: {
       ...rest,
       headers: {
-        // token: getCookie('token'),
-        userUUId: 'test123',
+        userUUId: Cookies.get("userUUId"),
         ...headers,
       },
     },

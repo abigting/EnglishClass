@@ -21,7 +21,11 @@ export default function LessonManagement() {
   const [lVisible, setlVisible] = useState(false)
   const [qVisible, setqVisible] = useState(false)
   const [currentCourse, setCurrentCourse] = useState(false)
-  
+
+
+  const [titleUuid, setTitleUuid] = useState<string|null>()
+  const [courseUid, setCourseUid] = useState<string|null>()
+
   useEffect(() => {
     getList();
   }, [])
@@ -56,15 +60,16 @@ export default function LessonManagement() {
       width: '30%',
       key: 'action',
       render: (_, record) => <div>
-        <a className={styles['form-action']} onClick={() => addQuestion(record)}>新增</a>
-
-        <a className={styles['form-action']}>查看</a>
+        {
+          record.type && <a className={styles['form-action']} onClick={() => addQuestion(record)}>新增</a>
+        }
+        <a className={styles['form-action']} onClick={() => reviewDeatil(record)}>查看</a>
 
         <Popconfirm
           title="确定要删除吗？"
           okText="Yes"
           cancelText="No"
-          onConfirm={()=>deleteConfirm(record)}
+          onConfirm={() => deleteConfirm(record)}
         >
           <a className={styles['form-action']}>删除</a>
         </Popconfirm>
@@ -73,24 +78,24 @@ export default function LessonManagement() {
   ];
 
   async function deleteConfirm(record: {
-    [x: string]: any; uuid: string; 
-}){
+    [x: string]: any; uuid: string;
+  }) {
     let res;
-    if(record.type){
-      res = await LearningServices.courseDelete({uuid:record.uuid});
-    }else{
-      res = await LearningServices.titleDelete({uuid:record.uuid});
+    if (record.type) {
+      res = await LearningServices.courseDelete({ uuid: record.uuid });
+    } else {
+      res = await LearningServices.titleDelete({ uuid: record.uuid });
     }
     if (res.code === 0) {
-          message.success('删除成功');
-          getList();
+      message.success('删除成功');
+      getList();
     }
   }
 
   async function getList() {
     const res = await LearningServices.fetchCourselist();
-    if (res.code === 0) {
-      const data = res.data.map((s: { list: string | any[]; }) => {
+    if (res.code === 0 && res.data) {
+      res.data.forEach((s: { list: string | any[]; }) => {
         if (s.list?.length === 0) {
           delete s.list
         }
@@ -104,25 +109,44 @@ export default function LessonManagement() {
   }
 
   function addQuestion(item: DataType) {
-    console.log(item, 'item')
     setCurrentCourse(item)
     setqVisible(true)
   }
 
+  function reviewDeatil(item: DataType) {
+    if(item.type){
+      setlVisible(true);
+      setCourseUid(item.uuid)
+    }else{
+      setqVisible(true);
+      setTitleUuid(item.uuid)
+    }
+
+  }
+
   function closeLessonDetailModal(refreash: boolean) {
-    if(refreash)      getList();
-    setlVisible(false) 
+    if (refreash) getList();
+    setlVisible(false)
+    setCourseUid(null)
   }
 
   function closeQuestionDetailModal(refreash: boolean) {
-    if(refreash)      getList();
+    if (refreash) getList();
     setqVisible(false)
+    setTitleUuid(null)
   }
 
   return <Wrapper menus={[]}>
-    <QuestionDetail visible={qVisible} course={currentCourse} closeModal={(refreash) => closeQuestionDetailModal(refreash)} />
-    <LessonDetail visible={lVisible} closeModal={(refreash) => closeLessonDetailModal(refreash)} />
-    <div><Button size='middle' type="primary" onClick={() => addLesson()}>新增课程</Button></div>
+    <QuestionDetail 
+    visible={qVisible} 
+    course={currentCourse} 
+    uuid={titleUuid}
+    closeModal={(refreash) => closeQuestionDetailModal(refreash)} />
+    <LessonDetail 
+    visible={lVisible} 
+    uuid={courseUid}
+    closeModal={(refreash) => closeLessonDetailModal(refreash)} />
+    <Button size='middle' type="primary" onClick={() => addLesson()}>新增课程</Button>
     <Table rowKey="id" childrenColumnName="list" dataSource={data} columns={columns} />
   </Wrapper>
 }

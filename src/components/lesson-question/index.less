@@ -41,10 +41,6 @@
     position: relative;
 }
 
-.l-recorder-container .btn-recorder.default {
-    // background-image: url(https://bhbl.dayuan1997.com/img/default.1df9dcc3.png);
-}
-
 .l-recorder-container .btn-recorder {
     position: relative;
     width: 7.85rem;
@@ -56,6 +52,7 @@
     font-weight: 700;
     perspective: 1.5rem;
 }
+
 
 .l-recorder-container .btn-recorder .btn-text {
     position: absolute;
@@ -69,8 +66,27 @@
     color: #db582e;
 }
 
-.l-recorder-container .btn-recorder .btn-text-active {
-    top: 8px
+.l-recorder-container .btn-recorder-default {
+    background-image: url(https://bhbl.dayuan1997.com/img/default.1df9dcc3.png);
+
+    .btn-text{
+
+    }
+}
+
+.l-recorder-container .btn-recorder-recording {
+    background-image: url(https://bhbl.dayuan1997.com/img/active_light.a95ba7f5.png);
+    .btn-text{
+        color: #d35529;
+        top: 8px
+    }
+}
+
+.l-recorder-container .btn-recorder-disabled {
+    background-image: url(https://bhbl.dayuan1997.com/img/disabled.b218e11c.png);
+    .btn-text{
+        color: #fff;
+    }
 }
 
 .l-button-container {
@@ -116,6 +132,11 @@
 .l-button-container .l-btn-default .btn-text-active {
     top: 4px
 }
+
+.l-button-container .disabled .btn-text {
+    color: #fff;
+}
+
 
 .l-number {
     height: 0.51rem;
@@ -168,4 +189,29 @@
         cursor: pointer;
         margin-left: 10px;
     }
+}
+
+.process-bar-container {
+    position: absolute;
+    width: 85%;
+    height: .07rem;
+    border-radius: .04rem;
+    bottom: .24rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: hsla(0,0%,100%,.2)
+}
+
+.process-bar-container .process-bar {
+    width: 0;
+    height: 100%;
+    border-radius: .04rem;
+    background-color: #f9e176
+}
+
+.process-bar-record{
+    position: absolute;
+    bottom: 0.24rem;
+    left: 20px;
+    width: 12px;
 }

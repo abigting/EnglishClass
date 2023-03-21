@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'umi';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Radio, Form, Input, InputNumber, Upload, message, Row, Col } from 'antd';
 import { LearningServices } from '@/services'
 import styles from './index.less';
@@ -9,11 +9,27 @@ type onCancel = (a: number, b: number) => number
 
 interface IProps {
     visible: boolean,
+    uuid?:string;
     closeModal: onCancel
 }
 
 export default function Add(props: IProps) {
     const [form] = Form.useForm();
+
+    useEffect(()=>{
+        if(props.visible){
+          getInfo()
+        }
+    }, [props.visible]);
+
+    function getInfo(){
+        LearningServices.reviewCourse(props.uuid).then(res=>{
+            if(res.code === 0){
+                // const {name} = res.data;
+                // form.setFieldsValue({... res.data})
+            }
+        })
+    }
 
     const handleOk = async () => {
 
@@ -53,6 +69,7 @@ export default function Add(props: IProps) {
             }
         }
         const formData = getFormData(req)
+        console.log(formData, 'formData')
         const res = await LearningServices.courseCreate(formData);
         if (res.code === 0) {
             message.success('保存成功');

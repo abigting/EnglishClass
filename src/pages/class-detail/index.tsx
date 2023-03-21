@@ -1,31 +1,33 @@
 import { useEffect, useState } from 'react';
-import { useLocation, history   } from 'umi';
+import { useLocation, history } from 'umi';
 import qs from 'query-string'
 // import { connect } from 'dva';
 import { LearningServices } from '@/services';
+import AnswerResult from '@/components/answer-result';
 import styles from './index.less';
 
 const blocksDefault = [
     {
         img: 'https://bhbl.dayuan1997.com/img/800.d1ecb553.png',
         text: '秘籍',
-        type:1,
+        type: 1,
     },
     {
         img: 'https://bhbl.dayuan1997.com/img/801.8c70aba7.png',
         text: '心法',
-        type:2,
+        type: 2,
     },
     {
         img: 'https://bhbl.dayuan1997.com/img/803.09130ece.png',
         text: '大侠表达',
-        type:3,
+        type: 3,
     }
 ]
 
 function ClassDetail(props: any) {
     const [course, setCourse] = useState({});
     const [blocks, setBlocks] = useState([]);
+    const [visible, setVisible] = useState(false);
     const location = useLocation();
     // const { user, loading } = useModel('userModel');
 
@@ -33,7 +35,7 @@ function ClassDetail(props: any) {
         // console.log(test, 'test')
         getDetailInfo()
     }, [])
-    
+
     async function getDetailInfo() {
 
         const { uuid } = qs.parse(location.search);
@@ -46,25 +48,26 @@ function ClassDetail(props: any) {
         //   })
         const res = await LearningServices.courseDetail({ uuid });
         if (res.code === 0 && res.data) {
-              setCourse(res.data);
-              const { audioPath } = res.data;
-              if(!audioPath){
-                setBlocks(blocksDefault.filter(s=>s.type !== 2))
-              }else{
+            setCourse(res.data);
+            const { audioPath } = res.data;
+            if (!audioPath) {
+                setBlocks(blocksDefault.filter(s => s.type !== 2))
+            } else {
                 setBlocks(blocksDefault)
-              }
+            }
         }
     }
 
-    function showAnswerRes(){
-
+    function showAnswerRes() {
+        setVisible(true);
     }
+    const { uuid } = qs.parse(location.search);
 
     return <div className={styles['lesson-wrapper']}>
         <div className={styles['lesson-wall']} />
         <div className={styles['lesson-land']} />
         <div className={styles['lesson-land-circle']} />
-        <div className={styles['lesson-land-report']} onClick={()=>showAnswerRes()}>
+        <div className={styles['lesson-land-report']} onClick={() => showAnswerRes()}>
             <div className={styles['lesson-cursor']}>
                 通关报告
             </div>
@@ -107,15 +110,17 @@ function ClassDetail(props: any) {
                 </div>
             </div>
         </div>
-
+        {
+            uuid && <AnswerResult visible={visible} courseUid={uuid} closeModal={() => setVisible(false)} />
+        }
     </div>
 }
 
-function mapStateToProps({ global }) {
-    return {
-      ...global
-    };
-  }
+// function mapStateToProps({ global }) {
+//     return {
+//       ...global
+//     };
+//   }
 
 // export default connect(mapStateToProps)(ClassDetail);
 export default ClassDetail;

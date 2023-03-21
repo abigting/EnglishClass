@@ -98,3 +98,48 @@ export function courseList(data: any) {
         // ...option,
     });
 }
+
+/**
+* @desc 答题
+*/
+export function answerQuestions(data: any) {
+    return request(`${url}/user_answer/answer_questions`, {
+        method: 'post',
+        data
+        // ...option,
+    });
+}
+
+
+/**
+* @desc 答题结果列表
+*/
+export function recordList(data: any) {
+    return request(`${url}/user_answer/record_list`, {
+        method: 'post',
+        data
+        // ...option,
+    });
+}
+
+/**
+* @desc 查看课程
+*/
+export function reviewCourse(data: any) {
+    return request(`${url}/user_answer/record_list`, {
+        method: 'post',
+        data
+        // ...option,
+    });
+}
+
+/**
+* @desc 查看题目
+*/
+export function reviewTitle(data: any) {
+    return request(`${url}/user_answer/record_list`, {
+        method: 'post',
+        data
+        // ...option,
+    });
+}

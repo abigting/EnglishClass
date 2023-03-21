@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { history } from 'umi';
-import { Button, Modal, Radio, Form, Input, message } from 'antd';
+import { Button, Form, Input, message } from 'antd';
+import Cookies from 'js-cookie';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { UserServices} from '@/services';
 import Register from './register';
@@ -12,15 +13,6 @@ export default function Index() {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 
-  function Upload(e){
-    console.log(e.target.value, 'e')
-  }
-
-  function getFile(){
-   const file = document.getElementById('file');
-   console.log(file, 'file')
-  }
-
   function login(){
     form.validateFields()
     .then(async (values) => {
@@ -29,11 +21,12 @@ export default function Index() {
       }else if(!values.password){
         message.error('请输入密码!')
       }else{
-        history.push('/home')
-        // const res =await UserServices.login(values);
-        // if (res.code === 0){
-        //   history.push('/home')
-        // }
+        // history.push('/home')
+        const res =await UserServices.login(values);
+        if (res.code === 0 && res.data){
+          Cookies.set("userUUId", res.data.uuid, { expires: 7, path: '/' });
+          history.push('/home')
+        }
       }
     })
     .catch((errorInfo) => {

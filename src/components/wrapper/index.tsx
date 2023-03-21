@@ -4,8 +4,8 @@ import styles from './index.less';
 
 interface TProps {
     children: ReactElement | ReactFragment;
-    menus: any;
-    toggleMenu: any;
+    menus?: any;
+    toggleMenu?: any;
 }
 
 export default function Home(props: TProps) {
