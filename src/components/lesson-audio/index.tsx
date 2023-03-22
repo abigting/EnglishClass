@@ -10,6 +10,7 @@ interface ICourse {
     playTimes: string;
     name: string;
     audioPath: string;
+    videoPath: string;
 }
 
 export default function Add(props:IProps) {

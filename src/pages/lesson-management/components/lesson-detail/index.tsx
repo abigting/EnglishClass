@@ -9,24 +9,24 @@ type onCancel = (a: number, b: number) => number
 
 interface IProps {
     visible: boolean,
-    uuid?:string;
+    uuid?: string;
     closeModal: onCancel
 }
 
 export default function Add(props: IProps) {
     const [form] = Form.useForm();
-
-    useEffect(()=>{
-        if(props.visible){
-          getInfo()
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        if (props.visible && props.uuid) {
+            getInfo()
         }
     }, [props.visible]);
 
-    function getInfo(){
-        LearningServices.courseDetail({uuid: props.uuid}).then(res=>{
-            if(res.code === 0){
+    function getInfo() {
+        LearningServices.courseDetail({ uuid: props.uuid }).then(res => {
+            if (res.code === 0 && res.data) {
                 const { id, list, ...rest } = res.data;
-                form.setFieldsValue({ ...rest })
+                form.setFieldsValue({ ...rest})
             }
         })
     }
@@ -48,6 +48,7 @@ export default function Add(props: IProps) {
     };
 
     const onFinish = async (values: any) => {
+        setLoading(true)
         const { coverPath, videoPath, audioPath, ...rest } = values;
         let req = { ...rest }
         if (values.coverPath) {
@@ -69,8 +70,8 @@ export default function Add(props: IProps) {
             }
         }
         const formData = getFormData(req)
-        console.log(formData, 'formData')
         const res = await LearningServices.courseCreate(formData);
+        setLoading(false)
         if (res.code === 0) {
             message.success('保存成功');
             props.closeModal();
@@ -82,7 +83,6 @@ export default function Add(props: IProps) {
     };
 
     const coverFile = (e: any) => {
-        console.log('Upload event:', e);
         if (Array.isArray(e)) {
             return e;
         }
@@ -90,7 +90,6 @@ export default function Add(props: IProps) {
     };
 
     const audioFile = (e: any) => {
-        console.log('Upload event:', e);
         if (Array.isArray(e)) {
             return e;
         }
@@ -98,7 +97,6 @@ export default function Add(props: IProps) {
     };
 
     const videoFile = (e: any) => {
-        console.log('Upload event:', e);
         if (Array.isArray(e)) {
             return e;
         }
@@ -115,7 +113,7 @@ export default function Add(props: IProps) {
             footer={null}>
             <div className={styles['form-wrapper']}>
                 <Form
-                  form={form}
+                    form={form}
                     className={styles['form-content']}
                     name="basic"
                     labelCol={{ span: 4 }}
@@ -203,16 +201,18 @@ export default function Add(props: IProps) {
                         getValueFromEvent={audioFile}
                     // rules={[{ required: true, message: '请上传音频资料!' }]}
                     >
-                        <Upload accept="image/*" maxCount={1}>
+                        <Upload accept="audio/*" maxCount={1}>
                             <Button>+ 上传</Button>
                         </Upload>
                     </Form.Item>
-
-                    <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
-                        <Button type="primary" htmlType="submit">
-                            保存
-                        </Button>
-                    </Form.Item>
+                    {
+                        !props.uuid &&
+                        <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
+                            <Button type="primary" htmlType="submit" loading={loading}>
+                                保存
+                            </Button>
+                        </Form.Item>
+                    }
                 </Form>
             </div>
         </Modal>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Modal, Radio, Form, Input, Upload, InputNumber, message } from 'antd';
 import { LearningServices } from '@/services'
 import styles from './index.less';
@@ -13,16 +13,17 @@ interface IProps {
 
 export default function Add(props: IProps) {
     const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (props.visible) {
+        if (props.visible && props.uuid) {
             getInfo()
         }
     }, [props.visible]);
 
     function getInfo() {
         LearningServices.titleDeatil({ uuid: props.uuid }).then(res => {
-            if (res.code === 0) {
+            if (res.code === 0 && res.data) {
                 const { id, courseUuid, ...rest } = res.data;
                 form.setFieldsValue({ ...rest })
             }
@@ -45,6 +46,7 @@ export default function Add(props: IProps) {
     };
 
     const onFinish = async (values: any) => {
+        setLoading(true)
         const { problemPath, interpretationPath, ...rest } = values;
         let req = { ...rest, courseUuid: props.course.uuid };
         if (values.problemPath) {
@@ -61,6 +63,7 @@ export default function Add(props: IProps) {
         }
         const formData = getFormData(req)
         const res = await LearningServices.titleCreate(formData);
+        setLoading(false)
         if (res.code === 0) {
             message.success('保存成功');
             props.closeModal(true);
@@ -123,17 +126,21 @@ export default function Add(props: IProps) {
                 >
                     <InputNumber min={1} precision={0} />
                 </Form.Item>
-                <Form.Item
-                    label="题目答案"
-                    name="answer"
-                    rules={[{ required: true, message: '请输入题目名称!' }]}
-                >
-                    <Radio.Group>
-                        <Radio value="A">A</Radio>
-                        <Radio value="B">B</Radio>
-                        <Radio value="C">C</Radio>
-                    </Radio.Group>
-                </Form.Item>
+                {
+                    props.course.type !== 3 &&
+                    <Form.Item
+                        label="题目答案"
+                        name="answer"
+                        rules={[{ required: true, message: '请输入题目名称!' }]}
+                    >
+                        <Radio.Group>
+                            <Radio value="A">A</Radio>
+                            <Radio value="B">B</Radio>
+                            <Radio value="C">C</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                }
+
 
                 <Form.Item
                     label="题目文件"
@@ -156,12 +163,14 @@ export default function Add(props: IProps) {
                         <Button >+ 上传</Button>
                     </Upload>
                 </Form.Item>
-
-                <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
-                    <Button type="primary" htmlType="submit">
-                        保存
-                    </Button>
-                </Form.Item>
+                {
+                    !props.uuid &&
+                    <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
+                        <Button type="primary" htmlType="submit" loading={loading}>
+                            保存
+                        </Button>
+                    </Form.Item>
+                }
             </Form>
         </Modal>
     );

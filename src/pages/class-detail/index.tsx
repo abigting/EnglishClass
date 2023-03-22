@@ -4,6 +4,7 @@ import qs from 'query-string'
 // import { connect } from 'dva';
 import { LearningServices } from '@/services';
 import AnswerResult from '@/components/answer-result';
+import AnswerResultOptional from '@/components/answer-result/optional';
 import styles from './index.less';
 
 const blocksDefault = [
@@ -111,7 +112,8 @@ function ClassDetail(props: any) {
             </div>
         </div>
         {
-            uuid && <AnswerResult visible={visible} courseUid={uuid} closeModal={() => setVisible(false)} />
+            course.type !== 3 ? <AnswerResultOptional visible={visible} courseUuid={uuid} closeModal={() => setVisible(false)} /> :
+                <AnswerResult visible={visible} courseUuid={uuid} closeModal={() => setVisible(false)} />
         }
     </div>
 }

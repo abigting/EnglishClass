@@ -17,17 +17,14 @@ interface ICourse {
     playTimes: string;
     name: string;
     audioPath: string;
+    videoPath: string;
     type: number;
+    list: any
 }
 
 function Lesson(props: IProps) {
     const [questions, setQuestions] = useState([]);
-    const [course, setCourse] = useState<ICourse>({
-        playTimes: '',
-        name: '',
-        audioPath: '',
-        type: 1,
-    });
+    const [course, setCourse] = useState<ICourse>();
     useEffect(() => {
         getInfo()
     }, [])
@@ -43,10 +40,12 @@ function Lesson(props: IProps) {
     const type = 1;
 
     const { match } = props;
+
+    if(!course) return;
     return <div>
         {
-            match?.params?.type === '1' ? <LessonAudio course={course} /> :
-                match?.params?.type === '2' ? <LessonVideo course={course} /> :
+            match?.params?.type === '1' ? <LessonVideo course={course} /> :
+                match?.params?.type === '2' ? <LessonAudio course={course} /> :
                     <LessonQuestion course={course} />
         }
     </div>

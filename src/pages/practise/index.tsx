@@ -21,8 +21,16 @@ const menusDefault = [
     }
 ]
 
+interface Item{
+    id: string | number;
+    uuid: string;
+    name: string;
+    coverPath: string;
+    rate: number
+}
+
 export default function Home() {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<Item[]>([]);
     const [menus, setMenus] = useState(menusDefault);
     useEffect(() => {
         getList('1');
@@ -49,7 +57,7 @@ export default function Home() {
                         <div className={styles['class-content']}>
                             <img className={styles['class-content-cover']} src={`http://lccweb.natapp1.cc${item.coverPath}`} alt="" />
                             <div className={styles['class-content-rate']} >
-                                <Rate value={item.rate} />
+                                <Rate allowHalf disabled value={item.rate} />
                             </div>
                         </div>
                     </div>)

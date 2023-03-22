@@ -24,7 +24,7 @@ export default function LessonManagement() {
 
 
   const [titleUuid, setTitleUuid] = useState<string|null>()
-  const [courseUid, setCourseUid] = useState<string|null>()
+  const [courseUuid, setCourseUuid] = useState<string|null>()
 
   useEffect(() => {
     getList();
@@ -116,7 +116,7 @@ export default function LessonManagement() {
   function reviewDeatil(item: DataType) {
     if(item.type){
       setlVisible(true);
-      setCourseUid(item.uuid)
+      setCourseUuid(item.uuid)
     }else{
       setqVisible(true);
       setTitleUuid(item.uuid)
@@ -127,7 +127,7 @@ export default function LessonManagement() {
   function closeLessonDetailModal(refreash: boolean) {
     if (refreash) getList();
     setlVisible(false)
-    setCourseUid(null)
+    setCourseUuid(null)
   }
 
   function closeQuestionDetailModal(refreash: boolean) {
@@ -144,9 +144,11 @@ export default function LessonManagement() {
     closeModal={(refreash) => closeQuestionDetailModal(refreash)} />
     <LessonDetail 
     visible={lVisible} 
-    uuid={courseUid}
+    uuid={courseUuid}
     closeModal={(refreash) => closeLessonDetailModal(refreash)} />
+    <div className={styles['table-wrapper']}>
     <Button size='middle' type="primary" onClick={() => addLesson()}>新增课程</Button>
-    <Table rowKey="id" childrenColumnName="list" dataSource={data} columns={columns} />
+    <Table rowKey="uuid" childrenColumnName="list" scroll={{ y: 320 }} dataSource={data} columns={columns} />
+    </div>
   </Wrapper>
 }

@@ -37,8 +37,8 @@ export default function Add(props:IProps) {
         <LearningWrapper title={props?.course?.name} className={styles['learn-vidreact-playereo']}>
         <div className={styles['video-wrapper']}>
             <ReactPlayer
-                url={require("./../../assets/2023_02_26 20_56_17.mp4")}
-                // url={props?.course?.videoPath}
+                // url={require("./../../assets/2023_02_26 20_56_17.mp4")}
+                url={props?.course?.videoPath}
                 className='react-player'
                 // playing
                 onPlay={()=>videoPlay()}

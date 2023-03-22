@@ -47,13 +47,23 @@ export default function Add(props: IProps) {
             key: 'titleName',
         },
         {
-            title: '语音地址',
-            dataIndex: 'userAnswerPath',
+            title: '你的答案',
+            dataIndex: 'userAnswer',
             width: '30%',
-            key: 'userAnswerPath',
-            render:(_, record)=><a href={record.userAnswerPath} target="_blank">点击</a>
+            key: 'userAnswer',
+            render:(_, record)=><span>{record.userAnswer || '-'}</span>
         },
+        {
+            title: '正确答案',
+            dataIndex: 'correctAnswer',
+            width: '30%',
+            key: 'correctAnswer',
+        }
     ];
+
+    function handleOk() {
+
+    }
 
     function handleCancel() {
         props.closeModal()
@@ -68,6 +78,15 @@ export default function Add(props: IProps) {
                 columns={columns}
                 dataSource={data}
                 pagination={false}
+                summary={() => (
+                    <Table.Summary fixed>
+                        <Table.Summary.Row>
+                            <Table.Summary.Cell rowSpan={3} index={0}></Table.Summary.Cell>
+                            <Table.Summary.Cell rowSpan={3} index={0}></Table.Summary.Cell>
+                            <Table.Summary.Cell rowSpan={3} index={0}>分数：80/100</Table.Summary.Cell>
+                        </Table.Summary.Row>
+                    </Table.Summary>
+                )}
             />
         </Modal>
     );
