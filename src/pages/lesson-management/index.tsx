@@ -74,7 +74,7 @@ export default function LessonManagement() {
         {
           record.type && <a className={styles['form-action']} onClick={() => addQuestion(record)}>新增题目</a>
         }
-        <a className={styles['form-action']} onClick={() => reviewDeatil(record)}>查看</a>
+        <a className={styles['form-action']} onClick={() => reviewDeatil(record)}>编辑</a>
         <Popconfirm
           title="确定要删除吗？"
           okText="Yes"

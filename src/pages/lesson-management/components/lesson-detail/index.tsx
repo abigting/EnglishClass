@@ -77,19 +77,19 @@ export default function Add(props: IProps) {
         setLoading(true)
         const { coverPath, videoPath, audioPath, ...rest } = values;
         let req = { ...rest }
-        if (values.coverPath?.length > 0) {
+        if (values.coverPath[0]?.originFileObj) {
             req = {
                 ...req,
                 coverPath: values?.coverPath[0].originFileObj
             }
         }
-        if (values.videoPath) {
+        if (values.videoPath[0]?.originFileObj) {
             req = {
                 ...req,
                 videoPath: values?.videoPath[0].originFileObj
             }
         }
-        if (values.audioPath) {
+        if (values?.audioPath[0]?.originFileObj) {
             req = {
                 ...req,
                 audioPath: values?.audioPath[0].originFileObj
@@ -218,7 +218,7 @@ export default function Add(props: IProps) {
 
                     // rules={[{ required: true, message: '请上传封面资料!' }]}
                     >
-                        <Upload accept="image/*" listType="picture-card" maxCount={1}>
+                        <Upload accept="image/*" listType="picture-card" maxCount={1} disabled={!!props.uuid}>
                             <div>
                                 <div style={{ marginTop: 8 }}>+ 上传</div>
                             </div>
@@ -232,7 +232,7 @@ export default function Add(props: IProps) {
                         getValueFromEvent={videoFile}
                     // rules={[{ required: true, message: '请上传视频资料!' }]}
                     >
-                        <Upload accept="video/*" maxCount={1}>
+                        <Upload accept="video/*" maxCount={1} disabled={!!props.uuid}>
                             <Button>+ 上传</Button>
                         </Upload>
                     </Form.Item>
@@ -244,7 +244,7 @@ export default function Add(props: IProps) {
                         getValueFromEvent={audioFile}
                     // rules={[{ required: true, message: '请上传音频资料!' }]}
                     >
-                        <Upload accept="audio/*" maxCount={1}>
+                        <Upload accept="audio/*" maxCount={1} disabled={!!props.uuid}>
                             <Button>+ 上传</Button>
                         </Upload>
                     </Form.Item>

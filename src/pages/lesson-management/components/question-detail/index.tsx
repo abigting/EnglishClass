@@ -19,6 +19,8 @@ export default function Add(props: IProps) {
     useEffect(() => {
         if (props.visible && props.uuid) {
             getInfo()
+        }else if(props.visible){
+            setCourseType(props.course?.type)
         }
     }, [props.visible]);
 
@@ -73,13 +75,13 @@ export default function Add(props: IProps) {
         setLoading(true)
         const { problemPath, interpretationPath, ...rest } = values;
         let req = { ...rest, courseUuid: props.course.uuid };
-        if (values.problemPath?.length > 0) {
+        if (values.problemPath[0]?.originFileObj) {
             req = {
                 ...req,
                 problemPath: values?.problemPath[0].originFileObj
             }
         }
-        if (values.interpretationPath?.length > 0) {
+        if (values.interpretationPath[0]?.originFileObj) {
             req = {
                 ...req,
                 interpretationPath: values?.interpretationPath[0].originFileObj
@@ -131,6 +133,7 @@ export default function Add(props: IProps) {
     };
 
     const needOptions = [1, 2].includes(props.course.type) || [1, 2].includes(courseType);
+
     return (
         <Modal
             title="新增题目"
@@ -188,7 +191,7 @@ export default function Add(props: IProps) {
                     getValueFromEvent={problemPath}
                     rules={[{ required: true, message: '请上传题目文件！' }]}
                 >
-                    <Upload maxCount={1}>
+                    <Upload maxCount={1} disabled={!!props.uuid}>
                         <Button >+ 上传</Button>
                     </Upload>
                 </Form.Item>
@@ -198,7 +201,7 @@ export default function Add(props: IProps) {
                     valuePropName="fileList"
                     getValueFromEvent={interpretationPath}
                 >
-                    <Upload maxCount={1}>
+                    <Upload maxCount={1} disabled={!!props.uuid}>
                         <Button >+ 上传</Button>
                     </Upload>
                 </Form.Item>
