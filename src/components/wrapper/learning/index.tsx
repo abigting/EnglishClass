@@ -24,11 +24,11 @@ export default function Learning(props: TProps) {
                 <div className={styles['learn-area']}>
                     <div>
                         <div className={`${styles['learn-area-left-post']}`}>
-                            <img src="https://bhbl.dayuan1997.com/img/learn-left-hand.ec83703e.png" className={`${styles['learn-left-hand']} ${styles['learn-img-info']}`} />
+                            <img src={require('@/assets/imgs/learn-left-hand.ec83703e.png')} className={`${styles['learn-left-hand']} ${styles['learn-img-info']}`} />
                             <div className={`${styles['left-post-board']}`} onClick={() => history.back()}></div>
                         </div>
                         <div className={`${styles['learn-area-right-post']}`}>
-                            <img src="https://bhbl.dayuan1997.com/img/learn-right-hand.f56a4367.png" className={`${styles['learn-right-hand']} ${styles['learn-img-info']}`} />
+                            <img src={require('@/assets/imgs/learn-right-hand.f56a4367.png')} className={`${styles['learn-right-hand']} ${styles['learn-img-info']}`} />
                             <div className={`${styles['right-post-board']} ${styles['learn-img-info']}`}></div>
                         </div>
                         <div className={`${styles['learn-bottom-light']}`} />

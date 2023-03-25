@@ -83,9 +83,9 @@ export default function Add(props: IProps) {
 
     return (
         <LearningWrapper title={props?.course?.name} className={styles['learn-audio']}>
-            <img src="https://bhbl.dayuan1997.com/img/record.e551874a.png" alt=""
+            <img src={require("@/assets/imgs/record.e551874a.png")} alt=""
                 className={`${styles['learn-audio-record']} ${play ? styles['rotate'] : {}}`} />
-            <img src="https://bhbl.dayuan1997.com/img/handle.8d346771.png" alt=""
+            <img src={require("@/assets/imgs/handle.8d346771.png")} alt=""
                 className={`${styles['learn-audio-handle']} ${play ? styles['handle-play'] : {}}`} />
             <div className={styles['l-audio-circle']}>
                 {

@@ -12,8 +12,6 @@ interface IProps {
     closeModal: onCancel
 }
 
-const backgroundImg = 'https://bhbl.dayuan1997.com/img/l-dialog-bg-small.4c4a2b9b.png';
-
 export default function Index(props: IProps) {
     const [form] = Form.useForm();
 

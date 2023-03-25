@@ -12,9 +12,9 @@ export default function Home(props: TProps) {
 
     return <div className={styles['home-wrapper']}>
         <div className={styles['home-nav']}>
-            <img className={styles['home-nav-top']} src="https://bhbl.dayuan1997.com/img/sucker.fbe6e7a2.png" alt="" />
+            <img className={styles['home-nav-top']} src={require("@/assets/imgs/sucker.fbe6e7a2.png")} alt="" />
             <img className={styles['home-nav-top-border']} src={require("@/assets/imgs/level-select.png")} alt="" />
-            <img className={styles['back-btn']} src="https://bhbl.dayuan1997.com/img/back.b6f5dd88.png" alt="" onClick={() => history.back()} />
+            <img className={styles['back-btn']} src={require("@/assets/imgs/back.b6f5dd88.png")}  alt="" onClick={() => history.back()} />
         </div>
         {
             props.menus &&

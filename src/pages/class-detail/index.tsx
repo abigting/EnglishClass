@@ -11,17 +11,18 @@ const blocksDefault = [
     {
         img: 'https://bhbl.dayuan1997.com/img/800.d1ecb553.png',
         text: '秘籍',
-        type: 1,
+        type:1,
     },
     {
         img: 'https://bhbl.dayuan1997.com/img/801.8c70aba7.png',
         text: '心法',
-        type: 2,
+        type:2,
     },
     {
+        id: 3,
         img: 'https://bhbl.dayuan1997.com/img/803.09130ece.png',
         text: '大侠表达',
-        type: 3,
+        type:3,
     }
 ]
 
@@ -99,7 +100,7 @@ function ClassDetail(props: any) {
             <div className={styles['section-scroll']}>
                 <div className={styles['section-view']}>
                     <div className={styles['lesson-info']}>
-                        <img className={styles['lesson-info-bg']} src="https://bhbl.dayuan1997.com/img/l-lesson-section.2b823d92.png" alt="" />
+                        <img className={styles['lesson-info-bg']} src={require('@/assets/imgs/l-lesson-section.2b823d92.png')} alt="" />
                         <div className={styles['lesson-info-name']}>
                             {course.name}
                         </div>

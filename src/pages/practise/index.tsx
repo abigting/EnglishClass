@@ -51,7 +51,7 @@ export default function Home() {
             {
                 data.map(item =>
                     <div key={item.id} className={styles['class-module']} onClick={() => history.push(`/classDetail?uuid=${item.uuid}`)}>
-                        <img className={styles['class-module-bg']} src={'https://bhbl.dayuan1997.com/img/list-bg.5a909275.png'} alt="" />
+                        <img className={styles['class-module-bg']} src={require("@/assets/imgs/list-bg.5a909275.png")} alt="" />
                         <div className={styles['class-title']}>
                             {item.name}
                         </div>

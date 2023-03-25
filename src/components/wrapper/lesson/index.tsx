@@ -49,7 +49,7 @@ export default function Lesson(props: TProps) {
             <div className={styles['section-scroll']}>
                 <div className={styles['section-view']}>
                     <div className={styles['lesson-info']}>
-                        <img className={styles['lesson-info-bg']} src="https://bhbl.dayuan1997.com/img/l-lesson-section.2b823d92.png" alt="" />
+                        <img className={styles['lesson-info-bg']} src={require('@/assets/imgs/l-lesson-section.2b823d92.png')} alt="" />
                         <div className={styles['lesson-info-name']}>
                             Aqua Ape(38-41)
                         </div>
