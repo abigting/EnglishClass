@@ -75,18 +75,20 @@ export default function Add(props: IProps) {
             footer={null}
             onCancel={() => handleCancel()}>
             <Table
+              rowKey={'uuid'}
                 columns={columns}
                 dataSource={data}
                 pagination={false}
-                summary={() => (
-                    <Table.Summary fixed>
-                        <Table.Summary.Row>
-                            <Table.Summary.Cell rowSpan={3} index={0}></Table.Summary.Cell>
-                            <Table.Summary.Cell rowSpan={3} index={0}></Table.Summary.Cell>
-                            <Table.Summary.Cell rowSpan={3} index={0}>分数：80/100</Table.Summary.Cell>
-                        </Table.Summary.Row>
-                    </Table.Summary>
-                )}
+                scroll={{ y: 500 }}
+                // summary={() => (
+                //     <Table.Summary fixed>
+                //         <Table.Summary.Row>
+                //             <Table.Summary.Cell rowSpan={3} index={0}></Table.Summary.Cell>
+                //             <Table.Summary.Cell rowSpan={3} index={0}></Table.Summary.Cell>
+                //             <Table.Summary.Cell rowSpan={3} index={0}>分数：80/100</Table.Summary.Cell>
+                //         </Table.Summary.Row>
+                //     </Table.Summary>
+                // )}
             />
         </Modal>
     );

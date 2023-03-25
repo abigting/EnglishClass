@@ -13,23 +13,25 @@ interface ICourse {
     videoPath: string;
 }
 
-export default function Add(props:IProps) {
+export default function Add(props: IProps) {
     const audioRef = useRef<HTMLAudioElement>(null)
     const [play, setPlay] = useState(false);
     const [playTimes, setPlayTimes] = useState(3);
+    const [circles, setCircles] = useState<number[]>([]);
     const [process, setProcess] = useState("0%");
     const [currentTime, setCurrentTime] = useState("00:00:00");
 
     useEffect(() => {
         processTimer;
         timeShowTimer;
-        return ()=>{
+        generateCircle()
+        return () => {
             clearInterval(processTimer);
             clearInterval(timeShowTimer);
         }
     }, [])
 
-    const processTimer =  setInterval(() => {
+    const processTimer = setInterval(() => {
         updateProcess();
     }, 120000)
 
@@ -47,6 +49,11 @@ export default function Add(props:IProps) {
         }
         setPlay(!play)
         // updateTimeShow()
+    }
+
+    function generateCircle() {
+        const numbers = Array.from(Array(500).keys(), n => n + 1);
+        setCircles(numbers)
     }
 
     //进度条主函数
@@ -80,10 +87,13 @@ export default function Add(props:IProps) {
                 className={`${styles['learn-audio-record']} ${play ? styles['rotate'] : {}}`} />
             <img src="https://bhbl.dayuan1997.com/img/handle.8d346771.png" alt=""
                 className={`${styles['learn-audio-handle']} ${play ? styles['handle-play'] : {}}`} />
-            <div
-                className={styles['learn-audio-play']}>
-                <div
-                    className={styles['learn-audio-bottom']}>
+            <div className={styles['l-audio-circle']}>
+                {
+                    circles.map(s => <div key={s} className={styles['l-circle']} />)
+                }
+            </div>
+            <div className={styles['learn-audio-play']}>
+                <div className={styles['learn-audio-bottom']}>
                     <div className={styles['progress']}>
                         <div className={styles['progress-section']}>
                             <div id="l-progress-audio" draggable="false" className={styles['progress-box']}>
@@ -106,7 +116,7 @@ export default function Add(props:IProps) {
                 </div>
             </div>
             <audio ref={audioRef} src={props?.course?.audioPath}></audio>
-            {/* <audio ref={audioRef} src="https://bhbl-prod.oss-accelerate.aliyuncs.com/undefined/2022/03/05/New%20Groove%2813%29.mp3?Expires=1679212180&OSSAccessKeyId=LTAI5tA6cc2K5H6xzdeuvpmt&Signature=aY7i9mswj7ah%2BCVESTZp5Zvv3Cc%3D"></audio> */}
+            {/* url={"https://bhbl.dayuan1997.com/阅课/02YDC02/YDC02019#新课/01#The Lamb And The Wolf/02#整故事提问#The Lamb And The Wolf整故事提问/YC02190101_Q.mp3"} */}
         </LearningWrapper >
     );
 }

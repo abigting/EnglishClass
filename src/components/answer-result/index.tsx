@@ -10,9 +10,11 @@ import styles from './index.less';
 interface DataType {
     key: React.ReactNode;
     titleName: string;
+    uuid: string;
     userAnswerPath: string;
     userAnswer: string;
     children?: DataType[];
+    playing?: boolean;
 }
 
 interface IProps {
@@ -49,26 +51,48 @@ export default function Add(props: IProps) {
         {
             title: '语音地址',
             dataIndex: 'userAnswerPath',
-            width: '30%',
+            width: '94px',
             key: 'userAnswerPath',
-            render:(_, record)=><a href={record.userAnswerPath} target="_blank">点击</a>
+            // render: (_, record) => <a href={record.userAnswerPath} target="_blank">点击</a>
+            render: (text, record) => <div className={styles['circle']} onClick={() => playingFn(record)}>
+                {
+                    text ? record.playing ? <img src={require("@/assets/imgs/lb.gif")} /> : <img src={require("@/assets/imgs/lb.png")} /> : '-'
+                }
+            </div>
         },
     ];
+
+    function playingFn(record: any) {
+        const playingAudio = data.find(s => s.playing)
+        if (playingAudio?.uuid === record.uuid) {
+            const x = data.map(s => { return { ...s, playing: false } })
+            setData(x)
+        } else {
+            const x = data.map(s => s.uuid === record.uuid ? { ...s, playing: true } : { ...s, playing: false })
+            setData(x)
+        }
+    }
 
     function handleCancel() {
         props.closeModal()
     }
 
+    const playingAudio = data.find(s => s.playing);
     return (
         <Modal title="答题记录"
             open={props.visible}
             footer={null}
             onCancel={() => handleCancel()}>
             <Table
+                rowKey={'uuid'}
                 columns={columns}
                 dataSource={data}
                 pagination={false}
+                scroll={{ y: 500 }}
             />
+            {
+                playingAudio && <audio autoPlay loop={false} src={playingAudio.userAnswerPath}></audio>
+            }
         </Modal>
     );
 }

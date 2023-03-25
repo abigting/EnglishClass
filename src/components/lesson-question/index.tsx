@@ -1,5 +1,6 @@
 import AudioQuestion from './audio-question';
 import OptionalQuestion from './optional-question';
+import Test from './test';
 
 interface IProps {
     course: ICourse;
@@ -16,4 +17,5 @@ interface ICourse {
 
 export default function Index(props: IProps){
     return props?.course?.type ===3 ? <AudioQuestion {...props}/> : <OptionalQuestion {...props}/>
+    // return <Test/>
 }

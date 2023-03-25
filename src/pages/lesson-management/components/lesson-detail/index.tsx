@@ -1,40 +1,66 @@
-import { Link, Outlet } from 'umi';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Modal, Radio, Form, Input, InputNumber, Upload, message, Row, Col } from 'antd';
-import { LearningServices } from '@/services'
+import { LearningServices } from '@/services';
+import utils from '@/utils';
 import styles from './index.less';
-
-type onCancel = (a: number, b: number) => number
-
 
 interface IProps {
     visible: boolean,
-    uuid?: string;
-    closeModal: onCancel
+    uuid?: string | null | undefined;
+    closeModal: any
 }
 
 export default function Add(props: IProps) {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         if (props.visible && props.uuid) {
             getInfo()
+        }else{
+            setLoading(false)
         }
     }, [props.visible]);
 
     function getInfo() {
         LearningServices.courseDetail({ uuid: props.uuid }).then(res => {
             if (res.code === 0 && res.data) {
-                const { id, list, ...rest } = res.data;
-                form.setFieldsValue({ ...rest})
+                const { id, list, coverPath, videoPath, audioPath, ...rest } = res.data;
+                let data = rest;
+                if (coverPath) {
+                    data = {
+                        ...data, coverPath: [{
+                            uid: '1',
+                            name: utils.getNameByUrl(coverPath),
+                            status: 'done',
+                            url: coverPath,
+                        }]
+                    }
+                }
+                if (videoPath) {
+                    data = {
+                        ...data, videoPath: [{
+                            uid: '2',
+                            name: utils.getNameByUrl(videoPath),
+                            status: 'done',
+                            url: videoPath,
+                        }]
+                    }
+                }
+                if (audioPath) {
+                    data = {
+                        ...data, audioPath: [{
+                            uid: '3',
+                            name: utils.getNameByUrl(audioPath),
+                            status: 'done',
+                            url: audioPath,
+                        }]
+                    }
+                }
+                form.setFieldsValue({ ...data })
             }
         })
     }
-
-    const handleOk = async () => {
-
-        // props.closeModal();
-    };
 
     const handleCancel = () => {
         props.closeModal()
@@ -51,63 +77,79 @@ export default function Add(props: IProps) {
         setLoading(true)
         const { coverPath, videoPath, audioPath, ...rest } = values;
         let req = { ...rest }
-        if (values.coverPath) {
+        if (values.coverPath?.length > 0) {
             req = {
                 ...req,
-                coverPath: values?.coverPath?.originFileObj
+                coverPath: values?.coverPath[0].originFileObj
             }
         }
         if (values.videoPath) {
             req = {
                 ...req,
-                videoPath: values?.videoPath?.originFileObj
+                videoPath: values?.videoPath[0].originFileObj
             }
         }
         if (values.audioPath) {
             req = {
                 ...req,
-                audioPath: values?.audioPath?.originFileObj
+                audioPath: values?.audioPath[0].originFileObj
             }
         }
-        const formData = getFormData(req)
-        const res = await LearningServices.courseCreate(formData);
-        setLoading(false)
-        if (res.code === 0) {
-            message.success('保存成功');
-            props.closeModal();
+        if (props.uuid) {
+            req = {
+                ...req,
+                uuid: props.uuid
+            }
+        }
+        const formData = getFormData(req);
+        if (props.uuid) {
+            const res = await LearningServices.courseEdit(formData);
+            setLoading(false)
+            if (res.code === 0) {
+                message.success('编辑成功');
+                props.closeModal(true);
+            }
+        } else {
+            const res = await LearningServices.courseCreate(formData);
+            setLoading(false)
+            if (res.code === 0) {
+                message.success('保存成功');
+                props.closeModal(true);
+            }
         }
     };
+
 
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
 
     const coverFile = (e: any) => {
+        console.log(e, 'e');
         if (Array.isArray(e)) {
             return e;
         }
-        return e?.file;
+        return e?.fileList;
     };
 
     const audioFile = (e: any) => {
         if (Array.isArray(e)) {
             return e;
         }
-        return e?.file;
+        return e?.fileList;
     };
 
     const videoFile = (e: any) => {
         if (Array.isArray(e)) {
             return e;
         }
-        return e?.file;
+        return e?.fileList;
     };
 
     return (
         <Modal title="新增课程"
             width={500}
             open={props.visible}
-            onOk={handleOk}
             onCancel={() => handleCancel()}
             afterClose={() => form.resetFields()}
             footer={null}>
@@ -171,8 +213,9 @@ export default function Add(props: IProps) {
                     <Form.Item
                         label="封面"
                         name="coverPath"
-                        valuePropName="coverPath"
+                        valuePropName="fileList"
                         getValueFromEvent={coverFile}
+
                     // rules={[{ required: true, message: '请上传封面资料!' }]}
                     >
                         <Upload accept="image/*" listType="picture-card" maxCount={1}>
@@ -185,7 +228,7 @@ export default function Add(props: IProps) {
                     <Form.Item
                         label="视频资料"
                         name="videoPath"
-                        valuePropName="videoPath"
+                        valuePropName="fileList"
                         getValueFromEvent={videoFile}
                     // rules={[{ required: true, message: '请上传视频资料!' }]}
                     >
@@ -197,7 +240,7 @@ export default function Add(props: IProps) {
                     <Form.Item
                         label="音频资料"
                         name="audioPath"
-                        valuePropName="audioList"
+                        valuePropName="fileList"
                         getValueFromEvent={audioFile}
                     // rules={[{ required: true, message: '请上传音频资料!' }]}
                     >
@@ -205,14 +248,11 @@ export default function Add(props: IProps) {
                             <Button>+ 上传</Button>
                         </Upload>
                     </Form.Item>
-                    {
-                        !props.uuid &&
-                        <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
-                            <Button type="primary" htmlType="submit" loading={loading}>
-                                保存
-                            </Button>
-                        </Form.Item>
-                    }
+                    <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
+                        <Button type="primary" htmlType="submit" loading={loading}>
+                            保存
+                        </Button>
+                    </Form.Item>
                 </Form>
             </div>
         </Modal>

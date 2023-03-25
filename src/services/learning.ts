@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import request from '@/utils/request';
 import { url } from '@/utils/config';
 
@@ -20,6 +19,16 @@ export function courseCreate(data: any) {
         method: 'post',
         data
         // ...option,
+    });
+}
+
+/**
+* @desc 编辑课程
+*/
+export function courseEdit(data: any) {
+    return request(`${url}/course/editForm`, {
+        method: 'post',
+        data
     });
 }
 
@@ -46,10 +55,10 @@ export function titleCreate(data: any) {
 }
 
 /**
-* @desc 新增题目
+* @desc 编辑题目
 */
 export function titleEdit(data: any) {
-    return request(`${url}/title/edit`, {
+    return request(`${url}/title/editForm`, {
         method: 'post',
         data
         // ...option,
@@ -118,11 +127,7 @@ export function answerQuestions(data: any) {
 export function recordList(data: any) {
     return request(`${url}/user_answer/record_list`, {
         method: 'post',
-        data:{
-            ...data,
-            userUUId: Cookies.get("userUUId")
-        }
-        // ...option,
+        data
     });
 }
 

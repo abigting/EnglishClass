@@ -12,9 +12,11 @@
 }
 
 .learn-audio {
+    position: relative;
+    top: -0.5rem;
     text-align: center;
     box-sizing: border-box;
-    // background: linear-gradient(0deg,#3d7bff,#87a1ff);
+    background: linear-gradient(0deg,#3d7bff,#87a1ff);
     overflow: hidden;
     width: 100%;
     height: 100%;
@@ -199,4 +201,39 @@
     bottom: .85rem;
     font-size: .12rem;
     color: #fff
+}
+
+.l-audio-circle{
+    width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: absolute
+}
+
+.l-audio-circle .l-circle {
+    width:42px;
+    height: 42px;
+    margin:4px;
+    border-radius: 45%;
+    background-color: hsla(0,0%,100%,.2);
+    float: left
+}
+
+.l-audio-circle .isActive {
+    background-color: hsla(0,0%,100%,.6)
+}
+
+@media (min-width: 1000px) {
+    .l-audio-circle .l-circle {
+        width:38px;
+        height: 38px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .l-audio-circle .l-circle {
+        width:50px;
+        height: 50px;
+    }
 }

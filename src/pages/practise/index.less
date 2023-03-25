@@ -1,15 +1,15 @@
 .class-wrapper {
-    width: 1200px;
+    // width: 1200px;
     margin: auto;
-    display: flex;
-    flex-flow: wrap;
-    justify-content: flex-start;
-    height: calc(100vh - 218px);
+    display: grid;
+    grid-template-columns: 400px 400px 400px;
+    justify-content: space-around;
+    height: calc(100vh - 200px);
     overflow-y: scroll;
 }
 
 .class-module {
-    width: 33.3%;
+    width: 400px;
     height: 304px;
     position: relative;
     cursor: pointer;

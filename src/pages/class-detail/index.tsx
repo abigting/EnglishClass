@@ -25,9 +25,15 @@ const blocksDefault = [
     }
 ]
 
+interface IBlocks{
+    img: string;
+    text: string;
+    type: number
+}
+
 function ClassDetail(props: any) {
     const [course, setCourse] = useState({});
-    const [blocks, setBlocks] = useState([]);
+    const [blocks, setBlocks] = useState<IBlocks[]>([]);
     const [visible, setVisible] = useState(false);
     const location = useLocation();
     // const { user, loading } = useModel('userModel');
@@ -50,12 +56,18 @@ function ClassDetail(props: any) {
         const res = await LearningServices.courseDetail({ uuid });
         if (res.code === 0 && res.data) {
             setCourse(res.data);
-            const { audioPath } = res.data;
-            if (!audioPath) {
-                setBlocks(blocksDefault.filter(s => s.type !== 2))
-            } else {
-                setBlocks(blocksDefault)
+            const { videoPath, audioPath, list } = res.data;
+            let blocks = blocksDefault;
+            if (!videoPath) {
+                blocks = blocks.filter(s => s.type !== 1);
             }
+            if (!audioPath) {
+                blocks = blocks.filter(s => s.type !== 2);
+            }
+            if (!list || list.length === 0) {
+                blocks = blocks.filter(s => s.type !== 3);
+            }
+            setBlocks(blocks)
         }
     }
 

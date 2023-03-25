@@ -8,7 +8,7 @@ import styles from './index.less';
 const menusDefault = [
     {
         key: '1',
-        title: '视频',
+        title: '文字',
         active: true
     },
     {
@@ -17,16 +17,17 @@ const menusDefault = [
     },
     {
         key: '3',
-        title: '选择题'
+        title: '语音回答'
     }
 ]
 
-interface Item{
+interface Item {
     id: string | number;
     uuid: string;
     name: string;
     coverPath: string;
-    rate: number
+    rate: number;
+    userScore?: number;
 }
 
 export default function Home() {
@@ -38,14 +39,14 @@ export default function Home() {
 
 
     async function getList(type: string | undefined) {
-        setMenus(menus.map(s=>s.key===type?{...s, active: true}:{...s,active: false}))
-        const res = await LearningServices.courseList({ type});
+        setMenus(menus.map(s => s.key === type ? { ...s, active: true } : { ...s, active: false }))
+        const res = await LearningServices.courseList({ type });
         if (res.code === 0) {
-            setData(res.data)
+            setData(res.data || [])
         }
     }
 
-    return <Wrapper menus={menus} toggleMenu={(type: string)=> getList(type)}>
+    return <Wrapper menus={menus} toggleMenu={(type: string) => getList(type)}>
         <div className={styles['class-wrapper']}>
             {
                 data.map(item =>
@@ -55,10 +56,12 @@ export default function Home() {
                             {item.name}
                         </div>
                         <div className={styles['class-content']}>
-                            <img className={styles['class-content-cover']} src={`http://lccweb.natapp1.cc${item.coverPath}`} alt="" />
-                            <div className={styles['class-content-rate']} >
-                                <Rate allowHalf disabled value={item.rate} />
-                            </div>
+                            <img className={styles['class-content-cover']} src={item.coverPath} alt="" />
+                            {
+                                item.userScore ? <div className={styles['class-content-rate']} >
+                                    <Rate allowHalf disabled value={item.userScore} />
+                                </div> : null
+                            }
                         </div>
                     </div>)
             }

@@ -7,10 +7,9 @@ import { LearningServices } from '@/services';
 import qs from 'query-string'
 import styles from './index.less';
 
-
 interface IProps {
     location: any;
-    match: any
+    match: any;
 }
 
 interface ICourse {
@@ -23,7 +22,6 @@ interface ICourse {
 }
 
 function Lesson(props: IProps) {
-    const [questions, setQuestions] = useState([]);
     const [course, setCourse] = useState<ICourse>();
     useEffect(() => {
         getInfo()
@@ -36,8 +34,6 @@ function Lesson(props: IProps) {
             setCourse(res.data)
         }
     }
-
-    const type = 1;
 
     const { match } = props;
 
