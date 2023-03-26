@@ -1,5 +1,4 @@
-import { Link, Outlet } from 'umi';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { message } from 'antd';
 import ReactPlayer from 'react-player';
 import LearningWrapper from '@/components/wrapper/learning';
@@ -106,7 +105,7 @@ const listDefault = [
 ]
 
 export default function Add(props: IProps) {
-    const [disable, setDisable] = useState(false);
+    const [disable, setDisable] = useState(true);
     const [options, setOptions] = useState<IOptions[]>(optionsDefault);
     const [autoPlay, setAutoPlay] = useState(false);
     const [playTimes, setPlayTimes] = useState(props?.course?.playTimes);

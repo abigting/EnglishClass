@@ -17,7 +17,7 @@ export default function Add(props: IProps) {
     useEffect(() => {
         if (props.visible && props.uuid) {
             getInfo()
-        }else{
+        } else {
             setLoading(false)
         }
     }, [props.visible]);
@@ -77,19 +77,19 @@ export default function Add(props: IProps) {
         setLoading(true)
         const { coverPath, videoPath, audioPath, ...rest } = values;
         let req = { ...rest }
-        if (values.coverPath[0]?.originFileObj) {
+        if (values.coverPath && values.coverPath[0]?.originFileObj) {
             req = {
                 ...req,
                 coverPath: values?.coverPath[0].originFileObj
             }
         }
-        if (values.videoPath[0]?.originFileObj) {
+        if (values.videoPath && values.videoPath[0]?.originFileObj) {
             req = {
                 ...req,
                 videoPath: values?.videoPath[0].originFileObj
             }
         }
-        if (values?.audioPath[0]?.originFileObj) {
+        if (values?.audioPath && values?.audioPath[0]?.originFileObj) {
             req = {
                 ...req,
                 audioPath: values?.audioPath[0].originFileObj
@@ -224,7 +224,6 @@ export default function Add(props: IProps) {
                             </div>
                         </Upload>
                     </Form.Item>
-
                     <Form.Item
                         label="视频资料"
                         name="videoPath"
@@ -236,7 +235,6 @@ export default function Add(props: IProps) {
                             <Button>+ 上传</Button>
                         </Upload>
                     </Form.Item>
-
                     <Form.Item
                         label="音频资料"
                         name="audioPath"

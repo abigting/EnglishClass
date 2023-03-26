@@ -159,7 +159,16 @@ export default function LessonManagement() {
       closeModal={(refreash: boolean) => closeLessonDetailModal(refreash)} />
     <div className={styles['table-wrapper']}>
       <Button size='middle' type="primary" onClick={() => addLesson()}>新增课程</Button>
-      <Table rowKey="uuid" childrenColumnName="list" scroll={{ y: 320 }} dataSource={data} columns={columns} />
+      <Table rowKey="uuid"
+        childrenColumnName="list"
+        scroll={{ y: 320 }}
+        dataSource={data}
+        columns={columns}
+        pagination={{
+          size: 'small',
+          pageSize: 5,
+          total: data?.length
+        }} />
     </div>
   </Wrapper>
 }

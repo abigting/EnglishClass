@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import LearningWrapper from '@/components/wrapper/learning';
+import { LearningServices } from '@/services';
 import styles from './index.less';
 
 interface IProps {
@@ -7,6 +8,7 @@ interface IProps {
 }
 
 interface ICourse {
+    uuid: string;
     playTimes: string;
     name: string;
     audioPath: string;
@@ -81,6 +83,10 @@ export default function Add(props: IProps) {
         return "00:" + minuteStr + ":" + secondStr;
     }
 
+    function audioEnd(){
+        LearningServices.playControl({ uuid: props.course?.uuid, status: 2 })
+    }
+
     return (
         <LearningWrapper title={props?.course?.name} className={styles['learn-audio']}>
             <img src={require("@/assets/imgs/record.e551874a.png")} alt=""
@@ -115,8 +121,7 @@ export default function Add(props: IProps) {
                     <span className={styles['pause-number']}>剩余暂停次数：{playTimes}次</span>
                 </div>
             </div>
-            <audio ref={audioRef} src={props?.course?.audioPath}></audio>
-            {/* url={"https://bhbl.dayuan1997.com/阅课/02YDC02/YDC02019#新课/01#The Lamb And The Wolf/02#整故事提问#The Lamb And The Wolf整故事提问/YC02190101_Q.mp3"} */}
+            <audio ref={audioRef} src={props?.course?.audioPath} onPause={()=>audioEnd()} onEnded={()=>audioEnd()}></audio>
         </LearningWrapper >
     );
 }

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Wrapper from '@/components/wrapper';
 import { history } from 'umi';
-import { Rate } from 'antd';
+import { Rate, Empty, Button } from 'antd';
 import { LearningServices } from '@/services';
 import styles from './index.less';
 
@@ -49,21 +49,34 @@ export default function Home() {
     return <Wrapper menus={menus} toggleMenu={(type: string) => getList(type)}>
         <div className={styles['class-wrapper']}>
             {
-                data.map(item =>
-                    <div key={item.id} className={styles['class-module']} onClick={() => history.push(`/classDetail?uuid=${item.uuid}`)}>
-                        <img className={styles['class-module-bg']} src={require("@/assets/imgs/list-bg.5a909275.png")} alt="" />
-                        <div className={styles['class-title']}>
-                            {item.name}
-                        </div>
-                        <div className={styles['class-content']}>
-                            <img className={styles['class-content-cover']} src={item.coverPath} alt="" />
-                            {
-                                item.userScore ? <div className={styles['class-content-rate']} >
-                                    <Rate allowHalf disabled value={item.userScore} />
-                                </div> : null
-                            }
-                        </div>
-                    </div>)
+                data?.length > 0 ?
+                    data.map(item =>
+                        <div key={item.id} className={styles['class-module']} onClick={() => history.push(`/classDetail?uuid=${item.uuid}`)}>
+                            <img className={styles['class-module-bg']} src={require("@/assets/imgs/list-bg.5a909275.png")} alt="" />
+                            <div className={styles['class-title']}>
+                                {item.name}
+                            </div>
+                            <div className={styles['class-content']}>
+                                <img className={styles['class-content-cover']} src={item.coverPath} alt="" />
+                                {
+                                    item.userStar ? <div className={styles['class-content-rate']} >
+                                        <Rate allowHalf disabled value={item.userStar} />
+                                    </div> : null
+                                }
+                            </div>
+                        </div>) :
+                    <Empty
+                        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                        className={styles['empty-block']}
+                        imageStyle={{ height: 80 }}
+                        description={
+                            <span className={styles['no-data']}>
+                                暂时没有数据
+                            </span>
+                        }
+                    >
+                        <Button type="primary" onClick={() => history.push(`/lessonManagement`)}>现在新增 + </Button>
+                    </Empty>
             }
         </div>
     </Wrapper>

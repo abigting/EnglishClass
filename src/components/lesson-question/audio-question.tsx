@@ -39,7 +39,7 @@ let timer: any; // 1 计时器
 
 export default function Add(props: IProps) {
     const [recording, setRecording] = useState(false);
-    const [disable, setDisable] = useState(false);
+    const [disable, setDisable] = useState(true);
     const [autoPlay, setAutoPlay] = useState(false);
     const [playTimes, setPlayTimes] = useState(props?.course?.playTimes);
 

@@ -2,15 +2,15 @@
     // width: 1200px;
     margin: auto;
     display: grid;
-    grid-template-columns: 400px 400px 400px;
+    grid-template-columns: 330px 330px 330px;
     justify-content: space-around;
     height: calc(100vh - 200px);
     overflow-y: scroll;
 }
 
 .class-module {
-    width: 400px;
-    height: 304px;
+    width: 330px;
+    height: 252px;
     position: relative;
     cursor: pointer;
 
@@ -54,4 +54,16 @@
             z-index: 1;
         }
     }
+}
+
+.empty-block{
+ position: absolute;
+ left: 50%;
+ top: 40%;
+ transform: translate(-50%, -50%);
+}
+
+.no-data{
+    color: #fff;
+    font-size: 18px;
 }

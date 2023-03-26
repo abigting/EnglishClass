@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import ReactPlayer from 'react-player';
 import { message } from 'antd';
 import LearningWrapper from '@/components/wrapper/learning';
-// import { PlusOutlined } from '@ant-design/icons';
+import { LearningServices } from '@/services';
 import styles from './index.less';
 
 
@@ -11,6 +11,7 @@ interface IProps {
 }
 
 interface ICourse {
+    uuid: string;
     playTimes: string;
     name: string;
     audioPath: string;
@@ -33,6 +34,10 @@ export default function Add(props: IProps) {
         }
     }
 
+   async function videoEnd(){
+    LearningServices.playControl({ uuid: props.course.uuid, status: 1 })
+    }
+
     return (
         <LearningWrapper title={props?.course?.name} className={styles['learn-vidreact-playereo']}>
             <div className={styles['video-wrapper']}>
@@ -42,11 +47,11 @@ export default function Add(props: IProps) {
                     className='react-player'
                     // playing
                     onPlay={() => videoPlay()}
-                    onPause={() => videoPause()}
+                    onPause={() => videoEnd()}
+                    onEnded={()=>videoEnd()}
                     controls={true}
                     width='100%'
                     height='100%'
-
                 />
                 <span className={styles['left-times']}>剩余暂停次数：{playTimes}</span>
             </div>

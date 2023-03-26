@@ -26,7 +26,7 @@ export function courseCreate(data: any) {
 * @desc 编辑课程
 */
 export function courseEdit(data: any) {
-    return request(`${url}/course/editForm`, {
+    return request(`${url}/course/edit`, {
         method: 'post',
         data
     });
@@ -58,7 +58,7 @@ export function titleCreate(data: any) {
 * @desc 编辑题目
 */
 export function titleEdit(data: any) {
-    return request(`${url}/title/editForm`, {
+    return request(`${url}/title/edit`, {
         method: 'post',
         data
         // ...option,
@@ -131,24 +131,13 @@ export function recordList(data: any) {
     });
 }
 
-// /**
-// * @desc 查看课程
-// */
-// export function reviewCourse(data: any) {
-//     return request(`${url}/user_answer/record_list`, {
-//         method: 'post',
-//         data
-//         // ...option,
-//     });
-// }
 
-// /**
-// * @desc 查看题目
-// */
-// export function reviewTitle(data: any) {
-//     return request(`${url}/user_answer/record_list`, {
-//         method: 'post',
-//         data
-//         // ...option,
-//     });
-// }
+/**
+* @desc 播放次数控制
+*/
+export function playControl(data: any) {
+    return request(`${url}/course/play_control`, {
+        method: 'post',
+        data
+    });
+}

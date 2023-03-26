@@ -13,14 +13,16 @@ interface IProps {
 
 export default function Add(props: IProps) {
     const [form] = Form.useForm();
-    const [courseType, setCourseType] = useState(1);
+    const [courseInfo, setCourseInfo] = useState<any>();
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (props.visible && props.uuid) {
             getInfo()
-        }else if(props.visible){
-            setCourseType(props.course?.type)
+        } else if (props.visible) {
+            setCourseInfo({type: props.course?.type})
+        }else{
+            setCourseInfo({})
         }
     }, [props.visible]);
 
@@ -28,7 +30,7 @@ export default function Add(props: IProps) {
         LearningServices.titleDeatil({ uuid: props.uuid }).then(res => {
             if (res.code === 0 && res.data) {
                 const { id, courseUuid, problemPath, interpretationPath, ...rest } = res.data;
-                setCourseType(rest.type)
+                setCourseInfo({courseUuid, type: rest.type})
                 let data = rest;
                 if (problemPath) {
                     data = {
@@ -75,13 +77,13 @@ export default function Add(props: IProps) {
         setLoading(true)
         const { problemPath, interpretationPath, ...rest } = values;
         let req = { ...rest, courseUuid: props.course.uuid };
-        if (values.problemPath[0]?.originFileObj) {
+        if (values.problemPath && values.problemPath[0]?.originFileObj) {
             req = {
                 ...req,
                 problemPath: values?.problemPath[0].originFileObj
             }
         }
-        if (values.interpretationPath[0]?.originFileObj) {
+        if (values.interpretationPath && values.interpretationPath[0]?.originFileObj) {
             req = {
                 ...req,
                 interpretationPath: values?.interpretationPath[0].originFileObj
@@ -90,7 +92,8 @@ export default function Add(props: IProps) {
         if (props.uuid) {
             req = {
                 ...req,
-                uuid: props.uuid
+                uuid: props.uuid,
+                courseUuid: courseInfo?.courseUuid
             }
         }
         const formData = getFormData(req);
@@ -132,7 +135,7 @@ export default function Add(props: IProps) {
         return e?.fileList;
     };
 
-    const needOptions = [1, 2].includes(props.course.type) || [1, 2].includes(courseType);
+    const needOptions = [1, 2].includes(props.course.type) || [1, 2].includes(courseInfo?.type);
 
     return (
         <Modal

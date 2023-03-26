@@ -1,8 +1,18 @@
 import { extend } from 'umi-request';
 import { message } from 'antd';
-// import { getCookie } from './common';
 
-const request = extend({});
+const errorHandler = (error: any) => {
+  console.log(error)
+  // message.error('哇哦，服务器出错啦，请稍候再试~');
+  return{
+    code: -1000
+  }
+};
+
+const request = extend({
+  errorHandler,
+});
+
 
 request.interceptors.request.use((_url, options: any) => {
   const { headers, ...rest } = options;
@@ -26,7 +36,7 @@ request.interceptors.response.use(async (response) => {
       message.destroy();
       message.warning(data.message);
       if (data.code === 6666) {
-        // window.location.href = '/';
+        setTimeout(()=>window.location.href = '/', 1000)
       }
     } else {
     }
