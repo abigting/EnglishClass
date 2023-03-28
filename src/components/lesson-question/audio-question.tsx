@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { message } from 'antd';
 import ReactPlayer from 'react-player';
 import LearningWrapper from '@/components/wrapper/learning';
 import Recorder from 'js-audio-recorder';
-import { LearningServices } from '@/services'
+import { LearningServices } from '@/services';
+import Badge from '@/components/badge';
 import styles from './index.less';
 
 interface IProps {
@@ -12,11 +13,13 @@ interface IProps {
 
 interface ICourse {
     playTimes: string;
+    uuid: string;
     name: string;
     audioPath: string;
     videoPath: string;
     type: number;
     list: any;
+    showCount?:boolean
 }
 
 interface Question {
@@ -43,6 +46,8 @@ export default function Add(props: IProps) {
     const [autoPlay, setAutoPlay] = useState(false);
     const [playTimes, setPlayTimes] = useState(props?.course?.playTimes);
 
+    const [BVisible, setBVisible] = useState<boolean>(false)
+
     const [videoObj, setVideoObj] = useState<IVideoObj>({});
     const [list, setList] = useState<Question[]>([]);
     const [recorder, setRecorder] = useState(new Recorder({
@@ -51,7 +56,6 @@ export default function Add(props: IProps) {
         numChannels: 1, // 声道，支持 1 或 2， 默认是1
         // compiling: false,(0.x版本中生效,1.x增加中)  // 是否边录边转换，默认是false
     }));
-
 
     const [progress, setProgress] = useState<number>(0);
     // const [audioUrl, setAudio] = useState<any>();
@@ -185,7 +189,7 @@ export default function Add(props: IProps) {
                 interpretation: false
             })
         } else {
-            message.success('恭喜你，已答题完成')
+            setBVisible(true)
         }
     }
 
@@ -220,7 +224,7 @@ export default function Add(props: IProps) {
     return (
         <div>
             <LearningWrapper title={props?.course?.name} className={styles['learn-vidreact-playereo']}>
-                {/* <audio autoPlay src={audioUrl}></audio> */}
+                <Badge visible = {BVisible} courseUuid={props.course?.uuid} closeBadge={()=>setBVisible(false)} />
                 <div className={styles['video-wrapper']}>
                     {
                         videoObj?.url &&
@@ -238,16 +242,18 @@ export default function Add(props: IProps) {
                             height='100%'
                         />
                     }
-                    <span className={styles["l-number"]}>{activeIndex + 1}/{list?.length}</span>
+                    {
+                        props?.course?.showCount ?<span className={styles["l-number"]}>{activeIndex + 1}/{list?.length}</span>:null
+                    }
                     <span className={styles["l-learn-replay"]}>
                         <img className={styles["l-learn-replay-reload"]} src={require("../../assets/imgs/reload.png")} alt="" />
                         <img className={styles["l-learn-replay-close"]} src={require("../../assets/imgs/close.png")} alt="" />
                         <span className={styles["l-learn-replay-num"]} onClick={() => location.reload()}>{playTimes}</span>
-                        {
+                        {/* {
                             disable ?
                                 <img className={styles["l-learn-replay-lbing"]} src={require("../../assets/imgs/lb.gif")} alt="" /> :
                                 <img className={styles["l-learn-replay-lb"]} src={require("../../assets/imgs/lb.png")} alt="" />
-                        }
+                        } */}
                     </span>
                 </div>
                 <div className={styles['lSoundRecording-btn']}>
@@ -269,11 +275,6 @@ export default function Add(props: IProps) {
                                     <img className={styles['process-bar-record']} src={require("@/assets/imgs/record.png")} alt="" />
                                 </>
                             }
-
-                            {/* <>
-                                <div className={styles['process-bar-container']} ><div className={styles['process-bar']} style={{ width: `${progress}%` }}></div></div>
-                                <img className={styles['process-bar-record']} src={require("@/assets/imgs/record.png")} alt="" />
-                            </> */}
                         </div>
                     </div>
                 </div>

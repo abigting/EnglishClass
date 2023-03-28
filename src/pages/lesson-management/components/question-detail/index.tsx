@@ -20,8 +20,8 @@ export default function Add(props: IProps) {
         if (props.visible && props.uuid) {
             getInfo()
         } else if (props.visible) {
-            setCourseInfo({type: props.course?.type})
-        }else{
+            setCourseInfo({ type: props.course?.type })
+        } else {
             setCourseInfo({})
         }
     }, [props.visible]);
@@ -30,7 +30,7 @@ export default function Add(props: IProps) {
         LearningServices.titleDeatil({ uuid: props.uuid }).then(res => {
             if (res.code === 0 && res.data) {
                 const { id, courseUuid, problemPath, interpretationPath, ...rest } = res.data;
-                setCourseInfo({courseUuid, type: rest.type})
+                setCourseInfo({ courseUuid, type: rest.type })
                 let data = rest;
                 if (problemPath) {
                     data = {
@@ -124,6 +124,9 @@ export default function Add(props: IProps) {
         if (Array.isArray(e)) {
             return e;
         }
+        if(e?.fileList?.length>0){
+            e.fileList[0].status = 'done'
+        }
         return e?.fileList;
     };
 
@@ -132,11 +135,14 @@ export default function Add(props: IProps) {
         if (Array.isArray(e)) {
             return e;
         }
+        if(e?.fileList?.length>0){
+            e.fileList[0].status = 'done'
+        }
         return e?.fileList;
     };
 
     const needOptions = [1, 2].includes(props.course.type) || [1, 2].includes(courseInfo?.type);
-
+    const notTextType = [2, 3].includes(props.course.type) || [2, 3].includes(courseInfo?.type);
     return (
         <Modal
             title="新增题目"
@@ -185,29 +191,48 @@ export default function Add(props: IProps) {
                         </Radio.Group>
                     </Form.Item>
                 }
-
-
-                <Form.Item
-                    label="题目文件"
-                    name="problemPath"
-                    valuePropName="fileList"
-                    getValueFromEvent={problemPath}
-                    rules={[{ required: true, message: '请上传题目文件！' }]}
-                >
-                    <Upload maxCount={1} disabled={!!props.uuid}>
-                        <Button >+ 上传</Button>
-                    </Upload>
-                </Form.Item>
-
-                <Form.Item label="解说"
-                    name="interpretationPath"
-                    valuePropName="fileList"
-                    getValueFromEvent={interpretationPath}
-                >
-                    <Upload maxCount={1} disabled={!!props.uuid}>
-                        <Button >+ 上传</Button>
-                    </Upload>
-                </Form.Item>
+                {
+                    notTextType &&
+                    <Form.Item
+                        label="题目文件"
+                        name="problemPath"
+                        valuePropName="fileList"
+                        getValueFromEvent={problemPath}
+                        rules={[{ required: true, message: '请上传题目文件！' }]}
+                    >
+                        <Upload accept="video/*" maxCount={1} disabled={!!props.uuid}>
+                            <Button >+ 上传</Button>
+                        </Upload>
+                    </Form.Item>
+                }
+                {
+                    !notTextType &&
+                    <Form.Item
+                        label="题目文件"
+                        name="problemPath"
+                        valuePropName="fileList"
+                        getValueFromEvent={problemPath}
+                        rules={[{ required: true, message: '请上传题目文件！' }]}
+                    >
+                        <Upload accept="image/*" listType="picture-card" maxCount={1} disabled={!!props.uuid}>
+                            <div>
+                                <div style={{ marginTop: 8 }}>+ 上传</div>
+                            </div>
+                        </Upload>
+                    </Form.Item>
+                }
+                {
+                    notTextType &&
+                    <Form.Item label="解说"
+                        name="interpretationPath"
+                        valuePropName="fileList"
+                        getValueFromEvent={interpretationPath}
+                    >
+                        <Upload accept="video/*" maxCount={1} disabled={!!props.uuid}>
+                            <Button >+ 上传</Button>
+                        </Upload>
+                    </Form.Item>
+                }
                 <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
                     <Button type="primary" htmlType="submit" loading={loading}>
                         保存

@@ -25,7 +25,11 @@ export default function Index() {
         if (res.code === 0 && res.data){
           // Cookies.set("userUUId", res.data.uuid, { expires: 7, path: '/' });
           window.localStorage.setItem("EnglishClass_userUUId", res.data.uuid);
-          history.push('/home')
+          if(res.data.isAdmin){
+            history.push('/home')
+          }else{
+            history.push('/practise')
+          }
         }
       }
     })
@@ -37,7 +41,7 @@ export default function Index() {
   return (
     <div className={styles['login-wrapper']}>
       <div className={styles['login-logo']}>
-        <img src="https://auth.dayuan1997.com/img/l-login-logo.7a739a16.png" alt="login-logo" />
+        <img src={require('@/assets/imgs/l-login-logo.7a739a16.png')} alt="login-logo" />
       </div>
       <div className={styles['login-inner']}>
         {/* <div className={styles['tab-box']}>
@@ -47,7 +51,7 @@ export default function Index() {
         </div> */}
         <div className={styles['login-main']}>
           <Form
-           form={form}
+            form={form}
             name="basic"
             className={styles['login-form']}
             labelCol={{ span: 4 }}
@@ -71,12 +75,10 @@ export default function Index() {
               <Input className={styles['login-form-input']} type="password" size="large" />
             </Form.Item>
 
-            {/* <div className={styles['register']} onClick={() => setVisible(true)}><a>注册</a></div> */}
+            <div className={styles['register']} onClick={() => setVisible(true)}><a>注册</a></div>
             <Button className={styles['login-btn']} onClick={() => login()}>立即登录</Button>
           </Form>
           <Register visible={visible} closeModal={()=> setVisible(false) }/>
-          {/* <input type="file" id="file" onChange={e=>Upload(e)}/>
-          <button onClick={()=>getFile()}>file</button> */}
         </div>
       </div>
     </div>

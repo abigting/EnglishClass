@@ -125,9 +125,11 @@ export default function Add(props: IProps) {
     };
 
     const coverFile = (e: any) => {
-        console.log(e, 'e');
         if (Array.isArray(e)) {
             return e;
+        }
+        if(e?.fileList?.length>0){
+            e.fileList[0].status = 'done'
         }
         return e?.fileList;
     };
@@ -136,12 +138,18 @@ export default function Add(props: IProps) {
         if (Array.isArray(e)) {
             return e;
         }
+        if(e?.fileList?.length>0){
+            e.fileList[0].status = 'done'
+        }
         return e?.fileList;
     };
 
     const videoFile = (e: any) => {
         if (Array.isArray(e)) {
             return e;
+        }
+        if(e?.fileList?.length>0){
+            e.fileList[0].status = 'done'
         }
         return e?.fileList;
     };
@@ -164,7 +172,7 @@ export default function Add(props: IProps) {
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
-                    initialValues={{ name: 'test', type: 1, playTimes: 3, orderNum: 1 }}
+                    initialValues={{ name: 'test', type: 1, playTimes: 3, orderNum: 1, showCount: false }}
                 >
                     <Form.Item
                         label="课程名称"
@@ -210,13 +218,23 @@ export default function Add(props: IProps) {
                             </Form.Item>
                         </Col>
                     </Row>
+
+                    <Form.Item
+                        label="题目数量"
+                        name="showCount"
+                        rules={[{ required: true, message: '请选择是否显示题目数量!' }]}
+                    >
+                        <Radio.Group>
+                            <Radio value={true}>显示</Radio>
+                            <Radio value={false}>不显示</Radio>
+                        </Radio.Group>
+                    </Form.Item>
                     <Form.Item
                         label="封面"
                         name="coverPath"
                         valuePropName="fileList"
                         getValueFromEvent={coverFile}
-
-                    // rules={[{ required: true, message: '请上传封面资料!' }]}
+                        rules={[{ required: true, message: '请上传封面资料!' }]}
                     >
                         <Upload accept="image/*" listType="picture-card" maxCount={1} disabled={!!props.uuid}>
                             <div>

@@ -7,19 +7,17 @@ import { url } from '@/utils/config';
 export function login(data: any) {
     return request(`${url}/user/login`, {
         method: 'post',
-        data: data
-        // ...option,
+        data
     });
 }
 
 /**
-* @desc 新增课程
+* @desc 注册
 */
-export function courseCreate(data: any) {
-    return request(`${url}/course/create`, {
+export function register(data: any) {
+    return request(`${url}/user/register`, {
         method: 'post',
-        data: data
-        // ...option,
+        data
     });
 }
 

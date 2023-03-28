@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
-import { history } from 'umi';
-import { Button, Modal, Radio, Form, Input, message, Upload, Table } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { Button, Modal, Checkbox, Form, Input, message } from 'antd';
+import { UserOutlined, LockOutlined, TeamOutlined } from '@ant-design/icons';
+import { UserServices } from '@/services';
 import styles from './register.less';
-
-type onCancel = (a: number, b: number) => number
-
 
 interface IProps {
     visible: boolean,
-    closeModal: onCancel
+    closeModal: any
 }
 
 export default function Index(props: IProps) {
@@ -24,16 +20,19 @@ export default function Index(props: IProps) {
     };
 
 
-    const register = () => {
+    function register() {
         form.validateFields()
-            .then((values) => {
-                console.log(values, 'values')
-                if (!values.username) {
+            .then(async (values) => {
+                if (!values.userName) {
                     message.error('请输入用户名!')
                 } else if (!values.password) {
                     message.error('请输入密码!')
                 } else {
-                    props.closeModal();
+                    const res = await UserServices.register({ ...values, role: values.role ? 'admin' : null });
+                    if (res.code === 0 && res.data) {
+                        message.success('注册成功！')
+                        props.closeModal();
+                    }
                 }
             })
             .catch((errorInfo) => {
@@ -50,17 +49,17 @@ export default function Index(props: IProps) {
             onCancel={() => handleCancel()}
             footer={null}>
             <Form
+                form={form}
                 name="basic"
                 className={styles['register-form']}
                 labelCol={{ span: 4 }}
                 wrapperCol={{ span: 20 }}
                 style={{ maxWidth: 600 }}
                 autoComplete="off"
-                initialValues={{ 'type': 'a' }}
             >
                 <Form.Item
                     label={<UserOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
-                    name="username"
+                    name="userName"
                 // rules={[{ required: true, message: '请输入用户名!' }]}
                 >
                     <Input className={styles['login-form-input']} size="large" />
@@ -72,7 +71,16 @@ export default function Index(props: IProps) {
                 >
                     <Input className={styles['login-form-input']} type="password" size="large" />
                 </Form.Item>
-                <Button className={styles['register-btn']} onClick={() => register()}>注册</Button>
+                <Form.Item
+                    label={<TeamOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
+                    name="role"
+                    valuePropName="checked"
+                >
+                    <Checkbox >管理员</Checkbox> 
+                </Form.Item>
+                <div className={styles['register-btn-box']}>
+                    <Button className={styles['register-btn']} onClick={() => register()}>注册</Button>
+                </div>
             </Form>
         </Modal>
     );

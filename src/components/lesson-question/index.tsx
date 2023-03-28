@@ -1,6 +1,6 @@
-import AudioQuestion from './audio-question';
+import TextOptionalQuestion from './text-optional-question';
 import OptionalQuestion from './optional-question';
-import Test from './test';
+import AudioQuestion from './audio-question';
 
 interface IProps {
     course: ICourse;
@@ -15,7 +15,18 @@ interface ICourse {
     list: any;
 }
 
-export default function Index(props: IProps){
-    return props?.course?.type ===3 ? <AudioQuestion {...props}/> : <OptionalQuestion {...props}/>
-    // return <Test/>
+export default function Index(props: IProps) {
+    function renderQuestion(type: number) {
+        switch (type) {
+            case 1:
+                return <TextOptionalQuestion {...props} />;
+            case 2:
+                return <OptionalQuestion {...props} />;
+            case 3:
+                return <AudioQuestion {...props} />;
+            default:
+                return null
+        }
+    }
+    return renderQuestion(props?.course?.type)
 }

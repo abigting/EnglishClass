@@ -133,7 +133,7 @@ export function recordList(data: any) {
 
 
 /**
-* @desc 播放次数控制
+* @desc 播放顺序控制
 */
 export function playControl(data: any) {
     return request(`${url}/course/play_control`, {
@@ -141,3 +141,14 @@ export function playControl(data: any) {
         data
     });
 }
+
+/**
+* @desc 用户成绩
+*/
+export function courserStat(data: any) {
+    return request(`${url}/user_metric/courser_stat`, {
+        method: 'post',
+        data
+    });
+}
+

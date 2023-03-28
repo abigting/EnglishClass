@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import { message } from 'antd';
+import { useEffect, useState, useRef } from 'react';
 import ReactPlayer from 'react-player';
 import LearningWrapper from '@/components/wrapper/learning';
 import { LearningServices } from '@/services'
-// import { PlusOutlined } from '@ant-design/icons';
+import Badge from '@/components/badge';
 import styles from './index.less';
 
 
@@ -32,11 +31,13 @@ interface IProps {
 
 interface ICourse {
     playTimes: string;
+    uuid: string;
     name: string;
     audioPath: string;
     videoPath: string;
     type: number;
     list: any;
+    showCount?: boolean
 }
 
 interface Question {
@@ -50,12 +51,12 @@ interface Question {
     active?: boolean;
 }
 
-interface IVideoObj{
+interface IVideoObj {
     url?: string
     interpretation?: boolean;
 }
 
-interface IOptions{
+interface IOptions {
     key: string,
     active?: boolean | null,
     status?: string | null
@@ -109,11 +110,15 @@ export default function Add(props: IProps) {
     const [options, setOptions] = useState<IOptions[]>(optionsDefault);
     const [autoPlay, setAutoPlay] = useState(false);
     const [playTimes, setPlayTimes] = useState(props?.course?.playTimes);
-
+    const [BVisible, setBVisible] = useState<boolean>(false)
     const [videoObj, setVideoObj] = useState<IVideoObj>({});
 
     // const [list, setList] = useState<Question[]>(listDefault);
     const [list, setList] = useState<Question[]>([]);
+
+    const rightAudio = useRef<HTMLAudioElement>(null)
+    const wrongAudio = useRef<HTMLAudioElement>(null)
+    const videoRef = useRef<HTMLVideoElement>(null)
 
     useEffect(() => {
         const list = props?.course?.list;
@@ -126,29 +131,46 @@ export default function Add(props: IProps) {
         }
     }, [props?.course?.list])
 
-    //选择题 选择答案 1|2
+
+    function onPlay(){
+        videoRef?.current?.getInternalPlayer().play();
+    }
+
+    function onPause(){
+        videoRef?.current?.getInternalPlayer().pause();
+    }
+
+    //选择题 选择答案 2
     function selectOption(key: string) {
-        setOptions(options.map(s => s.key === key ? { ...s, active: true, status:null } : { ...s, active: false, status:null }));
+        setOptions(options.map(s => s.key === key ? { ...s, active: true, status: null } : { ...s, active: false, status: null }));
 
         answerQuestions(key).then((res: any) => {
             if (res.code === 0) {
                 // ---- 答题之后的逻辑
                 const current = list.find(s => s.active) || list[0];
-
-                setAutoPlay(true)
+                const { correctAnswer, userAnswer } = res.data;
+                if (userAnswer === correctAnswer) {
+                    rightAudio.current?.play()
+                } else {
+                    wrongAudio.current?.play()
+                }
+                // setAutoPlay(true)
                 // 有解答 - 放解答
                 if (current.interpretationPath) {
                     const { correctAnswer, userAnswer } = res.data;
                     setOptions(options.map(s => s.key === userAnswer ?
                         { ...s, status: userAnswer === correctAnswer ? 'correct' : 'error', active: false } :
                         { ...s, active: false, status: null }));
-                    setVideoObj({
-                        url: current.interpretationPath,
-                        interpretation: true
-                    })
+                        setVideoObj({
+                            url: current.interpretationPath,
+                            interpretation: true
+                        })
+                    setTimeout(() => {
+                        onPlay()
+                    }, 3000)
                     //无解答 - 放下一题
                 } else {
-                    setOptions(options.map(s => { return { ...s, active: false, status:null } }));
+                    setOptions(options.map(s => { return { ...s, active: false, status: null } }));
                     const currentIndex = list.findIndex(s => s.active) === -1 ? 0 : list.findIndex(s => s.active);
                     const nextItem = list.find((_s, i) => i === currentIndex + 1);
                     if (nextItem) {
@@ -157,6 +179,9 @@ export default function Add(props: IProps) {
                             url: nextItem.problemPath,
                             interpretation: false
                         })
+                        setTimeout(() => {
+                            onPlay()
+                        }, 3000)
                     }
                 }
 
@@ -180,7 +205,7 @@ export default function Add(props: IProps) {
     function videoEnd() {
         if (videoObj.interpretation) {
             playNext();
-            setOptions(options.map(s => { return { ...s, status:null } }));
+            setOptions(options.map(s => { return { ...s, status: null } }));
         } else {
             setDisable(false);
         }
@@ -195,8 +220,8 @@ export default function Add(props: IProps) {
                 url: nextItem.problemPath,
                 interpretation: false
             })
-        }else{
-            message.success('恭喜你，已答题完成')
+        } else {
+            setBVisible(true)
         }
     }
 
@@ -218,13 +243,15 @@ export default function Add(props: IProps) {
     return (
         <div>
             <LearningWrapper title={props?.course?.name} className={styles['learn-vidreact-playereo']}>
-                {/* <audio src={audioUrl}></audio> */}
+                <audio ref={rightAudio} style={{ display: 'none' }} src={require('@/assets/audios/correct.mp3')}></audio>
+                <audio ref={wrongAudio} style={{ display: 'none' }} src={require('@/assets/audios/wrong.mp3')}></audio>
+                <Badge visible={BVisible} courseUuid={props.course?.uuid} closeBadge={() => setBVisible(false)} />
                 <div className={styles['video-wrapper']}>
                     {
                         currentQuestion?.problemPath &&
                         <ReactPlayer
+                            ref={videoRef}
                             // url={require("./../../assets/2023_02_26 20_47_31.mp4")}
-                            // url={currentQuestion?.problemPath}
                             url={videoObj?.url}
                             className='react-player'
                             onPlay={() => videoPlay()}
@@ -237,14 +264,14 @@ export default function Add(props: IProps) {
                             height='100%'
                         />
                     }
-
-                    <span className={styles["l-number"]}>{activeIndex + 1}/{list?.length}</span>
-
+                    {
+                        props?.course?.showCount ? <span className={styles["l-number"]}>{activeIndex + 1}/{list?.length}</span> : null
+                    }
                     <span className={styles["l-learn-replay"]}>
                         <img className={styles["l-learn-replay-reload"]} src={require("../../assets/imgs/reload.png")} alt="" />
                         <img className={styles["l-learn-replay-close"]} src={require("../../assets/imgs/close.png")} alt="" />
                         <span className={styles["l-learn-replay-num"]} onClick={() => location.reload()}>{playTimes}</span>
-                        <img className={styles["l-learn-replay-lb"]} src={require("../../assets/imgs/lb.png")} alt="" />
+                        {/* <img className={styles["l-learn-replay-lb"]} src={require("../../assets/imgs/lb.png")} alt="" /> */}
                         {/* <img className={styles["l-learn-replay-lbing"]} src={require("../../assets/imgs/lb.gif")} alt="" /> */}
                     </span>
                 </div>
@@ -259,7 +286,12 @@ export default function Add(props: IProps) {
                                 ${s.active ? styles['active'] : {}}
                                 ${disable ? styles['disabled'] : {}}
                                 ${s.status === "correct" ? styles['correct'] : s.status === "error" ? styles['error'] : {}}
-                                `} onClick={() => selectOption(s.key)}>
+                                `} onClick={() => {
+                                    if(disable) return
+                                    else{
+                                        selectOption(s.key)
+                                    }
+                                }}>
                                 <div className={`${styles['btn-text']} ${s.active ? styles['btn-text-active'] : {}}`}>
                                     {s.key}
                                 </div>

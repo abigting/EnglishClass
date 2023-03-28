@@ -71,7 +71,6 @@ function ClassDetail(props: any) {
                     const {data} = res1;
                     blocks = blocks.map((s,i)=> data.status < i?{...s, disabled: true}:{...s, disabled: false} )
                 }
-                console.log(blocks, 'blocks')
                 setBlocks(blocks)
             }
 
