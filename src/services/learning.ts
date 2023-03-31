@@ -4,10 +4,10 @@ import { url } from '@/utils/config';
 /**
  * @desc 获取列表
  */
-export function fetchCourselist() {
+export function fetchCourselist(params: any) {
     return request(`${url}/course/manager_list`, {
         method: 'get',
-        // ...option,
+        params
     });
 }
 
@@ -149,6 +149,24 @@ export function courserStat(data: any) {
     return request(`${url}/user_metric/courser_stat`, {
         method: 'post',
         data
+    });
+}
+
+/**
+* @desc 数据合并
+*/
+export function restoreCourse() {
+    return request(`${url}/multi_user/restore_course`, {
+        method: 'get',
+    });
+}
+
+/**
+* @desc 数据备份
+*/
+export function backupCourse() {
+    return request(`${url}/multi_user/backup_course`, {
+        method: 'get',
     });
 }
 

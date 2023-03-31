@@ -58,7 +58,7 @@ export default function Index() {
             wrapperCol={{ span: 20 }}
             style={{ maxWidth: 600 }}
             autoComplete="off"
-            initialValues={{userName:'test', password: '123456' }}
+            initialValues={{userName:'admin', password: '1qazCDE#!@#' }}
           >
             <Form.Item
               label={<UserOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Wrapper from '@/components/wrapper';
-import { Table, Button, Popconfirm, message } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { Table, Button, Popconfirm, message, Form, Input, Row, Col } from 'antd';
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import { PlusOutlined, FolderOutlined, VerticalAlignMiddleOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { LearningServices } from '@/services';
 import QuestionDetail from './components/question-detail';
@@ -17,6 +18,8 @@ interface DataType {
   children?: DataType[];
 }
 
+const { Search } = Input;
+
 export default function LessonManagement() {
   const [data, setData] = useState([])
   const [lVisible, setlVisible] = useState(false)
@@ -25,9 +28,13 @@ export default function LessonManagement() {
   const [titleUuid, setTitleUuid] = useState<string | null>()
   const [courseUuid, setCourseUuid] = useState<string | null>()
 
+  const [searchQuery, setSearchQuery] = useState<any>({
+    pageSize:10,
+    pageNumber:1
+  })
   useEffect(() => {
     getList();
-  }, [])
+  }, [searchQuery])
 
   const QUESTION_TYPE = {
     1: '选择题(文字)',
@@ -102,8 +109,8 @@ export default function LessonManagement() {
     }
   }
 
-  async function getList() {
-    const res = await LearningServices.fetchCourselist();
+  async function getList(params?: any) {
+    const res = await LearningServices.fetchCourselist(params? {...searchQuery, ...params}:searchQuery);
     if (res.code === 0 && res.data) {
       res.data.forEach((s: { list: string | any[]; }) => {
         if (s.list?.length === 0) {
@@ -118,9 +125,31 @@ export default function LessonManagement() {
     setlVisible(true)
   }
 
+  async function dataMerge() {
+    const res = await LearningServices.restoreCourse();
+    if (res.code === 0) {
+      message.success('合并成功')
+    }
+  }
+
+  async function dataBackup() {
+    const res = await LearningServices.backupCourse();
+    if (res.code === 0) {
+      message.success('备份成功')
+    }
+  }
+
   function addQuestion(item: DataType) {
     setCurrentCourse(item)
     setqVisible(true)
+  }
+
+  function paging(pagination: TablePaginationConfig){
+    setSearchQuery({
+      ...searchQuery,
+      pageSize:pagination.pageSize,
+      pageNumber: pagination.current
+    })
   }
 
   function reviewDeatil(item: DataType) {
@@ -158,7 +187,34 @@ export default function LessonManagement() {
       uuid={courseUuid}
       closeModal={(refreash: boolean) => closeLessonDetailModal(refreash)} />
     <div className={styles['table-wrapper']}>
-      <Button size='middle' type="primary" onClick={() => addLesson()}>新增课程</Button>
+      <div className={styles['table-operation']}>
+        <Row>
+          <Col span={8}>
+            <Form.Item
+              label={"课程名称"}
+              name="courseName"
+            >
+              <Search onSearch={value=>setSearchQuery({...searchQuery, courseName: value})}/>
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Button size='middle' type="primary" onClick={() => addLesson()} className={styles['add-btn']}>
+              <PlusOutlined />
+              新增课程
+            </Button>
+          </Col>
+          <Col span={8}>
+            <Button size='middle' onClick={() => dataBackup()} className={styles['backup-btn']}>
+              <FolderOutlined />
+              课程备份
+            </Button>
+            <Button size='middle' onClick={() => dataMerge()} className={styles['merge-btn']}>
+              <VerticalAlignMiddleOutlined />
+              课程合并
+            </Button>
+          </Col>
+        </Row>
+      </div>
       <Table rowKey="uuid"
         childrenColumnName="list"
         scroll={{ y: 320 }}
@@ -166,9 +222,11 @@ export default function LessonManagement() {
         columns={columns}
         pagination={{
           size: 'small',
-          pageSize: 5,
+          pageSize: 2,
           total: data?.length
-        }} />
+        }}
+        onChange={(pagination)=>paging(pagination)}
+         />
     </div>
   </Wrapper>
 }
