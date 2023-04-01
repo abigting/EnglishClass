@@ -24,7 +24,8 @@ export default function TextOptionalQuestion(props: IProps) {
     const wrongAudio = useRef<HTMLAudioElement>(null)
 
     useEffect(() => {
-        const answerNum = props?.course?.answerNum;
+        const currentQuestion = list.find(s => s.active) || list[0];
+        const answerNum = currentQuestion?.answerNum;
         if(answerNum){
             let answerOptions = optionsDefault;
             switch (answerNum) {
@@ -37,7 +38,7 @@ export default function TextOptionalQuestion(props: IProps) {
             }
             setOptions(answerOptions)
         }
-    }, [])
+    }, [list])
 
     useEffect(() => {
         const list = props?.course?.list;

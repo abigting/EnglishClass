@@ -74,7 +74,8 @@ export default function Add(props: IProps) {
     }
 
     function handleCancel() {
-        props.closeModal()
+        props.closeModal();
+        setData(data.map(s=> { return {...s, playing: false}}))
     }
 
     const playingAudio = data.find(s => s.playing);

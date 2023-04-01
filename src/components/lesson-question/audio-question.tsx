@@ -22,13 +22,13 @@ let timer: any; // 1 计时器
 export default function Add(props: IProps) {
     const [recording, setRecording] = useState(false);
     const [disable, setDisable] = useState(true);
-    const [playTimes, setPlayTimes] = useState(props?.course?.playTimes);
+    // const [playTimes, setPlayTimes] = useState(props?.course?.playTimes);
 
     const [BVisible, setBVisible] = useState<boolean>(false)
 
     const [videoObj, setVideoObj] = useState<IVideoObj>({});
     const [list, setList] = useState<ITitle[]>([]);
-    const [recorder, setRecorder] = useState(new Recorder({
+    const recorder = useRef(new Recorder({
         sampleBits: 16, // 采样位数，支持 8 或 16，默认是16
         sampleRate: 16000, // 采样率，支持 11025、16000、22050、24000、44100、48000，根据浏览器默认值，我的chrome是48000
         numChannels: 1, // 声道，支持 1 或 2， 默认是1
@@ -78,14 +78,14 @@ export default function Add(props: IProps) {
         }
     }
 
-    function stopRecordAudio(){
+    function stopRecordAudio() {
         setRecording(false)
         // 暂停录音
         clearInterval(timer)
-        recorder.stop()
+        recorder.current.stop()
         // 获取录音结果
         const formData = new FormData()
-        const blob = recorder.getWAVBlob()// 获取wav格式音频数据
+        const blob = recorder.current.getWAVBlob()// 获取wav格式音频数据
         // 此处获取到blob对象后需要设置fileName满足当前项目上传需求，其它项目可直接传把blob作为file塞入formData
         const newbolb = new Blob([blob], { type: 'audio/mp3' })
         const fileOfBlob = new File([newbolb], new Date().getTime() + '.mp3')
@@ -98,13 +98,14 @@ export default function Add(props: IProps) {
                 // ---- 答题之后的逻辑
                 const current = list.find(s => s.active) || list[0];
 
-                if (res?.data?.score>5) {
+                if (res?.data?.score > 5) {
                     rightAudio.current?.play()
                 } else {
                     wrongAudio.current?.play()
                 }
 
-                // setAutoPlay(true)
+                setDisable(true)
+
                 // 有解答 - 放解答
                 if (current.interpretationPath) {
                     setVideoObj({
@@ -137,15 +138,15 @@ export default function Add(props: IProps) {
             }
         });
         // 关闭并销毁录音实例
-        recorder.destroy()
+        recorder.current.destroy()
     }
 
-    
-    function onPlay(){
+
+    function onPlay() {
         videoRef?.current?.getInternalPlayer().play();
     }
 
-    function onPause(){
+    function onPause() {
         videoRef?.current?.getInternalPlayer().pause();
     }
 
@@ -156,7 +157,7 @@ export default function Add(props: IProps) {
                 console.log("开始录音");
                 setRecording(true);
                 setTimer(); // 进度条
-                recorder.start(); // 开始录音
+                recorder.current.start(); // 开始录音
             },
             (error: { name: any; message: any; }) => {
                 console.log(error, 'error')
@@ -195,7 +196,7 @@ export default function Add(props: IProps) {
                 url: nextItem.problemPath,
                 interpretation: false
             });
-            setTimeout(()=>onPlay(), 1000)
+            setTimeout(() => onPlay(), 1000)
         } else {
             setBVisible(true)
         }
@@ -256,16 +257,16 @@ export default function Add(props: IProps) {
                     {
                         props?.course?.showCount ? <span className={styles["l-number"]}>{activeIndex + 1}/{list?.length}</span> : null
                     }
-                    <span className={styles["l-learn-replay"]}>
+                    {/* <span className={styles["l-learn-replay"]}>
                         <img className={styles["l-learn-replay-reload"]} src={require("../../assets/imgs/reload.png")} alt="" />
                         <img className={styles["l-learn-replay-close"]} src={require("../../assets/imgs/close.png")} alt="" />
                         <span className={styles["l-learn-replay-num"]} onClick={() => location.reload()}>{playTimes}</span>
-                        {/* {
+                        {
                             disable ?
                                 <img className={styles["l-learn-replay-lbing"]} src={require("../../assets/imgs/lb.gif")} alt="" /> :
                                 <img className={styles["l-learn-replay-lb"]} src={require("../../assets/imgs/lb.png")} alt="" />
-                        } */}
-                    </span>
+                        }
+                    </span> */}
                 </div>
                 <div className={styles['lSoundRecording-btn']}>
                     <div className={styles['l-recorder-container']} >

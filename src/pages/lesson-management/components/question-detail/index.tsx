@@ -22,7 +22,8 @@ export default function Add(props: IProps) {
         if (props.visible && props.uuid) {
             getInfo()
         } else if (props.visible) {
-            setCourseInfo({ type: props.course?.type })
+            setCourseInfo({ type: props.course?.type });
+            getOrderNumberFn({courseUuid: props.course?.uuid})
         } else {
             setCourseInfo({})
         }
@@ -56,6 +57,14 @@ export default function Add(props: IProps) {
                 }
 
                 form.setFieldsValue({ ...data })
+            }
+        })
+    }
+
+    function getOrderNumberFn(params: any) {
+        LearningServices.getOrderNumber(params).then(res => {
+            if (res.code === 0 && res.data) {
+                form.setFieldsValue({ orderNum: res.data })
             }
         })
     }
@@ -163,7 +172,7 @@ export default function Add(props: IProps) {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
-                initialValues={{ 'name': '题目一', orderNum: 1, answer: 'A', answerNum: 3 }}
+                initialValues={{ 'name': '题目一', answer: 'A', answerNum: 3 }}
             >
                 <Form.Item
                     label="题目名称"

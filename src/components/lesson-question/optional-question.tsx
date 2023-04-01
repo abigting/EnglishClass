@@ -69,9 +69,21 @@ export default function Add(props: IProps) {
     const rightAudio = useRef<HTMLAudioElement>(null)
     const wrongAudio = useRef<HTMLAudioElement>(null)
     const videoRef = useRef<HTMLVideoElement>(null)
+    
+    useEffect(() => {
+        const list = props?.course?.list;
+        if (list && list?.length > 0) {
+            setVideoObj({
+                url: list[0].problemPath,
+                interpretation: false
+            })
+            setList(list)
+        }
+    }, [props?.course?.list])
 
     useEffect(() => {
-        const answerNum = props?.course?.answerNum;
+        const currentQuestion = list.find(s => s.active) || list[0];
+        const answerNum = currentQuestion?.answerNum;
         if(answerNum){
             let answerOptions = optionsDefault;
             switch (answerNum) {
@@ -84,18 +96,7 @@ export default function Add(props: IProps) {
             }
             setOptions(answerOptions)
         }
-    }, [])
-    
-    useEffect(() => {
-        const list = props?.course?.list;
-        if (list && list?.length > 0) {
-            setVideoObj({
-                url: list[0].problemPath,
-                interpretation: false
-            })
-            setList(list)
-        }
-    }, [props?.course?.list])
+    }, [list])
 
 
     function onPlay(){

@@ -9,7 +9,6 @@ interface ICourse {
     orderNum: number;
     playTimes: number;
     list: ITitle[];
-    answerNum?:number;
     oneStarScore?: number;
     oneTitleScore?: number;
     showCount?: boolean;
@@ -29,6 +28,7 @@ interface ITitle {
     problemPath: string;
     interpretationPath?: string;
     answer?: string;
+    answerNum?:number;
     orderNum: number;
     active?: boolean;
     createTime?: string | null;

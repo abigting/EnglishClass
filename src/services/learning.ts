@@ -170,3 +170,12 @@ export function backupCourse() {
     });
 }
 
+/**
+* @desc 获取题目最大顺序
+*/
+export function getOrderNumber(params: any) {
+    return request(`${url}/title/getOrderNumber`, {
+        method: 'get',
+        params
+    });
+}

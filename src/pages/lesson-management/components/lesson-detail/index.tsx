@@ -172,7 +172,7 @@ export default function Add(props: IProps) {
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
-                    initialValues={{ name: 'test', type: 1, playTimes: 3, orderNum: 1, showCount: false }}
+                    initialValues={{ name: 'test', type: 1, playTimes: 3, showCount: false }}
                 >
                     <Form.Item
                         label="课程名称"

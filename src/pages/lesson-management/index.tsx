@@ -22,7 +22,7 @@ export default function LessonManagement() {
   const [courseUuid, setCourseUuid] = useState<string | null>()
 
   const [searchQuery, setSearchQuery] = useState<any>({
-    pageSize:2,
+    pageSize:10,
     pageNumber:1
   })
   useEffect(() => {
@@ -218,7 +218,7 @@ export default function LessonManagement() {
         columns={columns}
         pagination={{
           size: 'small',
-          pageSize: 2,
+          pageSize: paging.pageSize,
           total: paging?.total
         }}
         onChange={(pagination)=>pagingChange(pagination)}
