@@ -5,18 +5,10 @@ import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { PlusOutlined, FolderOutlined, VerticalAlignMiddleOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { LearningServices } from '@/services';
+import { DataType } from '@/utils/type';
 import QuestionDetail from './components/question-detail';
 import LessonDetail from './components/lesson-detail';
 import styles from './index.less';
-
-interface DataType {
-  type: JSX.Element;
-  key: React.ReactNode;
-  name: string;
-  age: number;
-  address: string;
-  children?: DataType[];
-}
 
 const { Search } = Input;
 

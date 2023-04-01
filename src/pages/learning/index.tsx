@@ -5,20 +5,12 @@ import LessonVideo from '@/components/lesson-video';
 import LessonQuestion from '@/components/lesson-question';
 import { LearningServices } from '@/services';
 import qs from 'query-string'
+import { ICourse, ITitle } from '@/utils/type';
 import styles from './index.less';
 
 interface IProps {
     location: any;
     match: any;
-}
-
-interface ICourse {
-    playTimes: string;
-    name: string;
-    audioPath: string;
-    videoPath: string;
-    type: number;
-    list: any
 }
 
 function Lesson(props: IProps) {
@@ -37,7 +29,7 @@ function Lesson(props: IProps) {
 
     const { match } = props;
 
-    if(!course) return;
+    if(!course) return null;
     return <div>
         {
             match?.params?.type === '1' ? <LessonVideo course={course} /> :

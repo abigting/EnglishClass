@@ -5,35 +5,14 @@ import LearningWrapper from '@/components/wrapper/learning';
 import Recorder from 'js-audio-recorder';
 import { LearningServices } from '@/services';
 import Badge from '@/components/badge';
+import { ICourse, ITitle } from '@/utils/type';
 import styles from './index.less';
 
 interface IProps {
     course: ICourse;
 }
 
-interface ICourse {
-    playTimes: string;
-    uuid: string;
-    name: string;
-    audioPath: string;
-    videoPath: string;
-    type: number;
-    list: any;
-    showCount?:boolean
-}
-
-interface Question {
-    uuid: string;
-    courseUuid: string;
-    name: string;
-    answer: string;
-    problemPath: string;
-    interpretationPath: string;
-    orderNum: number;
-    active?: boolean;
-}
-
-interface IVideoObj{
+interface IVideoObj {
     url?: string
     interpretation?: boolean;
 }
@@ -43,13 +22,12 @@ let timer: any; // 1 计时器
 export default function Add(props: IProps) {
     const [recording, setRecording] = useState(false);
     const [disable, setDisable] = useState(true);
-    const [autoPlay, setAutoPlay] = useState(false);
     const [playTimes, setPlayTimes] = useState(props?.course?.playTimes);
 
     const [BVisible, setBVisible] = useState<boolean>(false)
 
     const [videoObj, setVideoObj] = useState<IVideoObj>({});
-    const [list, setList] = useState<Question[]>([]);
+    const [list, setList] = useState<ITitle[]>([]);
     const [recorder, setRecorder] = useState(new Recorder({
         sampleBits: 16, // 采样位数，支持 8 或 16，默认是16
         sampleRate: 16000, // 采样率，支持 11025、16000、22050、24000、44100、48000，根据浏览器默认值，我的chrome是48000
@@ -58,16 +36,19 @@ export default function Add(props: IProps) {
     }));
 
     const [progress, setProgress] = useState<number>(0);
+    const rightAudio = useRef<HTMLAudioElement>(null)
+    const wrongAudio = useRef<HTMLAudioElement>(null)
+    const videoRef = useRef<HTMLVideoElement>(null)
     // const [audioUrl, setAudio] = useState<any>();
     // const [videoObj, setVideoObj] = useState({
     //     url: "/static/2023_02_26 20_56_17.ba7c481e.mp4",
     //     interpretation: false
     // });
-    // const [list, setList] = useState<Question[]>(listDefault);
+    // const [list, setList] = useState<ITitle[]>(listDefault);
 
 
-    useEffect(()=>{
-       const list = props?.course?.list;
+    useEffect(() => {
+        const list = props?.course?.list;
         if (list && list?.length > 0) {
             setVideoObj({
                 url: list[0].problemPath,
@@ -75,7 +56,7 @@ export default function Add(props: IProps) {
             })
             setList(list)
         }
-    },[props?.course?.list])
+    }, [props?.course?.list])
 
     useEffect(() => {
         return () => {
@@ -110,13 +91,24 @@ export default function Add(props: IProps) {
                     // ---- 答题之后的逻辑
                     const current = list.find(s => s.active) || list[0];
 
-                    setAutoPlay(true)
+                    if (res?.data?.score>5) {
+                        rightAudio.current?.play()
+                    } else {
+                        wrongAudio.current?.play()
+                    }
+
+                    // setAutoPlay(true)
                     // 有解答 - 放解答
                     if (current.interpretationPath) {
                         setVideoObj({
                             url: current.interpretationPath,
                             interpretation: true
                         })
+
+                        setTimeout(() => {
+                            onPlay()
+                        }, 3000)
+
                         //无解答 - 放下一题
                     } else {
                         const currentIndex = list.findIndex(s => s.active) === -1 ? 0 : list.findIndex(s => s.active);
@@ -127,11 +119,14 @@ export default function Add(props: IProps) {
                                 url: nextItem.problemPath,
                                 interpretation: false
                             })
+                            setTimeout(() => {
+                                onPlay()
+                            }, 3000)
                         }
                     }
 
-                }else{
-                    
+                } else {
+
                 }
             });
             // 关闭并销毁录音实例
@@ -140,6 +135,15 @@ export default function Add(props: IProps) {
             startRecordAudio()
         }
 
+    }
+
+    
+    function onPlay(){
+        videoRef?.current?.getInternalPlayer().play();
+    }
+
+    function onPause(){
+        videoRef?.current?.getInternalPlayer().pause();
     }
 
     //开始录音
@@ -187,7 +191,8 @@ export default function Add(props: IProps) {
             setVideoObj({
                 url: nextItem.problemPath,
                 interpretation: false
-            })
+            });
+            setTimeout(()=>onPlay(), 1000)
         } else {
             setBVisible(true)
         }
@@ -207,43 +212,46 @@ export default function Add(props: IProps) {
 
     const setTimer = () => {
         timer = setInterval(() => {
-          setProgress(n => {
-            if (n + 3 <= 100) {
-              return n + 3
-            } else {
-              clearInterval(timer);
-              recordFn();
-              return 100
-            }
-          });
+            setProgress(n => {
+                if (n + 3 <= 100) {
+                    return n + 3
+                } else {
+                    clearInterval(timer);
+                    recordFn();
+                    return 100
+                }
+            });
         }, 1000)
-      }
+    }
 
     const activeIndex = list.findIndex(s => s.active) === -1 ? 0 : list.findIndex(s => s.active);
 
     return (
         <div>
             <LearningWrapper title={props?.course?.name} className={styles['learn-vidreact-playereo']}>
-                <Badge visible = {BVisible} courseUuid={props.course?.uuid} closeBadge={()=>setBVisible(false)} />
+                <audio ref={rightAudio} style={{ display: 'none' }} src={require('@/assets/audios/correct.mp3')}></audio>
+                <audio ref={wrongAudio} style={{ display: 'none' }} src={require('@/assets/audios/wrong.mp3')}></audio>
+                <Badge visible={BVisible} courseUuid={props.course?.uuid} closeBadge={() => setBVisible(false)} />
                 <div className={styles['video-wrapper']}>
                     {
                         videoObj?.url &&
                         <ReactPlayer
                             // url={require("./../../assets/2023_02_26 20_47_31.mp4")}
+                            ref={videoRef}
                             url={videoObj?.url}
                             className='react-player'
                             onPlay={() => videoPlay()}
                             onPause={() => videoPause()}
                             onEnded={() => videoEnd()}
                             onError={() => videoError()}
-                            playing={autoPlay}
+                            playing={false}
                             controls
                             width='100%'
                             height='100%'
                         />
                     }
                     {
-                        props?.course?.showCount ?<span className={styles["l-number"]}>{activeIndex + 1}/{list?.length}</span>:null
+                        props?.course?.showCount ? <span className={styles["l-number"]}>{activeIndex + 1}/{list?.length}</span> : null
                     }
                     <span className={styles["l-learn-replay"]}>
                         <img className={styles["l-learn-replay-reload"]} src={require("../../assets/imgs/reload.png")} alt="" />

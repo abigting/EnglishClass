@@ -1,18 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import LearningWrapper from '@/components/wrapper/learning';
 import { LearningServices } from '@/services';
+import { ICourse } from '@/utils/type';
 import styles from './index.less';
 
 interface IProps {
     course: ICourse;
-}
-
-interface ICourse {
-    uuid: string;
-    playTimes: string;
-    name: string;
-    audioPath: string;
-    videoPath: string;
 }
 
 export default function Add(props: IProps) {

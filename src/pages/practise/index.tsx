@@ -3,6 +3,7 @@ import Wrapper from '@/components/wrapper';
 import { history } from 'umi';
 import { Rate, Empty, Button } from 'antd';
 import { LearningServices } from '@/services';
+import { IMenu, ICourse } from '@/utils/type';
 import styles from './index.less';
 
 const menusDefault = [
@@ -21,18 +22,9 @@ const menusDefault = [
     }
 ]
 
-interface Item {
-    id: string | number;
-    uuid: string;
-    name: string;
-    coverPath: string;
-    rate: number;
-    userScore?: number;
-}
-
 export default function Home() {
-    const [data, setData] = useState<Item[]>([]);
-    const [menus, setMenus] = useState(menusDefault);
+    const [data, setData] = useState<ICourse[]>([]);
+    const [menus, setMenus] = useState<IMenu[]>(menusDefault);
     useEffect(() => {
         getList('1');
     }, [])

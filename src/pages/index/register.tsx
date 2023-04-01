@@ -60,14 +60,12 @@ export default function Index(props: IProps) {
                 <Form.Item
                     label={<UserOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
                     name="userName"
-                // rules={[{ required: true, message: '请输入用户名!' }]}
                 >
                     <Input className={styles['login-form-input']} size="large" />
                 </Form.Item>
                 <Form.Item
                     label={<LockOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
                     name="password"
-                // rules={[{ required: true, message: '请输入密码!' }]}
                 >
                     <Input className={styles['login-form-input']} type="password" size="large" />
                 </Form.Item>

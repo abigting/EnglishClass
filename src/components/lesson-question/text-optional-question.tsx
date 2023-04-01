@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import LearningWrapper from '@/components/wrapper/learning';
 import { LearningServices } from '@/services';
 import Badge from '@/components/badge';
+import { ICourse, ITitle, IOption, IVideoObj } from '@/utils/type';
 import styles from './index.less';
 
 const optionsDefault = [{
@@ -19,43 +20,10 @@ interface IProps {
     course: ICourse;
 }
 
-interface ICourse {
-    playTimes: string;
-    uuid: string;
-    name: string;
-    audioPath: string;
-    videoPath: string;
-    type: number;
-    list: any;
-    showCount?: boolean
-}
-
-interface Question {
-    uuid: string;
-    courseUuid: string;
-    name: string;
-    answer: string;
-    problemPath: string;
-    interpretationPath: string;
-    orderNum: number;
-    active?: boolean;
-}
-
-interface IVideoObj {
-    url?: string
-    interpretation?: boolean;
-}
-
-interface IOptions {
-    key: string,
-    active?: boolean | null,
-    status?: string | null
-}
-
 export default function Add(props: IProps) {
-    const [options, setOptions] = useState<IOptions[]>(optionsDefault);
+    const [options, setOptions] = useState<IOption[]>(optionsDefault);
     const [videoObj, setVideoObj] = useState<IVideoObj>({});
-    const [list, setList] = useState<Question[]>([]);
+    const [list, setList] = useState<ITitle[]>([]);
     const [BVisible, setBVisible] = useState<boolean>(false)
 
     const rightAudio = useRef<HTMLAudioElement>(null)
@@ -126,9 +94,9 @@ export default function Add(props: IProps) {
     return (
         <div>
             <LearningWrapper title={props?.course?.name} className={styles['learn-vidreact-playereo']}>
-                <audio ref={rightAudio} style={{display:'none'}} src={require('@/assets/audios/correct.mp3')}></audio>
-                <audio ref={wrongAudio} style={{display:'none'}} src={require('@/assets/audios/wrong.mp3')}></audio>
-                <Badge visible={BVisible} courseUuid={props.course?.uuid} closeBadge={()=>setBVisible(false)} />
+                <audio ref={rightAudio} style={{ display: 'none' }} src={require('@/assets/audios/you_pick_the_right_answer.mp3')}></audio>
+                <audio ref={wrongAudio} style={{ display: 'none' }} src={require('@/assets/audios/you_pick_the_wrong_answer.mp3')}></audio>
+                <Badge visible={BVisible} courseUuid={props.course?.uuid} closeBadge={() => setBVisible(false)} />
                 {/* <audio src={audioUrl}></audio> */}
                 <div className={styles['video-wrapper']}>
                     {

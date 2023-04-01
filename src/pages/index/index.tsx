@@ -4,7 +4,6 @@ import { Button, Form, Input, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { UserServices} from '@/services';
 import Register from './register';
-
 import styles from './index.less';
 
 
@@ -63,18 +62,15 @@ export default function Index() {
             <Form.Item
               label={<UserOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
               name="userName"
-            // rules={[{ required: true, message: '请输入用户名!' }]}
             >
               <Input className={styles['login-form-input']} size="large" />
             </Form.Item>
             <Form.Item
               label={<LockOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
               name="password"
-            // rules={[{ required: true, message: '请输入密码!' }]}
             >
               <Input className={styles['login-form-input']} type="password" size="large" />
             </Form.Item>
-
             <div className={styles['register']} onClick={() => setVisible(true)}><a>注册</a></div>
             <Button className={styles['login-btn']} onClick={() => login()}>立即登录</Button>
           </Form>

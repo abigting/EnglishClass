@@ -5,6 +5,7 @@ import qs from 'query-string'
 import { LearningServices } from '@/services';
 import AnswerResult from '@/components/answer-result';
 import AnswerResultOptional from '@/components/answer-result/optional';
+import { ICourse } from '@/utils/type';
 import styles from './index.less';
 import { message } from 'antd';
 
@@ -38,8 +39,8 @@ interface IBlocks{
     disabled?:boolean
 }
 
-function ClassDetail(props: any) {
-    const [course, setCourse] = useState({});
+function ClassDetail(_props: any) {
+    const [course, setCourse] = useState<ICourse>();
     const [blocks, setBlocks] = useState<IBlocks[]>([]);
     const [visible, setVisible] = useState(false);
     const location = useLocation();
@@ -51,6 +52,7 @@ function ClassDetail(props: any) {
 
     async function getDetailInfo() {
         const { uuid } = qs.parse(location.search);
+        if(!uuid) return;
         Promise.all([await LearningServices.courseDetail({ uuid }), await LearningServices.playControl({ uuid })]).then((result) => {
             const res = result[0];
             const res1 = result[1];
@@ -85,11 +87,15 @@ function ClassDetail(props: any) {
         if(s.disabled){
            message.info('请按顺序闯关')
         }else{
-            history.push(`/learning/${s.type}?uuid=${course.uuid}`)
+            history.push(`/learning/${s.type}?uuid=${course?.uuid}`)
         }
     }
-    const { uuid } = qs.parse(location.search);
+    let { uuid } = qs.parse(location.search);
+    if(Array.isArray(uuid)){
+        uuid=uuid[0]
+    }
 
+    if(!uuid || !course) return null
     return <div className={styles['lesson-wrapper']}>
         <div className={styles['lesson-wall']} />
         <div className={styles['lesson-land']} />

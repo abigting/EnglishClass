@@ -3,6 +3,7 @@ import ReactPlayer from 'react-player';
 import LearningWrapper from '@/components/wrapper/learning';
 import { LearningServices } from '@/services'
 import Badge from '@/components/badge';
+import { ICourse, ITitle, IOption, IVideoObj } from '@/utils/type';
 import styles from './index.less';
 
 
@@ -27,39 +28,6 @@ const optionsDefault = [{
 
 interface IProps {
     course: ICourse;
-}
-
-interface ICourse {
-    playTimes: string;
-    uuid: string;
-    name: string;
-    audioPath: string;
-    videoPath: string;
-    type: number;
-    list: any;
-    showCount?: boolean
-}
-
-interface Question {
-    uuid: string;
-    courseUuid: string;
-    name: string;
-    answer: string;
-    problemPath: string;
-    interpretationPath: string;
-    orderNum: number;
-    active?: boolean;
-}
-
-interface IVideoObj {
-    url?: string
-    interpretation?: boolean;
-}
-
-interface IOptions {
-    key: string,
-    active?: boolean | null,
-    status?: string | null
 }
 
 const listDefault = [
@@ -107,14 +75,13 @@ const listDefault = [
 
 export default function Add(props: IProps) {
     const [disable, setDisable] = useState(true);
-    const [options, setOptions] = useState<IOptions[]>(optionsDefault);
-    const [autoPlay, setAutoPlay] = useState(false);
+    const [options, setOptions] = useState<IOption[]>(optionsDefault);
     const [playTimes, setPlayTimes] = useState(props?.course?.playTimes);
     const [BVisible, setBVisible] = useState<boolean>(false)
     const [videoObj, setVideoObj] = useState<IVideoObj>({});
 
-    // const [list, setList] = useState<Question[]>(listDefault);
-    const [list, setList] = useState<Question[]>([]);
+    // const [list, setList] = useState<ITitle[]>(listDefault);
+    const [list, setList] = useState<ITitle[]>([]);
 
     const rightAudio = useRef<HTMLAudioElement>(null)
     const wrongAudio = useRef<HTMLAudioElement>(null)
@@ -220,6 +187,7 @@ export default function Add(props: IProps) {
                 url: nextItem.problemPath,
                 interpretation: false
             })
+            setTimeout(()=>onPlay(), 1000)
         } else {
             setBVisible(true)
         }
@@ -243,8 +211,8 @@ export default function Add(props: IProps) {
     return (
         <div>
             <LearningWrapper title={props?.course?.name} className={styles['learn-vidreact-playereo']}>
-                <audio ref={rightAudio} style={{ display: 'none' }} src={require('@/assets/audios/correct.mp3')}></audio>
-                <audio ref={wrongAudio} style={{ display: 'none' }} src={require('@/assets/audios/wrong.mp3')}></audio>
+                <audio ref={rightAudio} style={{ display: 'none' }} src={require('@/assets/audios/you_pick_the_right_answer.mp3')}></audio>
+                <audio ref={wrongAudio} style={{ display: 'none' }} src={require('@/assets/audios/you_pick_the_wrong_answer.mp3')}></audio>
                 <Badge visible={BVisible} courseUuid={props.course?.uuid} closeBadge={() => setBVisible(false)} />
                 <div className={styles['video-wrapper']}>
                     {
@@ -258,7 +226,7 @@ export default function Add(props: IProps) {
                             onPause={() => videoPause()}
                             onEnded={() => videoEnd()}
                             onError={() => videoError()}
-                            playing={autoPlay}
+                            playing={false}
                             controls
                             width='100%'
                             height='100%'
@@ -287,7 +255,7 @@ export default function Add(props: IProps) {
                                 ${disable ? styles['disabled'] : {}}
                                 ${s.status === "correct" ? styles['correct'] : s.status === "error" ? styles['error'] : {}}
                                 `} onClick={() => {
-                                    if(disable) return
+                                    if(disable || s.status) return
                                     else{
                                         selectOption(s.key)
                                     }

@@ -11,10 +11,17 @@ interface IProps {
     closeModal: any
 }
 
+const ANSWER_OPTIONS={
+    2:['A', 'B'],
+    3:['A', 'B', 'C'],
+    4:['A', 'B', 'C', 'D']
+}
+
 export default function Add(props: IProps) {
     const [form] = Form.useForm();
     const [courseInfo, setCourseInfo] = useState<any>();
     const [loading, setLoading] = useState(false);
+    const answerNum = Form.useWatch('answerNum', form);
 
     useEffect(() => {
         if (props.visible && props.uuid) {
@@ -124,7 +131,7 @@ export default function Add(props: IProps) {
         if (Array.isArray(e)) {
             return e;
         }
-        if(e?.fileList?.length>0){
+        if (e?.fileList?.length > 0) {
             e.fileList[0].status = 'done'
         }
         return e?.fileList;
@@ -135,7 +142,7 @@ export default function Add(props: IProps) {
         if (Array.isArray(e)) {
             return e;
         }
-        if(e?.fileList?.length>0){
+        if (e?.fileList?.length > 0) {
             e.fileList[0].status = 'done'
         }
         return e?.fileList;
@@ -161,7 +168,7 @@ export default function Add(props: IProps) {
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
-                initialValues={{ 'name': '题目一', orderNum: 1, answer: 'A' }}
+                initialValues={{ 'name': '题目一', orderNum: 1, answer: 'A', answerNum: 3 }}
             >
                 <Form.Item
                     label="题目名称"
@@ -180,14 +187,27 @@ export default function Add(props: IProps) {
                 {
                     needOptions &&
                     <Form.Item
+                        label="选项个数"
+                        name="answerNum"
+                        rules={[{ required: true, message: '题目选项个数!' }]}
+                        extra="题目选项的个数，范围2-4项"
+                    >
+                        <InputNumber min={2} max={4} precision={0} />
+                    </Form.Item>
+                }
+                {
+                    needOptions &&
+                    <Form.Item
                         label="题目答案"
                         name="answer"
                         rules={[{ required: true, message: '请输入题目名称!' }]}
                     >
                         <Radio.Group>
-                            <Radio value="A">A</Radio>
-                            <Radio value="B">B</Radio>
-                            <Radio value="C">C</Radio>
+                            {
+                                ANSWER_OPTIONS[answerNum || 3].map((option:string)=>
+                                    <Radio value={option} key={option}>{option}</Radio>
+                                    )
+                            }
                         </Radio.Group>
                     </Form.Item>
                 }
