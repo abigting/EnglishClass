@@ -72,69 +72,72 @@ export default function Add(props: IProps) {
             return
         }
         if (recording) {
-            setRecording(false)
-            // 暂停录音
-            clearInterval(timer)
-            recorder.stop()
-            // 获取录音结果
-            const formData = new FormData()
-            const blob = recorder.getWAVBlob()// 获取wav格式音频数据
-            // 此处获取到blob对象后需要设置fileName满足当前项目上传需求，其它项目可直接传把blob作为file塞入formData
-            const newbolb = new Blob([blob], { type: 'audio/mp3' })
-            const fileOfBlob = new File([newbolb], new Date().getTime() + '.mp3')
-            formData.append('file', fileOfBlob)
-            const url = window.URL.createObjectURL(fileOfBlob) //本地播放
-            // setAudio(url)
-
-            answerQuestions(fileOfBlob).then((res: any) => {
-                if (res.code === 0) {
-                    // ---- 答题之后的逻辑
-                    const current = list.find(s => s.active) || list[0];
-
-                    if (res?.data?.score>5) {
-                        rightAudio.current?.play()
-                    } else {
-                        wrongAudio.current?.play()
-                    }
-
-                    // setAutoPlay(true)
-                    // 有解答 - 放解答
-                    if (current.interpretationPath) {
-                        setVideoObj({
-                            url: current.interpretationPath,
-                            interpretation: true
-                        })
-
-                        setTimeout(() => {
-                            onPlay()
-                        }, 3000)
-
-                        //无解答 - 放下一题
-                    } else {
-                        const currentIndex = list.findIndex(s => s.active) === -1 ? 0 : list.findIndex(s => s.active);
-                        const nextItem = list.find((_s, i) => i === currentIndex + 1);
-                        if (nextItem) {
-                            setList(list.map((s, i) => i === currentIndex + 1 ? { ...s, active: true } : { ...s, active: false }));
-                            setVideoObj({
-                                url: nextItem.problemPath,
-                                interpretation: false
-                            })
-                            setTimeout(() => {
-                                onPlay()
-                            }, 3000)
-                        }
-                    }
-
-                } else {
-
-                }
-            });
-            // 关闭并销毁录音实例
-            recorder.destroy()
+            stopRecordAudio()
         } else {
             startRecordAudio()
         }
+    }
 
+    function stopRecordAudio(){
+        setRecording(false)
+        // 暂停录音
+        clearInterval(timer)
+        recorder.stop()
+        // 获取录音结果
+        const formData = new FormData()
+        const blob = recorder.getWAVBlob()// 获取wav格式音频数据
+        // 此处获取到blob对象后需要设置fileName满足当前项目上传需求，其它项目可直接传把blob作为file塞入formData
+        const newbolb = new Blob([blob], { type: 'audio/mp3' })
+        const fileOfBlob = new File([newbolb], new Date().getTime() + '.mp3')
+        formData.append('file', fileOfBlob)
+        // const url = window.URL.createObjectURL(fileOfBlob) //本地播放
+        // setAudio(url)
+
+        answerQuestions(fileOfBlob).then((res: any) => {
+            if (res.code === 0) {
+                // ---- 答题之后的逻辑
+                const current = list.find(s => s.active) || list[0];
+
+                if (res?.data?.score>5) {
+                    rightAudio.current?.play()
+                } else {
+                    wrongAudio.current?.play()
+                }
+
+                // setAutoPlay(true)
+                // 有解答 - 放解答
+                if (current.interpretationPath) {
+                    setVideoObj({
+                        url: current.interpretationPath,
+                        interpretation: true
+                    })
+
+                    setTimeout(() => {
+                        onPlay()
+                    }, 3000)
+
+                    //无解答 - 放下一题
+                } else {
+                    const currentIndex = list.findIndex(s => s.active) === -1 ? 0 : list.findIndex(s => s.active);
+                    const nextItem = list.find((_s, i) => i === currentIndex + 1);
+                    if (nextItem) {
+                        setList(list.map((s, i) => i === currentIndex + 1 ? { ...s, active: true } : { ...s, active: false }));
+                        setVideoObj({
+                            url: nextItem.problemPath,
+                            interpretation: false
+                        })
+                        setTimeout(() => {
+                            onPlay()
+                        }, 3000)
+                    }
+                }
+
+            } else {
+
+            }
+        });
+        // 关闭并销毁录音实例
+        recorder.destroy()
     }
 
     
@@ -217,7 +220,7 @@ export default function Add(props: IProps) {
                     return n + 3
                 } else {
                     clearInterval(timer);
-                    recordFn();
+                    stopRecordAudio();
                     return 100
                 }
             });

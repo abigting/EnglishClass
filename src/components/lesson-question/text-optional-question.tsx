@@ -1,33 +1,44 @@
 import { useEffect, useState, useRef } from 'react';
+import { Modal } from 'antd';
 import LearningWrapper from '@/components/wrapper/learning';
 import { LearningServices } from '@/services';
 import Badge from '@/components/badge';
 import { ICourse, ITitle, IOption, IVideoObj } from '@/utils/type';
+import { ANSWER_OPTIONS } from '@/utils/config';
+import Dtcard from '../dtcard';
 import styles from './index.less';
 
-const optionsDefault = [{
-    key: 'A',
-    active: false
-}, {
-    key: 'B',
-    active: false
-}, {
-    key: 'C',
-    active: false
-}];
+const optionsDefault = ANSWER_OPTIONS[3].map((s: string)=>{return {key: s}});
 
 interface IProps {
     course: ICourse;
 }
 
-export default function Add(props: IProps) {
+export default function TextOptionalQuestion(props: IProps) {
     const [options, setOptions] = useState<IOption[]>(optionsDefault);
     const [videoObj, setVideoObj] = useState<IVideoObj>({});
     const [list, setList] = useState<ITitle[]>([]);
     const [BVisible, setBVisible] = useState<boolean>(false)
-
+    const [visible, setVisible] = useState<boolean>(false);
     const rightAudio = useRef<HTMLAudioElement>(null)
     const wrongAudio = useRef<HTMLAudioElement>(null)
+
+    useEffect(() => {
+        const answerNum = props?.course?.answerNum;
+        if(answerNum){
+            let answerOptions = optionsDefault;
+            switch (answerNum) {
+                case 2:
+                case 3:
+                case 4:
+                    answerOptions = ANSWER_OPTIONS[answerNum].map((s: string)=>{return {key: s}});
+                default:
+                    break;
+            }
+            setOptions(answerOptions)
+        }
+    }, [])
+
     useEffect(() => {
         const list = props?.course?.list;
         if (list && list?.length > 0) {
@@ -88,6 +99,15 @@ export default function Add(props: IProps) {
         return await LearningServices.answerQuestions(formData);
     }
 
+    function showDTCard() {
+        setVisible(true)
+    }
+
+    function chooseTitle(s: ITitle) {
+        setList(list.map(item => item.uuid === s.uuid ? { ...item, active: true } : { ...item, active: false }));
+        setVisible(false)
+    }
+
     const currentQuestion = list.find(s => s.active) || list[0];
     const activeIndex = list.findIndex(s => s.active) === -1 ? 0 : list.findIndex(s => s.active);
 
@@ -97,7 +117,9 @@ export default function Add(props: IProps) {
                 <audio ref={rightAudio} style={{ display: 'none' }} src={require('@/assets/audios/you_pick_the_right_answer.mp3')}></audio>
                 <audio ref={wrongAudio} style={{ display: 'none' }} src={require('@/assets/audios/you_pick_the_wrong_answer.mp3')}></audio>
                 <Badge visible={BVisible} courseUuid={props.course?.uuid} closeBadge={() => setBVisible(false)} />
-                {/* <audio src={audioUrl}></audio> */}
+                <div className={styles['dtcard']} onClick={() => showDTCard()}>
+                    <img src={require('@/assets/imgs/card.d252ffbf.png')} alt="" />
+                </div>
                 <div className={styles['video-wrapper']}>
                     {
                         currentQuestion?.problemPath &&
@@ -113,7 +135,6 @@ export default function Add(props: IProps) {
                         props?.course?.showCount ? <span className={styles["l-number-for-text"]}>{activeIndex + 1}/{list?.length}</span> : null
                     }
                 </div>
-
                 <div className={styles['l-button-container']}>
                     {
                         options.map(s =>
@@ -130,6 +151,12 @@ export default function Add(props: IProps) {
                             </div>)
                     }
                 </div>
+
+                <Dtcard
+                    visible={visible}
+                    list={list}
+                    chooseTitle={(s: ITitle) => chooseTitle(s)}
+                    onCancel={() => setVisible(false)} />
             </LearningWrapper >
         </div>
     );

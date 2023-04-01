@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Button, Modal, Radio, Form, Input, Upload, InputNumber, message } from 'antd';
 import { LearningServices } from '@/services';
 import utils from '@/utils';
+import { ANSWER_OPTIONS } from '@/utils/config';
 import styles from './index.less';
 
 interface IProps {
@@ -9,12 +10,6 @@ interface IProps {
     course: any,
     uuid?: string | null | undefined;
     closeModal: any
-}
-
-const ANSWER_OPTIONS={
-    2:['A', 'B'],
-    3:['A', 'B', 'C'],
-    4:['A', 'B', 'C', 'D']
 }
 
 export default function Add(props: IProps) {

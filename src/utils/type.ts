@@ -9,6 +9,7 @@ interface ICourse {
     orderNum: number;
     playTimes: number;
     list: ITitle[];
+    answerNum?:number;
     oneStarScore?: number;
     oneTitleScore?: number;
     showCount?: boolean;

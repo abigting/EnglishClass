@@ -14,6 +14,7 @@ const { Search } = Input;
 
 export default function LessonManagement() {
   const [data, setData] = useState([])
+  const [paging, setPaging] = useState<any>({})
   const [lVisible, setlVisible] = useState(false)
   const [qVisible, setqVisible] = useState(false)
   const [currentCourse, setCurrentCourse] = useState<any>({})
@@ -21,7 +22,7 @@ export default function LessonManagement() {
   const [courseUuid, setCourseUuid] = useState<string | null>()
 
   const [searchQuery, setSearchQuery] = useState<any>({
-    pageSize:10,
+    pageSize:2,
     pageNumber:1
   })
   useEffect(() => {
@@ -109,6 +110,9 @@ export default function LessonManagement() {
           delete s.list
         }
       })
+      setPaging({
+        total: res.count || 0
+      })
       setData(res.data)
     }
   }
@@ -136,7 +140,7 @@ export default function LessonManagement() {
     setqVisible(true)
   }
 
-  function paging(pagination: TablePaginationConfig){
+  function pagingChange(pagination: TablePaginationConfig){
     setSearchQuery({
       ...searchQuery,
       pageSize:pagination.pageSize,
@@ -215,9 +219,9 @@ export default function LessonManagement() {
         pagination={{
           size: 'small',
           pageSize: 2,
-          total: data?.length
+          total: paging?.total
         }}
-        onChange={(pagination)=>paging(pagination)}
+        onChange={(pagination)=>pagingChange(pagination)}
          />
     </div>
   </Wrapper>

@@ -4,27 +4,10 @@ import LearningWrapper from '@/components/wrapper/learning';
 import { LearningServices } from '@/services'
 import Badge from '@/components/badge';
 import { ICourse, ITitle, IOption, IVideoObj } from '@/utils/type';
+import { ANSWER_OPTIONS } from '@/utils/config';
 import styles from './index.less';
 
-
-// interface DataType {
-//     key: React.ReactNode;
-//     name: string;
-//     address: string;
-//     answer: string;
-//     children?: DataType[];
-// }
-
-const optionsDefault = [{
-    key: 'A',
-    active: false
-}, {
-    key: 'B',
-    active: false
-}, {
-    key: 'C',
-    active: false
-}];
+const optionsDefault = ANSWER_OPTIONS[3].map((s: string)=>{return {key: s}});
 
 interface IProps {
     course: ICourse;
@@ -87,6 +70,22 @@ export default function Add(props: IProps) {
     const wrongAudio = useRef<HTMLAudioElement>(null)
     const videoRef = useRef<HTMLVideoElement>(null)
 
+    useEffect(() => {
+        const answerNum = props?.course?.answerNum;
+        if(answerNum){
+            let answerOptions = optionsDefault;
+            switch (answerNum) {
+                case 2:
+                case 3:
+                case 4:
+                    answerOptions = ANSWER_OPTIONS[answerNum].map((s: string)=>{return {key: s}});
+                default:
+                    break;
+            }
+            setOptions(answerOptions)
+        }
+    }, [])
+    
     useEffect(() => {
         const list = props?.course?.list;
         if (list && list?.length > 0) {

@@ -18,8 +18,14 @@ const codeMessage = {
     502: '网关错误。',
     503: '服务不可用，服务器暂时过载或维护。',
     504: '网关超时。',
-    };
+};
+
+const ANSWER_OPTIONS = {
+    2: ['A', 'B'],
+    3: ['A', 'B', 'C'],
+    4: ['A', 'B', 'C', 'D']
+}
 
 export {
-    url, codeMessage
+    url, codeMessage, ANSWER_OPTIONS
 }

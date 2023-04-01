@@ -6,37 +6,50 @@ import { LearningServices } from '@/services';
 import AnswerResult from '@/components/answer-result';
 import AnswerResultOptional from '@/components/answer-result/optional';
 import { ICourse } from '@/utils/type';
+import MJ from '@/assets/imgs/800.d1ecb553.png';
+import MJN from '@/assets/imgs/800-normal.46eec15c.png'
+import XF from '@/assets/imgs/801.8c70aba7.png'
+import XFN from '@/assets/imgs/801-normal.8d619adc.png'
+import BD from '@/assets/imgs/803.09130ece.png'
+import BDN from '@/assets/imgs/803-normal.f8994ff2.png'
 import styles from './index.less';
 import { message } from 'antd';
 
 const blocksDefault = [
     {
-        img: 'https://bhbl.dayuan1997.com/img/800.d1ecb553.png',
-        disableImg: 'https://bhbl.dayuan1997.com/img/800-normal.46eec15c.png',
+        img: MJ,
+        disableImg: MJN,
         text: '秘籍',
-        type:1,
+        type: 1,
     },
     {
-        img: 'https://bhbl.dayuan1997.com/img/801.8c70aba7.png',
-        disableImg:'https://bhbl.dayuan1997.com/img/801-normal.8d619adc.png',
+        img: XF,
+        disableImg: XFN,
         text: '心法',
-        type:2,
+        type: 2,
     },
     {
         id: 3,
-        img: 'https://bhbl.dayuan1997.com/img/803.09130ece.png',
-        disableImg:'https://bhbl.dayuan1997.com/img/803-normal.f8994ff2.png',
+        img: BD,
+        disableImg: BDN,
         text: '大侠表达',
-        type:3,
+        type: 3,
     }
-]
+];
 
-interface IBlocks{
+const BLOCL_LABLE = {
+    1: '大闯关',
+    2: '少侠通关',
+    3: '大侠表达',
+    4: '指读功'
+}
+
+interface IBlocks {
     img: string;
     disableImg: string;
     text: string;
     type: number;
-    disabled?:boolean
+    disabled?: boolean
 }
 
 function ClassDetail(_props: any) {
@@ -52,13 +65,13 @@ function ClassDetail(_props: any) {
 
     async function getDetailInfo() {
         const { uuid } = qs.parse(location.search);
-        if(!uuid) return;
+        if (!uuid) return;
         Promise.all([await LearningServices.courseDetail({ uuid }), await LearningServices.playControl({ uuid })]).then((result) => {
             const res = result[0];
             const res1 = result[1];
             if (res.code === 0 && res.data) {
                 setCourse(res.data);
-                const { videoPath, audioPath, list } = res.data;
+                const { videoPath, audioPath, list, type } = res.data;
                 let blocks = blocksDefault;
                 if (!videoPath) {
                     blocks = blocks.filter(s => s.type !== 1);
@@ -68,10 +81,12 @@ function ClassDetail(_props: any) {
                 }
                 if (!list || list.length === 0) {
                     blocks = blocks.filter(s => s.type !== 3);
+                } else {
+                    blocks = blocks.map(s => s.type === 3 ? { ...s, text: BLOCL_LABLE[type] } : s)
                 }
-                if(res1?.data){
-                    const {data} = res1;
-                    blocks = blocks.map((s,i)=> data.status < i?{...s, disabled: true}:{...s, disabled: false} )
+                if (res1?.data) {
+                    const { data } = res1;
+                    blocks = blocks.map((s, i) => data.status < i ? { ...s, disabled: true } : { ...s, disabled: false })
                 }
                 setBlocks(blocks)
             }
@@ -83,19 +98,19 @@ function ClassDetail(_props: any) {
         setVisible(true);
     }
 
-    function learningDetail(s: IBlocks){
-        if(s.disabled){
-           message.info('请按顺序闯关')
-        }else{
+    function learningDetail(s: IBlocks) {
+        if (s.disabled) {
+            message.info('请按顺序闯关')
+        } else {
             history.push(`/learning/${s.type}?uuid=${course?.uuid}`)
         }
     }
     let { uuid } = qs.parse(location.search);
-    if(Array.isArray(uuid)){
-        uuid=uuid[0]
+    if (Array.isArray(uuid)) {
+        uuid = uuid[0]
     }
 
-    if(!uuid || !course) return null
+    if (!uuid || !course) return null
     return <div className={styles['lesson-wrapper']}>
         <div className={styles['lesson-wall']} />
         <div className={styles['lesson-land']} />
@@ -130,7 +145,7 @@ function ClassDetail(_props: any) {
                                         <div className={styles['element-img']}>
                                             {/* <div className={styles['element-sign']}>0/1</div> */}
                                             {
-                                                s.disabled && s.disableImg?  <img src={s.disableImg} alt="" />:  <img src={s.img} alt="" />
+                                                s.disabled && s.disableImg ? <img src={s.disableImg} alt="" /> : <img src={s.img} alt="" />
                                             }
                                         </div>
                                         <div className={styles['element-text']}>

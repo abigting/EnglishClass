@@ -5,7 +5,7 @@ import LessonVideo from '@/components/lesson-video';
 import LessonQuestion from '@/components/lesson-question';
 import { LearningServices } from '@/services';
 import qs from 'query-string'
-import { ICourse, ITitle } from '@/utils/type';
+import { ICourse } from '@/utils/type';
 import styles from './index.less';
 
 interface IProps {
@@ -27,14 +27,24 @@ function Lesson(props: IProps) {
         }
     }
 
+    function renderContent(type: string) {
+        if(course) {
+            switch (type) {
+                case '1':
+                    return <LessonVideo course={course} />;
+                case '2':
+                    return <LessonAudio course={course} />;
+                case '3':
+                    return <LessonQuestion course={course} />;
+            }
+        }
+    }
+
     const { match } = props;
 
-    if(!course) return null;
     return <div>
         {
-            match?.params?.type === '1' ? <LessonVideo course={course} /> :
-                match?.params?.type === '2' ? <LessonAudio course={course} /> :
-                    <LessonQuestion course={course} />
+            course && renderContent(match?.params?.type)
         }
     </div>
 }

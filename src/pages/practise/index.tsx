@@ -4,6 +4,8 @@ import { history } from 'umi';
 import { Rate, Empty, Button } from 'antd';
 import { LearningServices } from '@/services';
 import { IMenu, ICourse } from '@/utils/type';
+import Loading from '@/loading';
+import dayjs from 'dayjs';
 import styles from './index.less';
 
 const menusDefault = [
@@ -24,6 +26,7 @@ const menusDefault = [
 
 export default function Home() {
     const [data, setData] = useState<ICourse[]>([]);
+    const [loading, setLoading] = useState(false);
     const [menus, setMenus] = useState<IMenu[]>(menusDefault);
     useEffect(() => {
         getList('1');
@@ -31,10 +34,12 @@ export default function Home() {
 
 
     async function getList(type: string | undefined) {
+        setLoading(true)
         setMenus(menus.map(s => s.key === type ? { ...s, active: true } : { ...s, active: false }))
-        const res = await LearningServices.courseList({ type });
+        const res = await LearningServices.courseList({ type, endTime:dayjs().valueOf(), startTime: dayjs().subtract(1, 'year').valueOf() });
         if (res.code === 0) {
             setData(res.data || [])
+            setLoading(false)
         }
     }
 
@@ -57,18 +62,19 @@ export default function Home() {
                                 }
                             </div>
                         </div>) :
-                    <Empty
-                        image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                        className={styles['empty-block']}
-                        imageStyle={{ height: 80 }}
-                        description={
-                            <span className={styles['no-data']}>
-                                暂时没有数据
-                            </span>
-                        }
-                    >
-                        <Button type="primary" onClick={() => history.push(`/lessonManagement`)}>现在新增 + </Button>
-                    </Empty>
+                    loading ? <Loading /> :
+                        <Empty
+                            image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                            className={styles['empty-block']}
+                            imageStyle={{ height: 80 }}
+                            description={
+                                <span className={styles['no-data']}>
+                                    暂时没有数据
+                                </span>
+                            }
+                        >
+                            <Button type="primary" onClick={() => history.push(`/lessonManagement`)}>现在新增 + </Button>
+                        </Empty>
             }
         </div>
     </Wrapper>
