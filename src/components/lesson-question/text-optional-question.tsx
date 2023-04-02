@@ -19,9 +19,16 @@ export default function TextOptionalQuestion(props: IProps) {
     const [videoObj, setVideoObj] = useState<IVideoObj>({});
     const [list, setList] = useState<ITitle[]>([]);
     const [BVisible, setBVisible] = useState<boolean>(false)
-    const [visible, setVisible] = useState<boolean>(false);
+    const [visible, setVisible] = useState<boolean>(false);setVideoObj
     const rightAudio = useRef<HTMLAudioElement>(null)
     const wrongAudio = useRef<HTMLAudioElement>(null)
+
+    useEffect(() => {
+        const list = props?.course?.list;
+        if (list && list?.length > 0) {
+            setList(list)
+        }
+    }, [props?.course?.list])
 
     useEffect(() => {
         const currentQuestion = list.find(s => s.active) || list[0];
@@ -39,17 +46,6 @@ export default function TextOptionalQuestion(props: IProps) {
             setOptions(answerOptions)
         }
     }, [list])
-
-    useEffect(() => {
-        const list = props?.course?.list;
-        if (list && list?.length > 0) {
-            setVideoObj({
-                url: list[0].problemPath,
-                interpretation: false
-            })
-            setList(list)
-        }
-    }, [props?.course?.list])
 
     //选择题 选择答案 1
     function selectOption(key: string) {
@@ -80,10 +76,6 @@ export default function TextOptionalQuestion(props: IProps) {
         const nextItem = list.find((_s, i) => i === currentIndex + 1);
         if (nextItem) {
             setList(list.map((s, i) => i === currentIndex + 1 ? { ...s, active: true } : { ...s, active: false }));
-            setVideoObj({
-                url: nextItem.problemPath,
-                interpretation: false
-            })
         } else {
             setBVisible(true)
         }
@@ -126,7 +118,7 @@ export default function TextOptionalQuestion(props: IProps) {
                         currentQuestion?.problemPath &&
                         <img
                             // src={videoObj?.url}
-                            src={videoObj?.url}
+                            src={currentQuestion?.problemPath}
                             className='react-player'
                             width='100%'
                             height='100%'

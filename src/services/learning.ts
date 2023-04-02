@@ -179,3 +179,24 @@ export function getOrderNumber(params: any) {
         params
     });
 }
+
+
+/**
+* @desc 更新用户观看控制
+*/
+export function editPlayControl(data: any) {
+    return request(`${url}/user/watch/edit/play_control`, {
+        method: 'post',
+        data
+    });
+}
+
+/**
+* @desc 查看用户观看控制
+*/
+export function showPlayControl(data: any) {
+    return request(`${url}/user/watch/show/play_control`, {
+        method: 'post',
+        data
+    });
+}

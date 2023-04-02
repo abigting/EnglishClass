@@ -22,10 +22,7 @@ let timer: any; // 1 计时器
 export default function Add(props: IProps) {
     const [recording, setRecording] = useState(false);
     const [disable, setDisable] = useState(true);
-    // const [playTimes, setPlayTimes] = useState(props?.course?.playTimes);
-
     const [BVisible, setBVisible] = useState<boolean>(false)
-
     const [videoObj, setVideoObj] = useState<IVideoObj>({});
     const [list, setList] = useState<ITitle[]>([]);
     const recorder = useRef(new Recorder({
@@ -50,8 +47,9 @@ export default function Add(props: IProps) {
     useEffect(() => {
         const list = props?.course?.list;
         if (list && list?.length > 0) {
+            const activeItem = list.find(s=>s.active);
             setVideoObj({
-                url: list[0].problemPath,
+                url: activeItem ? activeItem.problemPath : list[0].problemPath,
                 interpretation: false
             })
             setList(list)
@@ -243,7 +241,7 @@ export default function Add(props: IProps) {
                             // url={require("./../../assets/2023_02_26 20_47_31.mp4")}
                             ref={videoRef}
                             url={videoObj?.url}
-                            className='react-player'
+                            className={styles['react-player']}
                             onPlay={() => videoPlay()}
                             onPause={() => videoPause()}
                             onEnded={() => videoEnd()}

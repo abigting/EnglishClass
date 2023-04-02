@@ -6,8 +6,6 @@ import LessonQuestion from '@/components/lesson-question';
 import { LearningServices } from '@/services';
 import qs from 'query-string'
 import { ICourse } from '@/utils/type';
-import styles from './index.less';
-
 interface IProps {
     location: any;
     match: any;
@@ -15,8 +13,10 @@ interface IProps {
 
 function Lesson(props: IProps) {
     const [course, setCourse] = useState<ICourse>();
+    const [playControl, setPlayControl] = useState<any>();
     useEffect(() => {
-        getInfo()
+        getInfo();
+        showPlayControlFn();
     }, [])
 
     async function getInfo() {
@@ -27,13 +27,21 @@ function Lesson(props: IProps) {
         }
     }
 
+    async function showPlayControlFn() {
+        const { uuid } = qs.parse(props?.location?.search);
+        const res = await LearningServices.showPlayControl({ courseUuid:uuid });
+        if (res.code === 0 && res.data) {
+            setPlayControl(res.data)
+        }
+    }
+
     function renderContent(type: string) {
         if(course) {
             switch (type) {
                 case '1':
-                    return <LessonVideo course={course} />;
+                    return <LessonVideo course={course} playControl={playControl}/>;
                 case '2':
-                    return <LessonAudio course={course} />;
+                    return <LessonAudio course={course} playControl={playControl} />;
                 case '3':
                     return <LessonQuestion course={course} />;
             }

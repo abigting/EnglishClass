@@ -59,11 +59,8 @@ const listDefault = [
 export default function Add(props: IProps) {
     const [disable, setDisable] = useState(true);
     const [options, setOptions] = useState<IOption[]>(optionsDefault);
-    const [playTimes, setPlayTimes] = useState(props?.course?.playTimes);
     const [BVisible, setBVisible] = useState<boolean>(false)
     const [videoObj, setVideoObj] = useState<IVideoObj>({});
-
-    // const [list, setList] = useState<ITitle[]>(listDefault);
     const [list, setList] = useState<ITitle[]>([]);
 
     const rightAudio = useRef<HTMLAudioElement>(null)
@@ -73,10 +70,12 @@ export default function Add(props: IProps) {
     useEffect(() => {
         const list = props?.course?.list;
         if (list && list?.length > 0) {
+            const activeItem = list.find(s=>s.active);
             setVideoObj({
-                url: list[0].problemPath,
+                url: activeItem ? activeItem.problemPath : list[0].problemPath,
                 interpretation: false
             })
+
             setList(list)
         }
     }, [props?.course?.list])
@@ -221,7 +220,7 @@ export default function Add(props: IProps) {
                             ref={videoRef}
                             // url={require("./../../assets/2023_02_26 20_47_31.mp4")}
                             url={videoObj?.url}
-                            className='react-player'
+                            className={styles['react-player']}
                             onPlay={() => videoPlay()}
                             onPause={() => videoPause()}
                             onEnded={() => videoEnd()}
@@ -235,13 +234,13 @@ export default function Add(props: IProps) {
                     {
                         props?.course?.showCount ? <span className={styles["l-number"]}>{activeIndex + 1}/{list?.length}</span> : null
                     }
-                    <span className={styles["l-learn-replay"]}>
+                    {/* <span className={styles["l-learn-replay"]}>
                         <img className={styles["l-learn-replay-reload"]} src={require("../../assets/imgs/reload.png")} alt="" />
                         <img className={styles["l-learn-replay-close"]} src={require("../../assets/imgs/close.png")} alt="" />
                         <span className={styles["l-learn-replay-num"]} onClick={() => location.reload()}>{playTimes}</span>
-                        {/* <img className={styles["l-learn-replay-lb"]} src={require("../../assets/imgs/lb.png")} alt="" /> */}
-                        {/* <img className={styles["l-learn-replay-lbing"]} src={require("../../assets/imgs/lb.gif")} alt="" /> */}
-                    </span>
+                        <img className={styles["l-learn-replay-lb"]} src={require("../../assets/imgs/lb.png")} alt="" />
+                        <img className={styles["l-learn-replay-lbing"]} src={require("../../assets/imgs/lb.gif")} alt="" />
+                    </span> */}
                 </div>
 
                 <div className={styles['l-button-container']}>

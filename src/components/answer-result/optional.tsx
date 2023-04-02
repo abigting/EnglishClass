@@ -1,10 +1,8 @@
-import { Link, Outlet } from 'umi';
 import React, { useEffect, useState } from 'react';
 import { Modal, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { LearningServices } from '@/services';
 // import { PlusOutlined } from '@ant-design/icons';
-import styles from './index.less';
 
 
 interface DataType {
@@ -22,8 +20,9 @@ interface IProps {
 }
 
 export default function Add(props: IProps) {
-
     const [data, setData] = useState<DataType[]>([]);
+    const [userRate, setUserRate] = useState<any>()
+
     useEffect(() => {
         if (props.visible) {
             getInfo()
@@ -38,6 +37,11 @@ export default function Add(props: IProps) {
         if (res.code === 0) {
             setData(res.data || [])
         }
+
+        const res1 = await LearningServices.courserStat({ courseUuid: props.courseUuid });
+        if (res1.code === 0 && res1.data) {
+            setUserRate(res1.data)
+        }
     }
 
     const columns: ColumnsType<DataType> = [
@@ -51,7 +55,7 @@ export default function Add(props: IProps) {
             dataIndex: 'userAnswer',
             width: '30%',
             key: 'userAnswer',
-            render:(_, record)=><span>{record.userAnswer || '-'}</span>
+            render: (_, record) => <span>{record.userAnswer || '-'}</span>
         },
         {
             title: '正确答案',
@@ -61,34 +65,31 @@ export default function Add(props: IProps) {
         }
     ];
 
-    function handleOk() {
-
-    }
-
     function handleCancel() {
         props.closeModal()
     }
 
     return (
-        <Modal title="答题记录"
+        <Modal
+            title="答题记录"
             open={props.visible}
             footer={null}
             onCancel={() => handleCancel()}>
             <Table
-              rowKey={'uuid'}
+                rowKey={'uuid'}
                 columns={columns}
                 dataSource={data}
                 pagination={false}
-                scroll={{ y: 500 }}
-                // summary={() => (
-                //     <Table.Summary fixed>
-                //         <Table.Summary.Row>
-                //             <Table.Summary.Cell rowSpan={3} index={0}></Table.Summary.Cell>
-                //             <Table.Summary.Cell rowSpan={3} index={0}></Table.Summary.Cell>
-                //             <Table.Summary.Cell rowSpan={3} index={0}>分数：80/100</Table.Summary.Cell>
-                //         </Table.Summary.Row>
-                //     </Table.Summary>
-                // )}
+                scroll={{ y: 400 }}
+                summary={() => (
+                    <Table.Summary fixed>
+                        <Table.Summary.Row>
+                            <Table.Summary.Cell rowSpan={3} index={0}></Table.Summary.Cell>
+                            <Table.Summary.Cell rowSpan={3} index={0}></Table.Summary.Cell>
+                            <Table.Summary.Cell rowSpan={3} index={0}>分数：{userRate?.userScore}/{userRate?.allScore}</Table.Summary.Cell>
+                        </Table.Summary.Row>
+                    </Table.Summary>
+                )}
             />
         </Modal>
     );

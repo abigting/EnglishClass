@@ -6,12 +6,13 @@ import styles from './index.less';
 
 interface IProps {
     course: ICourse;
+    playControl: any
 }
 
 export default function Add(props: IProps) {
     const audioRef = useRef<HTMLAudioElement>(null)
     const [play, setPlay] = useState(false);
-    const [playTimes, setPlayTimes] = useState(3);
+    const [playTimes, setPlayTimes] = useState(0);
     const [circles, setCircles] = useState<number[]>([]);
     const [process, setProcess] = useState("0%");
     const [currentTime, setCurrentTime] = useState("00:00:00");
@@ -24,7 +25,11 @@ export default function Add(props: IProps) {
             clearInterval(processTimer);
             clearInterval(timeShowTimer);
         }
-    }, [])
+    }, []);
+
+    useEffect(()=>{
+        setPlayTimes(props?.playControl?.audioNumYu)
+    }, [props.playControl])
 
     const processTimer = setInterval(() => {
         updateProcess();
@@ -35,11 +40,12 @@ export default function Add(props: IProps) {
     }, 1000)
 
     function togglePlay() {
-        if (playTimes === 0) return
+        // if (playTimes === 0) return
         if (!play) {
-            setPlayTimes(playTimes - 1);
+            // setPlayTimes(playTimes - 1);
             audioRef.current?.play();
         } else {
+            audioEnd();
             audioRef.current?.pause()
         }
         setPlay(!play)
@@ -76,8 +82,16 @@ export default function Add(props: IProps) {
         return "00:" + minuteStr + ":" + secondStr;
     }
 
-    function audioEnd(){
-        LearningServices.playControl({ uuid: props.course?.uuid, status: 2 })
+    function audioEnd() {
+        if (playTimes > 0) {
+            const current = playTimes - 1;
+            setPlayTimes(current);
+            LearningServices.editPlayControl({
+                courseUuid: props.course.uuid,
+                audioNumYu: current,
+                videoNumYu: props?.playControl?.videoNumYu,
+            })
+        }
     }
 
     return (
@@ -111,10 +125,10 @@ export default function Add(props: IProps) {
                             play ? <span className={styles['pause']}></span> : <span className={styles['play']}></span>
                         }
                     </div>
-                    <span className={styles['pause-number']}>剩余暂停次数：{playTimes}次</span>
+                    <span className={styles['pause-number']}>播放{playTimes}次 可解锁下一关</span>
                 </div>
             </div>
-            <audio ref={audioRef} src={props?.course?.audioPath} onPause={()=>audioEnd()} onEnded={()=>audioEnd()}></audio>
+            <audio ref={audioRef} src={props?.course?.audioPath} onEnded={() => audioEnd()}></audio>
         </LearningWrapper >
     );
 }

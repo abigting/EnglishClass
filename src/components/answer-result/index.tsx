@@ -24,8 +24,8 @@ interface IProps {
 }
 
 export default function Add(props: IProps) {
-
     const [data, setData] = useState<DataType[]>([]);
+    const [userRate, setUserRate] = useState<any>()
     useEffect(() => {
         if (props.visible) {
             getInfo()
@@ -37,8 +37,14 @@ export default function Add(props: IProps) {
         const res = await LearningServices.recordList({
             courseUuid: props.courseUuid
         });
+
         if (res.code === 0) {
             setData(res.data || [])
+        }
+
+        const res1 = await LearningServices.courserStat({ courseUuid: props.courseUuid });
+        if (res1.code === 0 && res1.data) {
+            setUserRate(res1.data)
         }
     }
 
@@ -75,12 +81,14 @@ export default function Add(props: IProps) {
 
     function handleCancel() {
         props.closeModal();
-        setData(data.map(s=> { return {...s, playing: false}}))
+        setData(data.map(s => { return { ...s, playing: false } }))
     }
 
     const playingAudio = data.find(s => s.playing);
+
     return (
-        <Modal title="答题记录"
+        <Modal
+            title="答题记录"
             open={props.visible}
             footer={null}
             onCancel={() => handleCancel()}>
@@ -89,7 +97,14 @@ export default function Add(props: IProps) {
                 columns={columns}
                 dataSource={data}
                 pagination={false}
-                scroll={{ y: 500 }}
+                scroll={{ y: 400 }}
+                summary={() => (
+                    <Table.Summary fixed>
+                        <Table.Summary.Row>
+                            <Table.Summary.Cell rowSpan={2} index={0}>分数：{userRate?.userScore}/{userRate?.allScore}</Table.Summary.Cell>
+                        </Table.Summary.Row>
+                    </Table.Summary>
+                )}
             />
             {
                 playingAudio && <audio autoPlay loop={false} src={playingAudio.userAnswerPath}></audio>

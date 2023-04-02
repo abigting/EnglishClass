@@ -34,7 +34,21 @@ const blocksDefault = [
         disableImg: BDN,
         text: '大侠表达',
         type: 3,
-    }
+    },
+    // {
+    //     id: 4,
+    //     img: 'https://bhbl.dayuan1997.com/img/815.47abf77e.png',
+    //     disableImg: BDN,
+    //     text: '跟读功',
+    //     type: 4,
+    // },
+    // {
+    //     id: 5,
+    //     img: BD,
+    //     disableImg: 'https://bhbl.dayuan1997.com/img/zidu.9b1dedab.png',
+    //     text: '自读功',
+    //     type: 5,
+    // }
 ];
 
 const BLOCL_LABLE = {
@@ -66,7 +80,7 @@ function ClassDetail(_props: any) {
     async function getDetailInfo() {
         const { uuid } = qs.parse(location.search);
         if (!uuid) return;
-        Promise.all([await LearningServices.courseDetail({ uuid }), await LearningServices.playControl({ uuid })]).then((result) => {
+        Promise.all([await LearningServices.courseDetail({ uuid }), await LearningServices.showPlayControl({ courseUuid:uuid })]).then((result) => {
             const res = result[0];
             const res1 = result[1];
             if (res.code === 0 && res.data) {
@@ -85,12 +99,17 @@ function ClassDetail(_props: any) {
                     blocks = blocks.map(s => s.type === 3 ? { ...s, text: BLOCL_LABLE[type] } : s)
                 }
                 if (res1?.data) {
-                    const { data } = res1;
-                    blocks = blocks.map((s, i) => data.status < i ? { ...s, disabled: true } : { ...s, disabled: false })
+                    const { data={} } = res1;
+                    const { audioNumYu, videoNumYu } = data;
+                    if(videoNumYu >0 && videoPath){
+                        blocks = blocks.map((s) => s.type ===2 ? { ...s, disabled: true } : s)
+                    }
+                    if(audioNumYu >0 && audioPath){
+                        blocks = blocks.map((s) => s.type ===3 ? { ...s, disabled: true } : s)
+                    }
                 }
                 setBlocks(blocks)
             }
-
         })
     }
 

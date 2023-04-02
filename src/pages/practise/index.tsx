@@ -11,16 +11,16 @@ import styles from './index.less';
 const menusDefault = [
     {
         key: '1',
-        title: '文字',
+        title: '阅读闯关',
         active: true
     },
     {
         key: '2',
-        title: '音频'
+        title: '少侠'
     },
     {
         key: '3',
-        title: '语音回答'
+        title: '大侠'
     }
 ]
 
