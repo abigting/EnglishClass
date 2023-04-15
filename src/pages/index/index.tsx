@@ -57,19 +57,19 @@ export default function Index() {
             wrapperCol={{ span: 20 }}
             style={{ maxWidth: 600 }}
             autoComplete="off"
-            initialValues={{userName:'admin', password: '1qazCDE#!@#' }}
+            // initialValues={{userName:'admin', password: '1qazCDE#!@#' }}
           >
             <Form.Item
               label={<UserOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
               name="userName"
             >
-              <Input className={styles['login-form-input']} size="large" />
+              <Input className={styles['login-form-input']} size="large" maxLength={16} />
             </Form.Item>
             <Form.Item
               label={<LockOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
               name="password"
             >
-              <Input className={styles['login-form-input']} type="password" size="large" />
+              <Input className={styles['login-form-input']} type="password" maxLength={6} size="large" />
             </Form.Item>
             <div className={styles['register']} onClick={() => setVisible(true)}><a>注册</a></div>
             <Button className={styles['login-btn']} onClick={() => login()}>立即登录</Button>

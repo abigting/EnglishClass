@@ -61,13 +61,14 @@ export default function Index(props: IProps) {
                     label={<UserOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
                     name="userName"
                 >
-                    <Input className={styles['login-form-input']} size="large" />
+                    <Input className={styles['login-form-input']} size="large" maxLength={16} />
                 </Form.Item>
                 <Form.Item
                     label={<LockOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
                     name="password"
+                    extra="密码长度6位"
                 >
-                    <Input className={styles['login-form-input']} type="password" size="large" />
+                    <Input className={styles['login-form-input']} type="password" size="large" maxLength={6} />
                 </Form.Item>
                 <Form.Item
                     label={<TeamOutlined style={{ fontSize: 24 }} className={styles['login-form-icon']} />}
