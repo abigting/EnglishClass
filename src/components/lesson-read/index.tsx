@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { message } from 'antd';
 import ReactPlayer from 'react-player';
 import LearningWrapper from '@/components/wrapper/learning';
@@ -136,6 +136,7 @@ export default function Add(props: IProps) {
                 <FinishInfo visible={visible} uuid={props?.course?.uuid} />
                 <div className={styles['video-wrapper']}>
                     <ReactPlayer
+                        controls={props.muted ? false : true}
                         muted={props.muted}
                         id="picts"
                         // url={require("@/assets/2023_02_26 20_47_31.mp4")}
@@ -147,35 +148,34 @@ export default function Add(props: IProps) {
                         onEnded={() => videoEnd()}
                         onProgress={(info) => updateProcess(info)}
                         playing={false}
-                        controls
                         width='100%'
                         height='100%'
                     />
                 </div>
                 {
                     props.muted ?
-                    <div className={styles['lSoundRecording-btn']}>
-                    <div className={styles['l-recorder-container']} >
-                        <div className={`
+                        <div className={styles['lSoundRecording-btn']}>
+                            <div className={styles['l-recorder-container']} >
+                                <div className={`
                         ${styles['btn-recorder']} 
                         ${disable ? styles['btn-recorder-disabled'] : recording ? styles['btn-recorder-recording'] : styles['btn-recorder-default']}
                         `}
-                            onClick={() => recordFn()}
-                        >
-                            <div className={`${styles['btn-text']}`}>
-                                {
-                                    recording ? "录音中..." : " 点击按钮开始朗读"
-                                }
+                                    onClick={() => recordFn()}
+                                >
+                                    <div className={`${styles['btn-text']}`}>
+                                        {
+                                            recording ? "录音中..." : " 点击按钮开始朗读"
+                                        }
+                                    </div>
+                                    {
+                                        recording && <>
+                                            <div className={styles['process-bar-container']} ><div className={styles['process-bar']} style={{ width: `${progress}%` }}></div></div>
+                                            <img className={styles['process-bar-record']} src={require("@/assets/imgs/record.png")} alt="" />
+                                        </>
+                                    }
+                                </div>
                             </div>
-                            {
-                                recording && <>
-                                    <div className={styles['process-bar-container']} ><div className={styles['process-bar']} style={{ width: `${progress}%` }}></div></div>
-                                    <img className={styles['process-bar-record']} src={require("@/assets/imgs/record.png")} alt="" />
-                                </>
-                            }
-                        </div>
-                    </div>
-                </div>:null
+                        </div> : null
                 }
             </LearningWrapper >
         </div>

@@ -216,10 +216,10 @@ export function answerReadingUpload(data: any) {
 /**
 * @desc 跟读列表查看接口
 */
-export function answerReadingList(data: any) {
+export function answerReadingList(params: any) {
     return request(`${url}/follow/reading/answer_reading/list`, {
         method: 'get',
-        data
+        params
         // ...option,
     });
 }
