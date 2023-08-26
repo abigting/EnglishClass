@@ -25,7 +25,7 @@ export default function Add(props: IProps) {
     function getInfo() {
         LearningServices.courseDetail({ uuid: props.uuid }).then(res => {
             if (res.code === 0 && res.data) {
-                const { id, list, coverPath, videoPath, audioPath, ...rest } = res.data;
+                const { id, list, coverPath, videoPath, audioPath, followPath, ...rest } = res.data;
                 let data = rest;
                 if (coverPath) {
                     data = {
@@ -57,6 +57,16 @@ export default function Add(props: IProps) {
                         }]
                     }
                 }
+                if (followPath) {
+                    data = {
+                        ...data, followPath: [{
+                            uid: '4',
+                            name: utils.getNameByUrl(followPath),
+                            status: 'done',
+                            url: followPath,
+                        }]
+                    }
+                }
                 form.setFieldsValue({ ...data })
             }
         })
@@ -75,6 +85,7 @@ export default function Add(props: IProps) {
 
     const onFinish = async (values: any) => {
         setLoading(true)
+     
         const { coverPath, videoPath, audioPath, ...rest } = values;
         let req = { ...rest }
         if (values.coverPath && values.coverPath[0]?.originFileObj) {
@@ -93,6 +104,12 @@ export default function Add(props: IProps) {
             req = {
                 ...req,
                 audioPath: values?.audioPath[0].originFileObj
+            }
+        }
+        if (values?.followPath && values?.followPath[0]?.originFileObj) {
+            req = {
+                ...req,
+                followPath: values?.followPath[0].originFileObj
             }
         }
         if (props.uuid) {
@@ -144,6 +161,16 @@ export default function Add(props: IProps) {
         return e?.fileList;
     };
 
+    const followPathFile = (e: any) => {
+        if (Array.isArray(e)) {
+            return e;
+        }
+        if(e?.fileList?.length>0){
+            e.fileList[0].status = 'done'
+        }
+        return e?.fileList;
+    };
+
     const videoFile = (e: any) => {
         if (Array.isArray(e)) {
             return e;
@@ -157,6 +184,7 @@ export default function Add(props: IProps) {
     return (
         <Modal title="新增课程"
             width={500}
+            maskClosable={false}
             open={props.visible}
             onCancel={() => handleCancel()}
             afterClose={() => form.resetFields()}
@@ -264,6 +292,18 @@ export default function Add(props: IProps) {
                             <Button>+ 上传</Button>
                         </Upload>
                     </Form.Item>
+
+                    <Form.Item
+                        label="跟读资料"
+                        name="followPath"
+                        valuePropName="fileList"
+                        getValueFromEvent={followPathFile}
+                    >
+                        <Upload accept="video/*" maxCount={1} disabled={!!props.uuid}>
+                            <Button>+ 上传</Button>
+                        </Upload>
+                    </Form.Item>
+
                     <Form.Item wrapperCol={{ offset: 4, span: 20 }}>
                         <Button type="primary" htmlType="submit" loading={loading}>
                             保存

@@ -6,6 +6,7 @@ interface ICourse {
     audioPath: string;
     videoPath: string;
     coverPath: string;
+    followPath?: string;
     orderNum: number;
     playTimes: number;
     list: ITitle[];

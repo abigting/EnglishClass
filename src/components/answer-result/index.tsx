@@ -25,7 +25,12 @@ interface IProps {
 
 export default function Add(props: IProps) {
     const [data, setData] = useState<DataType[]>([]);
-    const [userRate, setUserRate] = useState<any>()
+    const [userRate, setUserRate] = useState<any>();
+    const [followReadingPath, setFollowReadingPath] = useState<string>();
+    const [playFollowupPath, setPlayFollowupPath] = useState<boolean>();
+
+    const audioRef = useRef<HTMLAudioElement>(null)
+
     useEffect(() => {
         if (props.visible) {
             getInfo()
@@ -46,6 +51,17 @@ export default function Add(props: IProps) {
         if (res1.code === 0 && res1.data) {
             setUserRate(res1.data)
         }
+
+        const res2 = await LearningServices.answerReadingList({
+            courseUuid: props.courseUuid,
+            needUser: true
+        });
+        if (res2.code === 0 && res2.data) {
+            if (res2.data[res2.data.length - 1]) {
+                setFollowReadingPath(res2.data[res2.data.length - 1].followReadingPath)
+            }
+        }
+
     }
 
     const columns: ColumnsType<DataType> = [
@@ -84,6 +100,15 @@ export default function Add(props: IProps) {
         setData(data.map(s => { return { ...s, playing: false } }))
     }
 
+    function playFollowupReading() {
+        if (playFollowupPath) {
+            audioRef.current?.pause();
+        } else {
+            audioRef.current?.play();
+        }
+        setPlayFollowupPath(!playFollowupPath)
+    }
+
     const playingAudio = data.find(s => s.playing);
 
     return (
@@ -108,6 +133,18 @@ export default function Add(props: IProps) {
             />
             {
                 playingAudio && <audio autoPlay loop={false} src={playingAudio.userAnswerPath}></audio>
+            }
+            {
+                followReadingPath ?
+                    <div className={styles['followup-audio']}>
+                        自读功跟读音频:
+                        <div className={styles['circle']}  onClick={() => playFollowupReading()}>
+                        {
+                            playFollowupPath ? <img src={require("@/assets/imgs/lb.gif")} /> : <img src={require("@/assets/imgs/lb.png")} />
+                        }
+                        </div>
+                        <audio ref={audioRef} autoPlay={false} loop={false} src={followReadingPath}></audio>
+                    </div> : null
             }
         </Modal>
     );

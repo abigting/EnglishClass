@@ -12,6 +12,8 @@ import XF from '@/assets/imgs/801.8c70aba7.png'
 import XFN from '@/assets/imgs/801-normal.8d619adc.png'
 import BD from '@/assets/imgs/803.09130ece.png'
 import BDN from '@/assets/imgs/803-normal.f8994ff2.png'
+import GDG from '@/assets/imgs/815.47abf77e.png'
+import ZDG from '@/assets/imgs/zidu.9b1dedab.png'
 import styles from './index.less';
 import { message } from 'antd';
 
@@ -35,20 +37,20 @@ const blocksDefault = [
         text: '大侠表达',
         type: 3,
     },
-    // {
-    //     id: 4,
-    //     img: 'https://bhbl.dayuan1997.com/img/815.47abf77e.png',
-    //     disableImg: BDN,
-    //     text: '跟读功',
-    //     type: 4,
-    // },
-    // {
-    //     id: 5,
-    //     img: BD,
-    //     disableImg: 'https://bhbl.dayuan1997.com/img/zidu.9b1dedab.png',
-    //     text: '自读功',
-    //     type: 5,
-    // }
+    {
+        id: 4,
+        img: GDG,
+        disableImg: GDG,
+        text: '跟读功',
+        type: 4,
+    },
+    {
+        id: 5,
+        img: ZDG,
+        disableImg: ZDG,
+        text: '自读功',
+        type: 5,
+    }
 ];
 
 const BLOCL_LABLE = {
@@ -85,13 +87,16 @@ function ClassDetail(_props: any) {
             const res1 = result[1];
             if (res.code === 0 && res.data) {
                 setCourse(res.data);
-                const { videoPath, audioPath, list, type } = res.data;
+                const { videoPath, audioPath, followPath, list, type } = res.data;
                 let blocks = blocksDefault;
                 if (!videoPath) {
                     blocks = blocks.filter(s => s.type !== 1);
                 }
                 if (!audioPath) {
                     blocks = blocks.filter(s => s.type !== 2);
+                }
+                if(!followPath){
+                    blocks = blocks.filter(s => s.type !== 4 && s.type !== 5);
                 }
                 if (!list || list.length === 0) {
                     blocks = blocks.filter(s => s.type !== 3);

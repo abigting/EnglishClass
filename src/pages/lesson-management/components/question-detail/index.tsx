@@ -160,6 +160,7 @@ export default function Add(props: IProps) {
             footer={null}
             open={props.visible}
             onOk={handleOk}
+            maskClosable={false}
             afterClose={() => form.resetFields()}
             onCancel={() => handleCancel('question')}>
             <Form

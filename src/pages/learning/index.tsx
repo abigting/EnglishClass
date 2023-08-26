@@ -3,6 +3,7 @@ import { withRouter } from 'umi';
 import LessonAudio from '@/components/lesson-audio';
 import LessonVideo from '@/components/lesson-video';
 import LessonQuestion from '@/components/lesson-question';
+import LessonRead from '@/components/lesson-read';
 import { LearningServices } from '@/services';
 import qs from 'query-string'
 import { ICourse } from '@/utils/type';
@@ -29,21 +30,25 @@ function Lesson(props: IProps) {
 
     async function showPlayControlFn() {
         const { uuid } = qs.parse(props?.location?.search);
-        const res = await LearningServices.showPlayControl({ courseUuid:uuid });
+        const res = await LearningServices.showPlayControl({ courseUuid: uuid });
         if (res.code === 0 && res.data) {
             setPlayControl(res.data)
         }
     }
 
     function renderContent(type: string) {
-        if(course) {
+        if (course) {
             switch (type) {
                 case '1':
-                    return <LessonVideo course={course} playControl={playControl}/>;
+                    return <LessonVideo course={course} playControl={playControl} />;
                 case '2':
                     return <LessonAudio course={course} playControl={playControl} />;
                 case '3':
                     return <LessonQuestion course={course} />;
+                case '4':
+                    return <LessonRead course={course} />;
+                case '5':
+                    return <LessonRead muted={true} course={course} />;
             }
         }
     }

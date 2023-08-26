@@ -200,3 +200,26 @@ export function showPlayControl(data: any) {
         data
     });
 }
+
+
+/**
+* @desc 跟读上传接口
+*/
+export function answerReadingUpload(data: any) {
+    return request(`${url}/follow/reading/answer_reading/upload`, {
+        method: 'post',
+        data
+        // ...option,
+    });
+}
+
+/**
+* @desc 跟读列表查看接口
+*/
+export function answerReadingList(data: any) {
+    return request(`${url}/follow/reading/answer_reading/list`, {
+        method: 'get',
+        data
+        // ...option,
+    });
+}
