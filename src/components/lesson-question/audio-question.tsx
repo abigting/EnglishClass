@@ -47,7 +47,7 @@ export default function Add(props: IProps) {
     useEffect(() => {
         const list = props?.course?.list;
         if (list && list?.length > 0) {
-            const activeItem = list.find(s=>s.active);
+            const activeItem = list.find(s => s.active);
             setVideoObj({
                 url: activeItem ? activeItem.problemPath : list[0].problemPath,
                 interpretation: false
@@ -81,6 +81,7 @@ export default function Add(props: IProps) {
         // 暂停录音
         clearInterval(timer)
         recorder.current.stop()
+        setProgress(0)
         // 获取录音结果
         const formData = new FormData()
         const blob = recorder.current.getWAVBlob()// 获取wav格式音频数据
@@ -150,18 +151,27 @@ export default function Add(props: IProps) {
 
     //开始录音
     function startRecordAudio() {
-        Recorder.getPermission().then(
-            () => {
-                console.log("开始录音");
-                setRecording(true);
-                setTimer(); // 进度条
-                recorder.current.start(); // 开始录音
-            },
-            (error: { name: any; message: any; }) => {
-                console.log(error, 'error')
-                message.info("请先允许该网页使用麦克风")
-            }
-        );
+        try {
+            console.log("开始录音");
+            setRecording(true);
+            setTimer(); // 进度条
+            recorder.current.start(); // 开始录音
+        } catch (e) {
+            message.info("请先允许该网页使用麦克风")
+        }
+
+        // Recorder.getPermission().then(
+        //     () => {
+        //         console.log("开始录音");
+        //         setRecording(true);
+        //         setTimer(); // 进度条
+        //         recorder.current.start(); // 开始录音
+        //     },
+        //     (error: { name: any; message: any; }) => {
+        //         console.log(error, 'error')
+        //         message.info("请先允许该网页使用麦克风")
+        //     }
+        // );
     }
 
     //答题
@@ -215,8 +225,8 @@ export default function Add(props: IProps) {
     const setTimer = () => {
         timer = setInterval(() => {
             setProgress(n => {
-                if (n + 3 <= 100) {
-                    return n + 3
+                if (n + 2 <= 100) {
+                    return n + 2
                 } else {
                     clearInterval(timer);
                     stopRecordAudio();
@@ -254,6 +264,9 @@ export default function Add(props: IProps) {
                     }
                     {
                         props?.course?.showCount ? <span className={styles["l-number"]}>{activeIndex + 1}/{list?.length}</span> : null
+                    }
+                    {
+                        window.localStorage.getItem("EnglishClass_isAdmin") === 'true' ? null : <div className="video-progress" />
                     }
                     {/* <span className={styles["l-learn-replay"]}>
                         <img className={styles["l-learn-replay-reload"]} src={require("../../assets/imgs/reload.png")} alt="" />

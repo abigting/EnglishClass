@@ -72,19 +72,28 @@ export default function Add(props: IProps) {
 
     //开始录音
     function startRecordAudio() {
-        Recorder.getPermission().then(
-            () => {
-                console.log("开始录音");
+        try {
+                // console.log("开始录音");
                 setRecording(true);
-                // setTimer(); // 进度条
                 recorder.current.start(); // 开始录音
                 videoRef?.current?.getInternalPlayer().play();
-            },
-            (error: { name: any; message: any; }) => {
-                console.log(error, 'error')
-                message.info("请先允许该网页使用麦克风")
-            }
-        );
+        } catch (e) {
+            message.info("请先允许该网页使用麦克风")
+        }
+
+        // Recorder.getPermission().then(
+        //     () => {
+        //         console.log("开始录音");
+        //         setRecording(true);
+        //         // setTimer(); // 进度条
+        //         recorder.current.start(); // 开始录音
+        //         videoRef?.current?.getInternalPlayer().play();
+        //     },
+        //     (error: { name: any; message: any; }) => {
+        //         console.log(error, 'error')
+        //         message.info("请先允许该网页使用麦克风")
+        //     }
+        // );
     }
 
     //停止录音
@@ -137,7 +146,6 @@ export default function Add(props: IProps) {
                 <div className={styles['video-wrapper']}>
                     <ReactPlayer
                         controls={props.muted ? false : true}
-                        muted={props.muted}
                         id="picts"
                         // url={require("@/assets/2023_02_26 20_47_31.mp4")}
                         ref={videoRef}
@@ -151,6 +159,9 @@ export default function Add(props: IProps) {
                         width='100%'
                         height='100%'
                     />
+                    {
+                        window.localStorage.getItem("EnglishClass_isAdmin") === 'true' ? null : <div className="video-progress" />
+                    }
                 </div>
                 {
                     props.muted ?

@@ -24,6 +24,7 @@ export default function Index() {
         if (res.code === 0 && res.data){
           // Cookies.set("userUUId", res.data.uuid, { expires: 7, path: '/' });
           window.localStorage.setItem("EnglishClass_userUUId", res.data.uuid);
+          window.localStorage.setItem("EnglishClass_isAdmin", res.data.isAdmin? 'true': 'false');
           if(res.data.isAdmin){
             history.push('/home')
           }else{

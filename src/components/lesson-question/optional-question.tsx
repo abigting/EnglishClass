@@ -225,7 +225,8 @@ export default function Add(props: IProps) {
                             onPause={() => videoPause()}
                             onEnded={() => videoEnd()}
                             onError={() => videoError()}
-                            playing={false}
+                            // playing={false}
+                            playing
                             controls
                             width='100%'
                             height='100%'
@@ -233,6 +234,9 @@ export default function Add(props: IProps) {
                     }
                     {
                         props?.course?.showCount ? <span className={styles["l-number"]}>{activeIndex + 1}/{list?.length}</span> : null
+                    }
+                    {
+                        window.localStorage.getItem("EnglishClass_isAdmin") === 'true' ? null : <div className="video-progress" />
                     }
                     {/* <span className={styles["l-learn-replay"]}>
                         <img className={styles["l-learn-replay-reload"]} src={require("../../assets/imgs/reload.png")} alt="" />

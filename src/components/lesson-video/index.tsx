@@ -14,7 +14,7 @@ interface IProps {
 export default function LessonVideo(props: IProps) {
     const [playTimes, setPlayTimes] = useState(0);
 
-    useEffect(()=>{
+    useEffect(() => {
         setPlayTimes(props?.playControl?.videoNumYu)
     }, [props.playControl])
 
@@ -43,7 +43,7 @@ export default function LessonVideo(props: IProps) {
                     // url={require("./../../assets/2023_02_26 20_56_17.mp4")}
                     url={props?.course?.videoPath}
                     className={styles['react-player']}
-                    // playing
+                    playing
                     onPlay={() => videoPlay()}
                     // onPause={() => videoEnd()}
                     onEnded={() => videoEnd()}
@@ -51,6 +51,9 @@ export default function LessonVideo(props: IProps) {
                     width='100%'
                     height='100%'
                 />
+                {
+                    window.localStorage.getItem("EnglishClass_isAdmin") === 'true' ? null : <div className="video-progress" />
+                }
                 <span className={styles['left-times']}>播放{playTimes}次 可解锁下一关</span>
             </div>
         </LearningWrapper >

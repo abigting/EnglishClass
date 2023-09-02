@@ -225,7 +225,7 @@ export default function Add(props: IProps) {
                     <Row>
                         <Col span={12}>
                             <Form.Item
-                                label="播放顺序"
+                                label="课程顺序"
                                 name="orderNum"
                                 labelCol={{ span: 8 }}
                                 wrapperCol={{ span: 12 }}
